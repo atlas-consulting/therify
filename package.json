@@ -1,0 +1,39 @@
+{
+    "private": true,
+    "name": "therify",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "workspaces": {
+        "packages": [
+            "packages/*"
+        ],
+        "nohoist": [
+            "**/therify-lambdas/**"
+        ]
+    },
+    "scripts": {
+        "build": "lerna run build",
+        "test": "lerna run test"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@commitlint/cli": "^11.0.0",
+        "@commitlint/config-conventional": "^11.0.0",
+        "@typescript-eslint/eslint-plugin": "^4.14.0",
+        "@typescript-eslint/parser": "^4.14.0",
+        "eslint": "^7.18.0",
+        "eslint-config-prettier": "^7.2.0",
+        "eslint-plugin-prettier": "^3.3.1",
+        "husky": "^4.3.8",
+        "lerna": "^3.22.1",
+        "prettier": "^2.2.1"
+    },
+    "husky": {
+        "hooks": {
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+        }
+    }
+}
