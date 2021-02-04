@@ -3,7 +3,9 @@
     "version": "1.0.0",
     "description": "Serverless webpack example using Typescript",
     "main": "handler.js",
-    "scripts": {},
+    "scripts": {
+        "start": "sls offline"
+    },
     "dependencies": {
         "@therify/types": "1.0.0",
         "aws-sdk": "^2.831.0",
