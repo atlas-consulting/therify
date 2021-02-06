@@ -16,14 +16,17 @@ export const therafyTypography: TypographyOptions = {
     h1: {
         fontSize: TherafyFontSizes.Xl,
         fontWeight: 700,
+        marginBotttom: TherafyFontSizes.Xl
     },
     h2: {
         fontSize: TherafyFontSizes.Lg,
         fontWeight: 700,
+        marginBotttom: TherafyFontSizes.Xl
     },
     h3: {
         fontSize: TherafyFontSizes.Md,
         fontWeight: 700,
+        marginBotttom: TherafyFontSizes.Lg
     },
     body1: {
         fontSize: TherafyFontSizes.Base,
