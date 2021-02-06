@@ -8,6 +8,9 @@ export const therafyTheme = createMuiTheme({
     typography: therafyTypography,
     overrides: therafyglobals,
     props: {
+        MuiSelect: {
+            color: 'secondary',
+        },
         MuiButtonBase: {
             disableRipple: true,
         },
