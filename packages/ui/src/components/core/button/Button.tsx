@@ -5,7 +5,7 @@ import React from 'react';
 export const ButtonFill: React.FC = (props: ButtonProps) => {
     const theme = useTheme();
     return (
-        <Button color="primary" {...props} variant="contained" style={{ padding: theme.spacing(1) }}>
+        <Button color="primary" {...props} variant="contained" style={{ padding: theme.spacing(0, 1) }}>
             {props.children}
         </Button>
     );
@@ -13,7 +13,7 @@ export const ButtonFill: React.FC = (props: ButtonProps) => {
 export const ButtonOutline: React.FC = (props: ButtonProps) => {
     const theme = useTheme();
     return (
-        <Button color="primary" {...props} variant="outlined" style={{ padding: theme.spacing(1) }}>
+        <Button color="primary" {...props} variant="outlined" style={{ padding: theme.spacing(0, 1) }}>
             {props.children}
         </Button>
     );
