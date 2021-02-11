@@ -23,7 +23,7 @@ export const NavDrawerPage = ({ drawer: Drawer, children }: NavDrawerPageProps) 
     };
     return (
         <Grid container>
-            <Grid xs={12} sm={2} style={navStyle}>
+            <Grid item xs={12} sm={2} style={navStyle}>
                 {<Drawer />}
             </Grid>
             <Grid item xs={12} sm={10} style={contentStyle}>
