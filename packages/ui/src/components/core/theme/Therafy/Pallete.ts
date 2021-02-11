@@ -22,11 +22,17 @@ export const therafyPalette: PaletteOptions = {
         main: TherafyBrandColors.Purple,
         contrastText: TherafyBrandColors.White,
     },
-    text: {},
+    text: {
+        primary: TherafyBrandColors.Black,
+    },
     success: {
         main: TherafyBrandColors.Success,
     },
     error: {
         main: TherafyBrandColors.Error,
+    },
+    background: {
+        default: TherafyBrandColors.Offwhite,
+        paper: TherafyBrandColors.White,
     },
 };
