@@ -6,6 +6,7 @@ export const therafyglobals: Overrides = {
         '@global': {
             html: {
                 WebkitFontSmoothing: 'auto',
+                boxSizing: 'border-box',
             },
             body: {
                 color: TherafyBrandColors.Black,

@@ -27,6 +27,7 @@ export const therafyPalette: PaletteOptions = {
     },
     success: {
         main: TherafyBrandColors.Success,
+        contrastText: TherafyBrandColors.White,
     },
     error: {
         main: TherafyBrandColors.Error,
