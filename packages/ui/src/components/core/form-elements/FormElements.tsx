@@ -56,6 +56,18 @@ export const Select = ({ id, name, options, selectedValue, handleChange, label }
     );
 };
 
-export const Input = (props: InputBaseComponentProps) => {
-    return <TextField variant="outlined" inputProps={props} />;
+export const Input = (props: { label: string } & InputBaseComponentProps) => {
+    const theme = useTheme();
+    return (
+        <TextField
+            variant="outlined"
+            inputProps={{
+                ...props,
+                style: {
+                    padding: theme.spacing(0.75, 1),
+                    ...props.style,
+                },
+            }}
+        />
+    );
 };
