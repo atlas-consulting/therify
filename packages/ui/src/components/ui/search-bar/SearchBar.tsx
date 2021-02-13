@@ -2,6 +2,7 @@ import { Box, useTheme } from '@material-ui/core';
 import React, { useState } from 'react';
 import { Input } from '../../core';
 import { Search, Close } from '@material-ui/icons';
+import { CSSProperties } from '@material-ui/core/styles/withStyles';
 export type SearchBarProps = {
     value: string;
     label: string;
@@ -9,14 +10,15 @@ export type SearchBarProps = {
     'data-testid'?: string;
     onChange: (searchValue: string) => void;
     onClear?: () => void;
+    style?: CSSProperties;
 };
-export const SearchBar = ({ label, value, onChange, onClear, placeholder }: SearchBarProps) => {
+export const SearchBar = ({ label, value, onChange, onClear, placeholder, style }: SearchBarProps) => {
     const theme = useTheme();
     const handleChange = (ev: any) => onChange(ev.target?.value ?? '');
     const [isActive, setIsActive] = useState(false);
     const isVisible = !!value || isActive;
     return (
-        <Box position="relative" display="inline-block" data-testid="searchbar">
+        <Box position="relative" display="inline-block" data-testid="searchbar" style={style}>
             <label htmlFor={label} style={{ display: 'none' }}>
                 {label}
             </label>
