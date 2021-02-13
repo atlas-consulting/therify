@@ -2507,6 +2507,12 @@
     react-is "^16.8.0 || ^17.0.0"
     react-transition-group "^4.4.0"
 
+"@material-ui/icons@^4.11.2":
+  version "4.11.2"
+  resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-4.11.2.tgz#b3a7353266519cd743b6461ae9fdfcb1b25eb4c5"
+  dependencies:
+    "@babel/runtime" "^7.4.4"
+
 "@material-ui/styles@^4.11.3":
   version "4.11.3"
   resolved "https://registry.yarnpkg.com/@material-ui/styles/-/styles-4.11.3.tgz#1b8d97775a4a643b53478c895e3f2a464e8916f2"
@@ -3770,6 +3776,12 @@
 "@testing-library/user-event@^12.1.10":
   version "12.6.3"
   resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-12.6.3.tgz#4a77c56a48823cf8adebd0f57670e4a89c24d058"
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+
+"@testing-library/user-event@^12.7.0":
+  version "12.7.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-12.7.0.tgz#39084ab8c777f6113980b80b8a25f2b7e349f8aa"
   dependencies:
     "@babel/runtime" "^7.12.5"
 
