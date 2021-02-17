@@ -18,7 +18,8 @@ export type SelectProps = {
     label?: string;
     options: SelectOption[];
     selectedValue: string;
-    handleChange: (selectedValue: string) => void;
+    useNameInDisplay?: boolean;
+    onChange: (selectedValue: string) => void;
 };
 export type SelectOption = {
     value: string;
@@ -26,7 +27,7 @@ export type SelectOption = {
     key?: string;
     ariaLabel?: string;
 };
-export const Select = ({ id, name, options, selectedValue, handleChange, label }: SelectProps) => {
+export const Select = ({ id, name, options, selectedValue, onChange, label, useNameInDisplay }: SelectProps) => {
     const theme = useTheme();
     return (
         <FormControl variant="outlined" style={{ padding: 0 }}>
@@ -41,7 +42,7 @@ export const Select = ({ id, name, options, selectedValue, handleChange, label }
                         padding: `0 ${theme.spacing(3)}px 0 ${theme.spacing(1)}px`,
                     },
                 }}
-                onChange={(ev) => handleChange(ev.target.value as string)}
+                onChange={(ev) => onChange(ev.target.value as string)}
                 style={{
                     padding: theme.spacing(0.5),
                 }}
