@@ -1,6 +1,7 @@
 import { createMuiTheme } from '@material-ui/core';
 import { therafyglobals } from './Globals';
 import { therafyPalette } from './Pallete';
+import { therafyShape } from './Shape';
 import { therafyTypography } from './Typography';
 
 export const therafyTheme = createMuiTheme({
@@ -15,4 +16,5 @@ export const therafyTheme = createMuiTheme({
             disableRipple: true,
         },
     },
+    shape: therafyShape,
 });
