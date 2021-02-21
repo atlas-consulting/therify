@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 import { PatientCard as PatientCardUi } from './PatientCard';
+import { RankingStatus } from '../provider-ranking';
 
 const mockPatient = {
     email: 'test@storybook.com',
@@ -15,6 +16,20 @@ const mockPatient = {
     },
 };
 
+const mockRanking = {
+    id: 'test',
+    provider: {
+        name: 'Dr. Test Jackson',
+        state: 'TN',
+        network: 'Cigna',
+        gender: 'male',
+        race: 'No ',
+        specialty: 'Stress',
+    },
+    onApprove: async () => {},
+    status: RankingStatus.GOOD,
+};
+
 export const PatientCard: Story = () => {
     const [isChecked, setIsChecked] = useState(false);
     return (
@@ -22,7 +37,7 @@ export const PatientCard: Story = () => {
             isChecked={isChecked}
             onCheck={() => setIsChecked(!isChecked)}
             patient={mockPatient}
-            rankings={[]}
+            rankings={[mockRanking, mockRanking, mockRanking]}
         />
     );
 };

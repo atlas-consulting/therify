@@ -9,7 +9,10 @@ export enum TherafyBrandColors {
     White = '#FFFFFF',
     Offwhite = '#F5F5F5',
     Success = '#3DDC97',
+    SuccessLight = '#ECFBF5',
+    WarningLight = '#F9EEE1',
     Error = '#DB3A34',
+    ErrorLight = '#FBEBEB',
 }
 
 export const therafyPalette: PaletteOptions = {
@@ -26,10 +29,16 @@ export const therafyPalette: PaletteOptions = {
         primary: TherafyBrandColors.Black,
     },
     success: {
+        light: TherafyBrandColors.SuccessLight,
         main: TherafyBrandColors.Success,
         contrastText: TherafyBrandColors.White,
     },
+    warning: {
+        light: TherafyBrandColors.WarningLight,
+        main: TherafyBrandColors.Orange,
+    },
     error: {
+        light: TherafyBrandColors.ErrorLight,
         main: TherafyBrandColors.Error,
     },
     background: {

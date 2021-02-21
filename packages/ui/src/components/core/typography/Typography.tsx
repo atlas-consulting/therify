@@ -48,7 +48,7 @@ export const Subtitle2 = (props: TypographyProps) => (
     </Typography>
 );
 export const TextBold = (props: TypographyProps) => (
-    <Typography variant="body1" gutterBottom {...props} style={{ fontWeight: 700 }}>
+    <Typography variant="body1" gutterBottom {...props} style={{ fontWeight: 700, ...(props.style ?? {}) }}>
         {props.children}
     </Typography>
 );
