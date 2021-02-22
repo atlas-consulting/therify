@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
 import { PatientCard as PatientCardUi } from './PatientCard';
-import { RankingStatus } from '../provider-ranking';
+import { RankingStatus } from '@therify/types/lib/match';
 
 const mockPatient = {
     email: 'test@storybook.com',
@@ -37,7 +37,29 @@ export const PatientCard: Story = () => {
             isChecked={isChecked}
             onCheck={() => setIsChecked(!isChecked)}
             patient={mockPatient}
-            rankings={[mockRanking, mockRanking, mockRanking]}
+            rankings={[
+                { ...mockRanking, id: '1' },
+                { ...mockRanking, id: '2' },
+                { ...mockRanking, id: '3' },
+            ]}
+            handleApprove={async () => {}}
+            handleCreateMatch={() => {}}
+        />
+    );
+};
+export const NoMatchCreation: Story = () => {
+    const [isChecked, setIsChecked] = useState(false);
+    return (
+        <PatientCardUi
+            isChecked={isChecked}
+            onCheck={() => setIsChecked(!isChecked)}
+            patient={mockPatient}
+            rankings={[
+                { ...mockRanking, id: '1' },
+                { ...mockRanking, id: '2' },
+                { ...mockRanking, id: '3' },
+            ]}
+            handleApprove={async () => {}}
         />
     );
 };

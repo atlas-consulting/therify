@@ -1,12 +1,9 @@
-import { Box, Theme, useTheme } from '@material-ui/core';
+import { Box, Theme, useTheme, withStyles } from '@material-ui/core';
+import { Delete } from '@material-ui/icons';
+import { RankingStatus } from '@therify/types/lib/match';
 import React from 'react';
 import { Text, TextSmall, TextBold } from '../../core';
 import { ApprovalButton } from '../approval-button';
-export enum RankingStatus {
-    GOOD = 'good',
-    WARNING = 'warning',
-    INCOMPATIBLE = 'incompatible',
-}
 export type ProviderRankingProps = {
     id: string;
     status: RankingStatus;
@@ -15,6 +12,7 @@ export type ProviderRankingProps = {
     statusText?: string;
     onApprove: (rankingId: string) => Promise<unknown>;
     onCancel?: () => void;
+    onDelete?: (rankingId: string) => void;
 };
 const getStatusColor = ({ theme, status }: { status: RankingStatus; theme: Theme }) => {
     switch (status) {
@@ -34,17 +32,17 @@ export const ProviderRanking = ({
     statusText,
     onApprove,
     onCancel,
+    onDelete,
 }: ProviderRankingProps) => {
     const theme = useTheme();
     const { backgroundColor, textColor } = getStatusColor({ theme, status });
     return (
-        <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            width="100%"
-            style={{ marginBottom: theme.spacing(1) }}
-        >
+        <RankingWrapper style={{ marginBottom: theme.spacing(1) }}>
+            {onDelete && (
+                <DeleteWithStyles title="Delete this match" className="delete-match" onClick={() => onDelete(id)}>
+                    <Delete color="error" fontSize="small" style={{ marginRight: theme.spacing(1) }} />
+                </DeleteWithStyles>
+            )}
             <Box
                 style={{
                     ...flexCenter,
@@ -71,7 +69,7 @@ export const ProviderRanking = ({
                     buttonText="Approve"
                 />
             </Box>
-        </Box>
+        </RankingWrapper>
     );
 };
 
@@ -80,3 +78,25 @@ const flexCenter = {
     alignItems: 'center',
     justifyContent: 'center',
 };
+const DeleteWithStyles = withStyles({
+    root: {
+        opacity: 0,
+        cursor: 'pointer',
+        transition: '200ms',
+        '&:hover': {
+            opacity: '1 !important',
+        },
+    },
+})(Box);
+
+const RankingWrapper = withStyles({
+    root: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        '&:hover .delete-match': {
+            opacity: 0.5,
+        },
+    },
+})(Box);
