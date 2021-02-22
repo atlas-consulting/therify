@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ApprovalButton } from './ApprovalButton';
 
+// TODO: Write more tests
 describe('ApprovalButton', () => {
     beforeEach(() => {
         jest.useFakeTimers();
