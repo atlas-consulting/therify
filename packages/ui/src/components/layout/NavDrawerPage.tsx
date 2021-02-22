@@ -1,12 +1,13 @@
 import React, { CSSProperties } from 'react';
-import { Paper, Grid, useTheme, Hidden } from '@material-ui/core';
+import { Grid, useTheme } from '@material-ui/core';
 
 export type NavDrawerPageProps = {
     drawer: React.FC;
     children: React.ReactNode;
+    style?: React.CSSProperties;
 };
 
-export const NavDrawerPage = ({ drawer: Drawer, children }: NavDrawerPageProps) => {
+export const NavDrawerPage = ({ drawer: Drawer, children, style }: NavDrawerPageProps) => {
     const theme = useTheme();
     const navStyle: CSSProperties = {
         background: theme.palette.background.paper,
@@ -16,7 +17,6 @@ export const NavDrawerPage = ({ drawer: Drawer, children }: NavDrawerPageProps) 
     };
     const contentStyle: CSSProperties = {
         background: theme.palette.background.default,
-        padding: theme.spacing(3, 6),
         height: '100vh',
         overflow: 'auto',
         overflowX: 'hidden',
@@ -26,7 +26,7 @@ export const NavDrawerPage = ({ drawer: Drawer, children }: NavDrawerPageProps) 
             <Grid item xs={12} sm={2} style={navStyle}>
                 {<Drawer />}
             </Grid>
-            <Grid item xs={12} sm={10} style={contentStyle}>
+            <Grid item xs={12} sm={10} style={{ ...contentStyle, ...style }}>
                 {children}
             </Grid>
         </Grid>
