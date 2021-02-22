@@ -39,8 +39,9 @@ export const SuccessButton = (props: ButtonProps) => {
             borderColor: theme.palette.success.main,
             padding: theme.spacing(0, 1),
             '&:hover': {
-                backgroundColor: theme.palette.success.dark,
-                borderColor: theme.palette.success.dark,
+                backgroundColor: theme.palette.success.main,
+                borderColor: theme.palette.success.main,
+                boxShadow: theme.shadows[4],
             },
             '&:active': {
                 boxShadow: 'none',
