@@ -18,14 +18,14 @@ export const Select: Story = () => {
         <SelectUi
             name="storybook-select"
             selectedValue={selected}
-            handleChange={(s: string) => setSelected(s)}
+            onChange={(s: string) => setSelected(s)}
             options={options}
         />
     );
 };
 
 export const Input: Story = () => {
-    return <InputUi placeholder="This is an input" />;
+    return <InputUi label="test" placeholder="This is an input" />;
 };
 
 export default {

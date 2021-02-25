@@ -10,7 +10,9 @@ import {
 } from '@material-ui/core';
 import React from 'react';
 
-export const Checkbox = (props: CheckboxProps) => <MuiCheckbox color="primary" {...props} />;
+export const Checkbox = (props: CheckboxProps) => (
+    <MuiCheckbox color="primary" {...props} style={{ padding: 0, ...(props.style ?? {}) }} />
+);
 
 export type SelectProps = {
     name?: string;
