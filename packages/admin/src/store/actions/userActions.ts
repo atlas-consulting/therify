@@ -1,15 +1,9 @@
+import { User } from '../../models';
+
 // Todo: type out content
 export enum UserActionTypes {
     SET_USER = 'SET_USER',
 }
-
-export type User = {
-    firstName: string;
-    lastName: string;
-    email: string;
-    id: string;
-    token: string;
-};
 
 export interface ISetUserAction {
     type: UserActionTypes;
