@@ -1,14 +1,14 @@
 import { MatchTypes } from '@therify/types';
-// Todo: type out content
-export enum MatchesActionTypes {
+
+export interface IMatchesAction<PayloadType> {
+    type: MatchesActionType;
+    payload: PayloadType;
+}
+export enum MatchesActionType {
     SET_MATCHES = 'SET_MATCHES',
 }
-
-export interface ISetMatchesAction {
-    type: MatchesActionTypes;
-    payload: { matches: MatchTypes.Match[] };
-}
-export const setMatches = (matches: MatchTypes.Match[]): ISetMatchesAction => ({
-    type: MatchesActionTypes.SET_MATCHES,
+export type SetMatchesPayload = { matches: MatchTypes.Match[] };
+export const setMatches = (matches: MatchTypes.Match[]): IMatchesAction<SetMatchesPayload> => ({
+    type: MatchesActionType.SET_MATCHES,
     payload: { matches },
 });

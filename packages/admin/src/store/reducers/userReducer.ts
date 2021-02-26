@@ -1,4 +1,4 @@
-import { UserActionTypes, ISetUserAction } from '../actions';
+import { UserActionType, IUserAction, SetUserPayload } from '../actions';
 export type UserStore = {
     firstName: string;
     lastName: string;
@@ -14,10 +14,10 @@ const initialState: UserStore = {
     token: '',
 };
 
-export default function userReducer(state = initialState, action: any) {
+export default function userReducer(state = initialState, action: IUserAction<any>) {
     switch (action.type) {
-        case UserActionTypes.SET_USER:
-            const { payload: userDetails } = action.payload as ISetUserAction;
+        case UserActionType.SET_USER:
+            const { payload: userDetails } = action as IUserAction<SetUserPayload>;
             return {
                 ...state,
                 ...userDetails,

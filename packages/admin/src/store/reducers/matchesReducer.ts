@@ -1,5 +1,5 @@
 import { MatchTypes } from '@therify/types';
-import { MatchesActionTypes, ISetMatchesAction } from '../actions';
+import { IMatchesAction, MatchesActionType, SetMatchesPayload } from '../actions';
 export type MatchesStore = {
     matches: Record<string, MatchTypes.Match>;
 };
@@ -7,12 +7,12 @@ const initialState: MatchesStore = {
     matches: {},
 };
 
-export default function matchesReducer(state = initialState, action: any) {
+export default function matchesReducer(state = initialState, action: IMatchesAction<unknown>) {
     switch (action.type) {
-        case MatchesActionTypes.SET_MATCHES:
+        case MatchesActionType.SET_MATCHES:
             const {
                 payload: { matches },
-            } = action.payload as ISetMatchesAction;
+            } = action as IMatchesAction<SetMatchesPayload>;
             const matchesMap = matches.reduce((map, match) => {
                 map[match.id] = match;
                 return map;

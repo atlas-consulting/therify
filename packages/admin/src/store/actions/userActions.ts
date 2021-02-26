@@ -1,16 +1,17 @@
 import { User } from '../../models';
 
-// Todo: type out content
-export enum UserActionTypes {
+export interface IUserAction<PayloadType> {
+    type: UserActionType;
+    payload: PayloadType;
+}
+
+export enum UserActionType {
     SET_USER = 'SET_USER',
 }
 
-export interface ISetUserAction {
-    type: UserActionTypes;
-    payload: User;
-}
-export const setUser = (user: User): ISetUserAction => ({
-    type: UserActionTypes.SET_USER,
+export type SetUserPayload = User;
+export const setUser = (user: User): IUserAction<SetUserPayload> => ({
+    type: UserActionType.SET_USER,
     payload: {
         firstName: user.firstName,
         lastName: user.lastName,
