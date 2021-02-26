@@ -4,11 +4,11 @@ export enum MatchesActionTypes {
     SET_MATCHES = 'SET_MATCHES',
 }
 
-export type SetMatchesAction = {
+export interface ISetMatchesAction {
     type: MatchesActionTypes;
     payload: { matches: MatchTypes.Match[] };
-};
-export const setMatches = (matches: MatchTypes.Match[]): SetMatchesAction => ({
+}
+export const setMatches = (matches: MatchTypes.Match[]): ISetMatchesAction => ({
     type: MatchesActionTypes.SET_MATCHES,
     payload: { matches },
 });
