@@ -1,7 +1,8 @@
 // TODO: Type this out correctly
 export type Match = {
-    patient: Patient,
-    matches: Ranking[]
+    id: string;
+    patient: Patient;
+    matches: Ranking[];
 };
 
 export type Features = {
@@ -10,7 +11,7 @@ export type Features = {
     gender: string;
     race: string;
     specialty: string;
-}
+};
 export type Patient = {
     email: string;
     id: string;
@@ -19,9 +20,9 @@ export type Patient = {
 };
 
 export type Ranking = {
-    id: string,
-    provider: {name: string} & Features,
-    status: RankingStatus,
+    id: string;
+    provider: { name: string } & Features;
+    status: RankingStatus;
 };
 
 export enum RankingStatus {

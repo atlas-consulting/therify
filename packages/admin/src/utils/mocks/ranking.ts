@@ -1,6 +1,8 @@
+import { MatchTypes } from '@therify/types';
 import { RankingStatus } from '@therify/types/lib/match';
 
-export const mockModelResult = {
+export const mockModelResult: MatchTypes.Match = {
+    id: 'test1234',
     patient: {
         email: 'test@storybook.com',
         id: '123',
