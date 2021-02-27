@@ -1,11 +1,15 @@
+import { MatchTypes } from '@therify/types';
+import { mockModelResultsList } from './mocks/RankingResult';
+
 export type getMatchesOptions = {
-    userId: string;
+    token: string;
 };
-// TODO: Mock up match objects
-const mockMatches: any[] = [];
+
 const MatchesApiCreator = () => {
     const getMatches = async (options: getMatchesOptions) => {
-        return await new Promise((resolve) => setTimeout(() => resolve(mockMatches), 1000));
+        return await new Promise<MatchTypes.Match[]>((resolve) =>
+            setTimeout(() => resolve(mockModelResultsList), 2000),
+        );
     };
     return { getMatches };
 };
