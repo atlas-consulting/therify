@@ -10,13 +10,13 @@ const mockUser = {
 describe('userSelector', () => {
     describe('getUserState', () => {
         it('should return state object', () => {
-            expect(getUserState({ ...mockUser })).toStrictEqual(mockUser);
+            expect(getUserState({ user: { ...mockUser } })).toStrictEqual(mockUser);
         });
     });
 
     describe('getUserToken', () => {
         it('should return matches as array', () => {
-            expect(getUserToken({ ...mockUser })).toBe(mockUser.token);
+            expect(getUserToken({ user: { ...mockUser } })).toBe(mockUser.token);
         });
     });
 });

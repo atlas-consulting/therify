@@ -1,5 +1,5 @@
 import { MatchesStore } from '../reducers/matchesReducer';
+type Store = { matches: MatchesStore };
+export const getMatchesState = ({ matches }: Store) => matches.modelResults;
 
-export const getMatchesState = (store: MatchesStore) => store.matches;
-
-export const getMatches = (store: MatchesStore) => Object.values(getMatchesState(store));
+export const getMatches = (store: Store) => Object.values(getMatchesState(store));

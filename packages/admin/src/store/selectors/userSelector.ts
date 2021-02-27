@@ -1,5 +1,6 @@
 import { UserStore } from '../reducers/userReducer';
 
-export const getUserState = (store: UserStore) => store;
+type Store = { user: UserStore };
+export const getUserState = ({ user }: Store) => user;
 
-export const getUserToken = (store: UserStore) => store.token;
+export const getUserToken = ({ user }: Store) => user.token;

@@ -1,8 +1,8 @@
-import { mockModelResult } from '../../utils/mocks/ranking';
+import { mockModelResult } from '../../api/mocks/RankingResult';
 import { MatchesActionType, setMatches } from '../actions';
 import matchesReducer, { MatchesStore } from './matchesReducer';
 const mockState: MatchesStore = {
-    matches: {},
+    modelResults: {},
 };
 describe('matches reducer', () => {
     it('should return default state', () => {
@@ -14,7 +14,7 @@ describe('matches reducer', () => {
         const action = setMatches([mockModelResult]);
         expect(matchesReducer(mockState, action)).toStrictEqual({
             ...mockState,
-            matches: {
+            modelResults: {
                 [mockModelResult.id]: mockModelResult,
             },
         });
