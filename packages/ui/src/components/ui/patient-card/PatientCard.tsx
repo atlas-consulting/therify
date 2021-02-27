@@ -1,4 +1,4 @@
-import { Box, Paper, Theme, useTheme, withStyles } from '@material-ui/core';
+import { Box, Paper, Theme, useTheme, withStyles, Grid } from '@material-ui/core';
 import { Checkbox, TextSmall, Text } from '../../';
 import React from 'react';
 import { Header3 } from '../../core';
@@ -43,29 +43,38 @@ export const PatientCard = ({
                 <TextSmall>{company}</TextSmall>
                 <Header3>{email}</Header3>
                 <TextSmall style={{ paddingTop: theme.spacing(1) }}>Provider Preferences</TextSmall>
-                <Box display="flex" flexWrap="wrap">
-                    {/* TODO: look into cols for preferences */}
-                    <TextSmall style={{ flexGrow: 3 }}>
-                        <b>State: </b>
-                        {preferences.state}
-                    </TextSmall>
-                    <TextSmall style={{ flexGrow: 3 }}>
-                        <b>Gender: </b>
-                        {preferences.gender}
-                    </TextSmall>
-                    <TextSmall style={{ flexGrow: 3 }}>
-                        <b>Specialty: </b>
-                        {preferences.specialty}
-                    </TextSmall>
-                    <TextSmall style={{ flexGrow: 3 }}>
-                        <b>Network: </b>
-                        {preferences.network}
-                    </TextSmall>
-                    <TextSmall style={{ flexGrow: 3 }}>
-                        <b>Race: </b>
-                        {preferences.race}
-                    </TextSmall>
-                </Box>
+                <Grid container>
+                    <Grid item xs={12} sm={4}>
+                        <TextSmall style={{ flexGrow: 3 }}>
+                            <b>State: </b>
+                            {preferences.state}
+                        </TextSmall>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <TextSmall style={{ flexGrow: 3 }}>
+                            <b>Gender: </b>
+                            {preferences.gender}
+                        </TextSmall>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <TextSmall style={{ flexGrow: 3 }}>
+                            <b>Specialty: </b>
+                            {preferences.specialty}
+                        </TextSmall>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <TextSmall style={{ flexGrow: 3 }}>
+                            <b>Network: </b>
+                            {preferences.network}
+                        </TextSmall>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <TextSmall style={{ flexGrow: 3 }}>
+                            <b>Race: </b>
+                            {preferences.race}
+                        </TextSmall>
+                    </Grid>
+                </Grid>
             </Box>
             <Box flexGrow="2" style={{ paddingLeft: theme.spacing(3) }}>
                 <TextSmall style={{ marginLeft: theme.spacing(5) }}>Matches</TextSmall>
