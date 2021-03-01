@@ -1,11 +1,11 @@
 import { Box, Paper, Theme, useTheme, withStyles, Grid } from '@material-ui/core';
-import { Checkbox, TextSmall, Text } from '../../';
+import { Checkbox, TextSmall, Text } from '../..';
 import React from 'react';
 import { Header3 } from '../../core';
 import { ProviderRanking } from '../provider-ranking';
 import { Patient, Ranking } from '@therify/types/lib/match';
 
-export type PatientCardProps = {
+export type MatchesCardProps = {
     isChecked: boolean;
     onCheck: () => void;
     patient: Patient;
@@ -15,7 +15,7 @@ export type PatientCardProps = {
     handleDeleteMatch?: (id: string) => void;
     handleCreateMatch?: () => void;
 };
-export const PatientCard = ({
+export const MatchesCard = ({
     isChecked,
     onCheck,
     patient,
@@ -24,7 +24,7 @@ export const PatientCard = ({
     handleCancelApprove,
     handleDeleteMatch,
     handleCreateMatch,
-}: PatientCardProps) => {
+}: MatchesCardProps) => {
     const theme = useTheme();
     const { email, company, preferences } = patient;
     const TextButton = makeTextButton(theme);
