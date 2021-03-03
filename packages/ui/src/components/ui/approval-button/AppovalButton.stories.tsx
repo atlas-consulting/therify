@@ -16,6 +16,20 @@ export const ApprovalButton: Story = () => {
         />
     );
 };
+export const ApprovalButtonFailure: Story = () => {
+    return (
+        <ApprovalButtonUi
+            rankingId="test"
+            onApprove={() =>
+                new Promise((r, reject) =>
+                    setTimeout(() => {
+                        reject(console.log('Failure!'));
+                    }, 500),
+                )
+            }
+        />
+    );
+};
 
 export default {
     title: 'Ui/ApprovalButton',
