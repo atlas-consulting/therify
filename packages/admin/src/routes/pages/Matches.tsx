@@ -8,27 +8,26 @@ import {
     SelectGroup,
     SelectConfig,
     Divider,
-    PatientCard,
 } from '@therify/ui';
-import { MatchTypes } from '@therify/types';
-import { useTheme, CircularProgress } from '@material-ui/core';
-import { Box } from '@material-ui/core';
-import { mockModelResult } from '../../utils/mocks/ranking';
+import { useTheme, Box } from '@material-ui/core';
+import { useMatchesApi } from '../../hooks/useMatchesApi';
+import { MatchesList } from '../../components/matches-list/MatchesList';
 
 const Nav = () => <h2>hi</h2>;
 export const Matches = () => {
     const theme = useTheme();
-    const modelResults: MatchTypes.Match[] = [
-        { ...mockModelResult, patient: { ...mockModelResult.patient, id: 'test1' } },
-        { ...mockModelResult, patient: { ...mockModelResult.patient, id: 'test2' } },
-        { ...mockModelResult, patient: { ...mockModelResult.patient, id: 'test3' } },
-        { ...mockModelResult, patient: { ...mockModelResult.patient, id: 'test4' } },
-        { ...mockModelResult, patient: { ...mockModelResult.patient, id: 'test5' } },
-    ];
-    const [isLoading, setIsLoading] = useState(false);
+    const { matches, getMatches, createMatch, approveMatch, denyMatch } = useMatchesApi();
+    // const [selectedMatches, setSelectedMatches] = useState({});
     const [companyFilter, setCompanyFilter] = useState('all');
     const [statusFilter, setStatusFilter] = useState('all');
     const [sortByFilter, setSortByFilter] = useState('newest');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleCreateMatch = () => {
+        if (isModalOpen) {
+            createMatch({ patientId: 'add', providerId: 'me' });
+        }
+        setIsModalOpen(!isModalOpen);
+    };
 
     const selectConfigs: SelectConfig[] = [
         {
@@ -72,8 +71,9 @@ export const Matches = () => {
         },
     ];
     useEffect(() => {
-        setIsLoading(true);
-        setTimeout(() => setIsLoading(false), 2000);
+        if (matches.length === 0) {
+            getMatches();
+        }
     }, []);
     return (
         <NavDrawerPage
@@ -104,31 +104,12 @@ export const Matches = () => {
                 </Box>
                 <Divider margin={`${theme.spacing(2)}px 0 0`} />
             </Box>
-
-            <Box flexGrow={1} overflow="auto" style={{ padding: theme.spacing(3, 6), paddingBottom: 0 }}>
-                {isLoading ? (
-                    <Box display="flex" padding={theme.spacing(1)} justifyContent="center" alignItems="center">
-                        <CircularProgress color="primary" />
-                    </Box>
-                ) : (
-                    modelResults.map(({ patient, matches }) => (
-                        <PatientCard
-                            key={patient.id}
-                            isChecked={false}
-                            onCheck={() => {}}
-                            patient={patient}
-                            rankings={matches}
-                            handleApprove={async (result) => {
-                                console.log(result);
-                            }}
-                            handleDeleteMatch={async (id: string) => {
-                                console.log('deleting id: ' + id);
-                            }}
-                            handleCreateMatch={() => console.log('create match!')}
-                        />
-                    ))
-                )}
-            </Box>
+            <MatchesList
+                onCheck={() => {}}
+                handleApprove={approveMatch}
+                handleDeleteMatch={denyMatch}
+                handleCreateMatch={handleCreateMatch}
+            />
         </NavDrawerPage>
     );
 };
