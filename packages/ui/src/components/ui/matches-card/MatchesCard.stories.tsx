@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
-import { PatientCard as PatientCardUi } from './PatientCard';
+import { MatchesCard as MatchesCardUi } from './MatchesCard';
 import { RankingStatus } from '@therify/types/lib/match';
 
 const mockPatient = {
@@ -30,10 +30,10 @@ const mockRanking = {
     status: RankingStatus.GOOD,
 };
 
-export const PatientCard: Story = () => {
+export const MatchesCard: Story = () => {
     const [isChecked, setIsChecked] = useState(false);
     return (
-        <PatientCardUi
+        <MatchesCardUi
             isChecked={isChecked}
             onCheck={() => setIsChecked(!isChecked)}
             patient={mockPatient}
@@ -50,7 +50,7 @@ export const PatientCard: Story = () => {
 export const NoMatchCreation: Story = () => {
     const [isChecked, setIsChecked] = useState(false);
     return (
-        <PatientCardUi
+        <MatchesCardUi
             isChecked={isChecked}
             onCheck={() => setIsChecked(!isChecked)}
             patient={mockPatient}
@@ -65,5 +65,5 @@ export const NoMatchCreation: Story = () => {
 };
 
 export default {
-    title: 'Ui/PatientCard',
+    title: 'Ui/MatchesCard',
 } as Meta;
