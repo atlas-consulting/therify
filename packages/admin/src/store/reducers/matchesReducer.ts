@@ -1,10 +1,10 @@
 import { MatchTypes } from '@therify/types';
 import { IMatchesAction, MatchesActionType, SetMatchesPayload } from '../actions';
 export type MatchesStore = {
-    modelResults: Record<string, MatchTypes.Match>;
+    matches: Record<string, MatchTypes.Match>;
 };
 const initialState: MatchesStore = {
-    modelResults: {},
+    matches: {},
 };
 
 export default function matchesReducer(state = initialState, action: IMatchesAction<unknown>) {
@@ -19,7 +19,7 @@ export default function matchesReducer(state = initialState, action: IMatchesAct
             }, {} as Record<string, MatchTypes.Match>);
             return {
                 ...state,
-                modelResults: matchesMap,
+                matches: matchesMap,
             };
         default:
             return state;

@@ -5,7 +5,7 @@ const mockMatch = { id: 'test' } as MatchTypes.Match;
 describe('matchesSelector', () => {
     describe('getMatchesState', () => {
         it('should return state object', () => {
-            expect(getMatchesState({ matches: { modelResults: { test: mockMatch } } })).toStrictEqual({
+            expect(getMatchesState({ matches: { matches: { test: mockMatch } } })).toStrictEqual({
                 test: mockMatch,
             });
         });
@@ -13,7 +13,7 @@ describe('matchesSelector', () => {
 
     describe('getMatches', () => {
         it('should return matches as array', () => {
-            expect(getMatches({ matches: { modelResults: { test: mockMatch } } })).toStrictEqual([mockMatch]);
+            expect(getMatches({ matches: { matches: { test: mockMatch } } })).toStrictEqual([mockMatch]);
         });
     });
 });
