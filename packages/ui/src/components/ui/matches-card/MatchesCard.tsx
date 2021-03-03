@@ -10,7 +10,7 @@ export type MatchesCardProps = {
     onCheck: () => void;
     patient: Patient;
     rankings: Ranking[];
-    handleApprove: ({ patient, ranking }: { patient: Patient; ranking: Ranking }) => Promise<unknown>;
+    handleApprove: (matchId: string) => Promise<void>;
     handleCancelApprove?: ({ patient, ranking }: { patient: Patient; ranking: Ranking }) => void;
     handleDeleteMatch?: (id: string) => void;
     handleCreateMatch?: () => void;
@@ -88,7 +88,7 @@ export const MatchesCard = ({
                             status={ranking.status}
                             providerName={ranking.provider.name}
                             rank={i + 1}
-                            onApprove={() => handleApprove({ ranking, patient })}
+                            onApprove={() => handleApprove(ranking.id)}
                             onCancel={handleCancelApprove ? () => handleCancelApprove({ ranking, patient }) : undefined}
                             onDelete={handleDeleteMatch}
                         />
