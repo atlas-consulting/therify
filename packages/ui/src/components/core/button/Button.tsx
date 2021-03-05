@@ -1,5 +1,4 @@
-import Button, { ButtonProps } from '@material-ui/core/Button';
-import { useTheme, withStyles } from '@material-ui/core';
+import { useTheme, withStyles, Button, ButtonProps } from '@material-ui/core';
 import React from 'react';
 
 export const ButtonFill = (props: ButtonProps) => {
@@ -9,7 +8,7 @@ export const ButtonFill = (props: ButtonProps) => {
             color="primary"
             {...props}
             variant="contained"
-            style={{ padding: theme.spacing(0, 1), textTransform: 'none' }}
+            style={{ padding: theme.spacing(0, 1), textTransform: 'none', ...props.style }}
         >
             {props.children}
         </Button>
@@ -22,7 +21,7 @@ export const ButtonOutline = (props: ButtonProps) => {
             color="primary"
             {...props}
             variant="outlined"
-            style={{ padding: theme.spacing(0, 1), textTransform: 'none' }}
+            style={{ padding: theme.spacing(0, 1), textTransform: 'none', ...props.style }}
         >
             {props.children}
         </Button>
