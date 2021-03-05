@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createMatchOptions, MatchesApi } from '../api/MatchesApi';
-import { setMatches } from '../store/actions';
+import { removeRankingFromPatient, setMatches } from '../store/actions';
 import { getMatches as getMatchesState, getUserToken } from '../store/selectors';
 
 export const useMatchesApi = () => ({
@@ -56,7 +56,9 @@ const useApproveMatch = () => {
         approveMatchError,
     };
 };
+
 const useDenyMatch = () => {
+    const dispatch = useDispatch();
     const [isDenyingMatch, setIsDenyingMatch] = useState(false);
     const [denyMatchError, setDenyMatchError] = useState<string | undefined>(undefined);
 
@@ -65,6 +67,7 @@ const useDenyMatch = () => {
         setDenyMatchError(undefined);
         try {
             await MatchesApi.denyMatch(matchId);
+            dispatch(removeRankingFromPatient(matchId));
         } catch (error) {
             setDenyMatchError(error.message);
         }
