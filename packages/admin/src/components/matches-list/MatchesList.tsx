@@ -8,8 +8,15 @@ export type MatchesListProps = {
     handleDeleteMatch: (id: string) => void;
     handleCreateMatch: () => void;
     onCheck: () => void;
+    isLoading: boolean;
 };
-export const MatchesList = ({ handleApprove, handleDeleteMatch, handleCreateMatch, onCheck }: MatchesListProps) => {
+export const MatchesList = ({
+    handleApprove,
+    handleDeleteMatch,
+    handleCreateMatch,
+    onCheck,
+    isLoading,
+}: MatchesListProps) => {
     const { matches, getMatchesError, isLoadingMatches, getMatches } = useMatchesApi();
     const theme = useTheme();
     const ErrorContent = getMatchesError ? (
@@ -18,11 +25,12 @@ export const MatchesList = ({ handleApprove, handleDeleteMatch, handleCreateMatc
             <Button onClick={getMatches}>Try again</Button>
         </>
     ) : undefined;
-    const LoadingContent = isLoadingMatches ? (
-        <Box display="flex" padding={theme.spacing(1)} justifyContent="center" alignItems="center">
-            <CircularProgress color="primary" />
-        </Box>
-    ) : undefined;
+    const LoadingContent =
+        isLoadingMatches || isLoading ? (
+            <Box display="flex" padding={theme.spacing(1)} justifyContent="center" alignItems="center">
+                <CircularProgress color="primary" />
+            </Box>
+        ) : undefined;
 
     const MatchesContent =
         matches.length === 0 ? (

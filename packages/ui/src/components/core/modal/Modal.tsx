@@ -15,7 +15,7 @@ export const Modal = ({ handleClose, isOpen, children, title }: ModalProps) => {
             <div
                 style={{
                     minWidth: '300px',
-                    padding: theme.spacing(2),
+                    padding: theme.spacing(4),
                 }}
             >
                 {title && <Header3>{title}</Header3>}

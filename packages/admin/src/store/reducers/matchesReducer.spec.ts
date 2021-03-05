@@ -1,8 +1,9 @@
 import { mockModelResult } from '../../api/mocks/RankingResult';
-import { MatchesActionType, setMatches } from '../actions';
+import { MatchesActionType, setMatches, removeRankingFromPatient } from '../actions';
 import matchesReducer, { MatchesStore } from './matchesReducer';
 const mockState: MatchesStore = {
     matches: {},
+    deniedRankingIds: new Set([]),
 };
 describe('matches reducer', () => {
     it('should return default state', () => {
@@ -17,6 +18,14 @@ describe('matches reducer', () => {
             matches: {
                 [mockModelResult.id]: mockModelResult,
             },
+        });
+    });
+
+    it('should set rankingId to state', () => {
+        const action = removeRankingFromPatient('test');
+        expect(matchesReducer(mockState, action)).toStrictEqual({
+            ...mockState,
+            deniedRankingIds: new Set(['test']),
         });
     });
 });
