@@ -2,9 +2,11 @@ import { MatchTypes } from '@therify/types';
 import { IMatchesAction, MatchesActionType, SetMatchesPayload } from '../actions';
 export type MatchesStore = {
     matches: Record<string, MatchTypes.Match>;
+    deniedRankingIds: Set<string>;
 };
 const initialState: MatchesStore = {
     matches: {},
+    deniedRankingIds: new Set(),
 };
 
 export default function matchesReducer(state = initialState, action: IMatchesAction<unknown>) {
@@ -21,6 +23,13 @@ export default function matchesReducer(state = initialState, action: IMatchesAct
                 ...state,
                 matches: matchesMap,
             };
+        case MatchesActionType.REMOVE_RANKING_FROM_PATIENT:
+            const { payload: rankingId } = action as IMatchesAction<string>;
+            return {
+                ...state,
+                deniedRankingIds: state.deniedRankingIds.add(rankingId),
+            };
+
         default:
             return state;
     }
