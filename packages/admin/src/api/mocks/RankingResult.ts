@@ -19,9 +19,10 @@ export const mockModelResult: MatchTypes.Match = {
         {
             id: 'test1',
             provider: {
+                id: 'xx1',
                 name: 'Dr. Test Jackson',
                 state: 'TN',
-                network: 'Cigna',
+                acceptedNetworks: ['Cigna'],
                 gender: 'male',
                 race: 'No ',
                 specialty: 'Stress',
@@ -31,9 +32,10 @@ export const mockModelResult: MatchTypes.Match = {
         {
             id: 'test2',
             provider: {
+                id: 'xx2',
                 name: 'Dr. Test Jameson',
                 state: 'TN',
-                network: 'Cigna',
+                acceptedNetworks: ['Cigna'],
                 gender: 'male',
                 race: 'No ',
                 specialty: 'Stress',
@@ -43,9 +45,10 @@ export const mockModelResult: MatchTypes.Match = {
         {
             id: 'test3',
             provider: {
+                id: 'xx3',
                 name: 'Dr. Test Johnson',
                 state: 'TN',
-                network: 'Cigna',
+                acceptedNetworks: ['Cigna'],
                 gender: 'male',
                 race: 'No ',
                 specialty: 'Stress',

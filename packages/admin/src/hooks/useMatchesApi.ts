@@ -1,3 +1,4 @@
+import { MatchTypes } from '@therify/types';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createMatchOptions, MatchesApi } from '../api/MatchesApi';
@@ -9,6 +10,7 @@ export const useMatchesApi = () => ({
     ...useApproveMatch(),
     ...useDenyMatch(),
     ...useCreateMatch(),
+    ...useListProviders(),
 });
 
 const useGetMatches = () => {
@@ -99,4 +101,26 @@ const useCreateMatch = () => {
         isCreatingMatch,
         createMatchError,
     };
+};
+
+const useListProviders = () => {
+    const [providers, setProviders] = useState<MatchTypes.Provider[]>([]);
+    const [isLoadingProviders, setIsLoadingProviders] = useState(false);
+    const [listProvidersError, setListProvidersError] = useState<string | undefined>(undefined);
+    const listProviders = async (queryParams: Record<string, string> | undefined = {}) => {
+        const queryString = Object.entries(queryParams)
+            .map(([key, value]) => `${key}=${value}`)
+            .join('&');
+        const query = queryString === '' ? '' : `?${queryString}`;
+        setListProvidersError(undefined);
+        setIsLoadingProviders(true);
+        try {
+            const results = await MatchesApi.listProviders(query);
+            setProviders(results);
+        } catch (error) {
+            setListProvidersError(error.message);
+        }
+        setIsLoadingProviders(false);
+    };
+    return { providers, listProviders, isLoadingProviders, listProvidersError };
 };
