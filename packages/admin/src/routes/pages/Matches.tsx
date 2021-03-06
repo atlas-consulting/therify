@@ -16,6 +16,9 @@ import {
 import { useTheme, Box, CircularProgress } from '@material-ui/core';
 import { useMatchesApi } from '../../hooks/useMatchesApi';
 import { MatchesList } from '../../components/matches-list/MatchesList';
+import { Patient } from '@therify/types/lib/match';
+import { CreateMatchModal } from '../../components/create-match-modal';
+import { MatchTypes } from '@therify/types';
 
 const Nav = () => <h2>hi</h2>;
 export const Matches = () => {
@@ -28,18 +31,27 @@ export const Matches = () => {
         denyMatch,
         isDenyingMatch,
         isLoadingMatches,
+        isCreatingMatch,
+        isLoadingProviders,
+        listProviders,
+        listProvidersError,
+        providers,
     } = useMatchesApi();
     // const [selectedMatches, setSelectedMatches] = useState({});
     const [companyFilter, setCompanyFilter] = useState('all');
     const [statusFilter, setStatusFilter] = useState('all');
     const [sortByFilter, setSortByFilter] = useState('newest');
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [createMatchTargetUser, setCreateMatchTargetUser] = useState<MatchTypes.Patient | null>(null);
     const [matchIdToDeny, setMatchIdToDeny] = useState<string | null>(null);
+    const handleOpenCreateMatchModal = (user: Patient) => {
+        setCreateMatchTargetUser(user);
+        listProviders({
+            state: user.preferences.state,
+            network: user.preferences.network,
+        });
+    };
     const handleCreateMatch = () => {
-        if (isModalOpen) {
-            createMatch({ patientId: 'add', providerId: 'me' });
-        }
-        setIsModalOpen(!isModalOpen);
+        createMatch({ patientId: 'add', providerId: 'me' });
     };
 
     const selectConfigs: SelectConfig[] = [
@@ -122,10 +134,21 @@ export const Matches = () => {
                     onCheck={() => {}}
                     handleApprove={approveMatch}
                     handleDeleteMatch={(id) => setMatchIdToDeny(id)}
-                    handleCreateMatch={handleCreateMatch}
+                    handleCreateMatch={handleOpenCreateMatchModal}
                     isLoading={isLoadingMatches}
                 />
             </NavDrawerPage>
+            {createMatchTargetUser && (
+                <CreateMatchModal
+                    selectedUser={createMatchTargetUser}
+                    isOpen={!!createMatchTargetUser}
+                    isLoading={isCreatingMatch || isLoadingProviders}
+                    errorMsg={listProvidersError}
+                    providers={providers}
+                    handleCreate={handleCreateMatch}
+                    handleClose={() => setCreateMatchTargetUser(null)}
+                ></CreateMatchModal>
+            )}
             {matchIdToDeny && (
                 <Modal
                     isOpen={!!matchIdToDeny}
