@@ -1,10 +1,10 @@
 import { cleanup } from '@testing-library/react';
 import { MatchesList } from './MatchesList';
 import { renderWithStore } from '../../utils/testUtils';
-import { mockModelResult } from '../../api/mocks/RankingResult';
+import { mockModelResult } from '../../api/mocks/rankingResult';
 import { MatchTypes } from '@therify/types';
 
-describe.only('MatchesList', () => {
+describe('MatchesList', () => {
     const mockHandleApprove = jest.fn();
     const mockHandleDeleteMatch = jest.fn();
     const mockHandleCreateMatch = jest.fn();
@@ -31,6 +31,7 @@ describe.only('MatchesList', () => {
         // TODO: Fix this test
         const { getByText } = renderWithStore(
             <MatchesList
+                isLoading={false}
                 onCheck={mockOnCheck}
                 handleApprove={mockHandleApprove}
                 handleDeleteMatch={mockHandleDeleteMatch}
@@ -45,6 +46,7 @@ describe.only('MatchesList', () => {
         mockMatches = [mockModelResult];
         const { getByText } = renderWithStore(
             <MatchesList
+                isLoading={false}
                 onCheck={mockOnCheck}
                 handleApprove={mockHandleApprove}
                 handleDeleteMatch={mockHandleDeleteMatch}
@@ -58,6 +60,7 @@ describe.only('MatchesList', () => {
         mockGetMatchesError = 'This is a test';
         const { getByText } = renderWithStore(
             <MatchesList
+                isLoading={false}
                 onCheck={mockOnCheck}
                 handleApprove={mockHandleApprove}
                 handleDeleteMatch={mockHandleDeleteMatch}

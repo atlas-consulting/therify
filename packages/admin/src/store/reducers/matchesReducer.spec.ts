@@ -1,4 +1,4 @@
-import { mockModelResult } from '../../api/mocks/RankingResult';
+import { mockModelResult } from '../../api/mocks/rankingResult';
 import { MatchesActionType, setMatches, removeRankingFromPatient } from '../actions';
 import matchesReducer, { MatchesStore } from './matchesReducer';
 const mockState: MatchesStore = {
