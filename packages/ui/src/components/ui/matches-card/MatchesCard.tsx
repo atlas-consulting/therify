@@ -4,6 +4,7 @@ import React from 'react';
 import { Header3 } from '../../core';
 import { ProviderRanking } from '../provider-ranking';
 import { Patient, Ranking } from '@therify/types/lib/match';
+import { PreferencesGrid } from '../preferences-grid';
 
 export type MatchesCardProps = {
     isChecked: boolean;
@@ -43,38 +44,7 @@ export const MatchesCard = ({
                 <TextSmall>{company}</TextSmall>
                 <Header3>{email}</Header3>
                 <TextSmall style={{ paddingTop: theme.spacing(1) }}>Provider Preferences</TextSmall>
-                <Grid container>
-                    <Grid item xs={12} sm={4}>
-                        <TextSmall style={{ flexGrow: 3 }}>
-                            <b>State: </b>
-                            {preferences.state}
-                        </TextSmall>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <TextSmall style={{ flexGrow: 3 }}>
-                            <b>Gender: </b>
-                            {preferences.gender}
-                        </TextSmall>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <TextSmall style={{ flexGrow: 3 }}>
-                            <b>Specialty: </b>
-                            {preferences.specialty}
-                        </TextSmall>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <TextSmall style={{ flexGrow: 3 }}>
-                            <b>Network: </b>
-                            {preferences.network}
-                        </TextSmall>
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <TextSmall style={{ flexGrow: 3 }}>
-                            <b>Race: </b>
-                            {preferences.race}
-                        </TextSmall>
-                    </Grid>
-                </Grid>
+                <PreferencesGrid preferences={preferences} />
             </Box>
             <Box flexGrow="2" style={{ paddingLeft: theme.spacing(3) }}>
                 <TextSmall style={{ marginLeft: theme.spacing(5) }}>Matches</TextSmall>
