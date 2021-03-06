@@ -2,11 +2,12 @@ import React from 'react';
 import { Text, MatchesCard, ButtonFill as Button } from '@therify/ui';
 import { useTheme, CircularProgress, Box } from '@material-ui/core';
 import { useMatchesApi } from '../../hooks/useMatchesApi';
+import { Patient } from '@therify/types/lib/match';
 
 export type MatchesListProps = {
     handleApprove: (matchId: string) => Promise<void>;
     handleDeleteMatch: (id: string) => void;
-    handleCreateMatch: () => void;
+    handleCreateMatch: (user: Patient) => void;
     onCheck: () => void;
     isLoading: boolean;
 };
@@ -45,7 +46,7 @@ export const MatchesList = ({
                     rankings={matches}
                     handleApprove={handleApprove}
                     handleDeleteMatch={handleDeleteMatch}
-                    handleCreateMatch={handleCreateMatch}
+                    handleCreateMatch={() => handleCreateMatch(patient)}
                 />
             ))
         );
