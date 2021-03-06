@@ -56,7 +56,7 @@ export const MatchesCard = ({
                             key={ranking.id}
                             id={ranking.id}
                             status={ranking.status}
-                            providerName={ranking.provider.name}
+                            displayText={ranking.provider.name}
                             rank={i + 1}
                             onApprove={() => handleApprove(ranking.id)}
                             onCancel={handleCancelApprove ? () => handleCancelApprove({ ranking, patient }) : undefined}
