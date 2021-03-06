@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { MatchTypes } from '@therify/types';
-import { ButtonFill, ButtonOutline, Modal, Text, TextBold, TextSmall } from '@therify/ui';
+import { ButtonFill, ButtonOutline, Modal, Text, TextBold, ProviderRanking, PreferencesGrid } from '@therify/ui';
 import { useTheme, Box, CircularProgress, TextField, Grid } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { RankingStatus } from '@therify/types/lib/match';
 
 export type CreateMatchModalProps = {
     isOpen: boolean;
@@ -44,46 +45,30 @@ export const CreateMatchModal = ({
             {Error ?? Loading ?? (
                 <Box width="400px">
                     <Text style={{ fontWeight: 300, marginTop: theme.spacing(2) }}>{selectedUser.email}</Text>
-                    <Grid container style={{ marginBottom: theme.spacing(2) }}>
-                        <Grid item xs={12} sm={4}>
-                            <TextSmall style={{ flexGrow: 3 }}>
-                                <b>State: </b>
-                                {selectedUser.preferences.state}
-                            </TextSmall>
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <TextSmall style={{ flexGrow: 3 }}>
-                                <b>Gender: </b>
-                                {selectedUser.preferences.gender}
-                            </TextSmall>
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <TextSmall style={{ flexGrow: 3 }}>
-                                <b>Specialty: </b>
-                                {selectedUser.preferences.specialty}
-                            </TextSmall>
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <TextSmall style={{ flexGrow: 3 }}>
-                                <b>Network: </b>
-                                {selectedUser.preferences.network}
-                            </TextSmall>
-                        </Grid>
-                        <Grid item xs={12} sm={4}>
-                            <TextSmall style={{ flexGrow: 3 }}>
-                                <b>Race: </b>
-                                {selectedUser.preferences.race}
-                            </TextSmall>
-                        </Grid>
-                    </Grid>
+                    <Box width="100%" style={{ marginBottom: theme.spacing(2) }}>
+                        <PreferencesGrid preferences={selectedUser.preferences} />
+                    </Box>
                     <TextBold style={{ marginBottom: theme.spacing(1) }}>Provider</TextBold>
-                    <Autocomplete
-                        id="combo-box-demo"
-                        options={providers}
-                        getOptionLabel={(provider) => provider.name}
-                        renderInput={(params) => <TextField {...params} label="Select a provider" variant="outlined" />}
-                        onChange={(_, value) => setSelectedProvider(value)}
-                    />
+                    <Box width="100%" style={{ marginBottom: theme.spacing(2) }}>
+                        {selectedProvider && (
+                            <Box style={{ marginBottom: theme.spacing(2) }}>
+                                <ProviderRanking
+                                    id="selectedProviderStatus"
+                                    displayText="good"
+                                    status={RankingStatus.GOOD}
+                                />
+                            </Box>
+                        )}
+                        <Autocomplete
+                            id="combo-box-demo"
+                            options={providers}
+                            getOptionLabel={(provider) => provider.name}
+                            renderInput={(params) => (
+                                <TextField {...params} label="Select a provider" variant="outlined" />
+                            )}
+                            onChange={(_, value) => setSelectedProvider(value)}
+                        />
+                    </Box>
                     <Box>
                         <ButtonOutline onClick={handleClose}>Cancel</ButtonOutline>
                         <ButtonFill
