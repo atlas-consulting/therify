@@ -19,14 +19,14 @@ const mockPatient = {
 const mockRanking = {
     id: 'test',
     provider: {
+        id: '1',
         name: 'Dr. Test Jackson',
         state: 'TN',
-        network: 'Cigna',
+        acceptedNetworks: ['Cigna'],
         gender: 'male',
         race: 'No ',
         specialty: 'Stress',
     },
-    onApprove: async () => {},
     status: RankingStatus.GOOD,
 };
 
