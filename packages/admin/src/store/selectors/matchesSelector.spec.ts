@@ -1,11 +1,12 @@
 import { MatchTypes } from '@therify/types';
+import { MatchesStore } from '../reducers/matchesReducer';
 import { getDeniedRankingIds, getMatches, getMatchesState } from './matchesSelector';
 
-const mockMatch = ({ id: 'test', matches: [] } as unknown) as MatchTypes.Match;
+const mockMatch = ({ id: 'testid', matches: [] } as unknown) as MatchTypes.Match;
 const mockDeniedRankingId = 'test1';
-const mockStore = {
-    matches: {
-        matches: { test: mockMatch },
+const mockStore: { matchesStore: MatchesStore } = {
+    matchesStore: {
+        matches: { [mockMatch.id]: mockMatch },
         deniedRankingIds: new Set<string>([mockDeniedRankingId]),
     },
 };
@@ -13,7 +14,7 @@ describe('matchesSelector', () => {
     describe('getMatchesState', () => {
         it('should return state object', () => {
             expect(getMatchesState(mockStore)).toStrictEqual({
-                test: mockMatch,
+                [mockMatch.id]: mockMatch,
             });
         });
     });
