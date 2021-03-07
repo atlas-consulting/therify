@@ -31,8 +31,10 @@ export const CreateMatchModal = ({
         }
     };
     const Error = errorMsg ? (
-        <Box display="flex" padding={theme.spacing(1)} justifyContent="center" alignItems="center">
-            <Text>{errorMsg}</Text>
+        <Box padding={theme.spacing(1)} justifyContent="center" alignItems="center">
+            <Text>There seems to be a problem: {errorMsg}</Text>
+            <Text>please close and try again</Text>
+            <ButtonFill onClick={handleClose}>Close</ButtonFill>
         </Box>
     ) : null;
     const Loading = isLoading ? (
@@ -53,6 +55,7 @@ export const CreateMatchModal = ({
                         {selectedProvider && (
                             <Box style={{ marginBottom: theme.spacing(2) }}>
                                 <ProviderRanking
+                                    data-testid="provider-ranking"
                                     id="selectedProviderStatus"
                                     displayText="good"
                                     status={RankingStatus.GOOD}
@@ -60,6 +63,7 @@ export const CreateMatchModal = ({
                             </Box>
                         )}
                         <Autocomplete
+                            data-testid="provider-select"
                             id="combo-box-demo"
                             options={providers}
                             getOptionLabel={(provider) => provider.name}
@@ -70,8 +74,11 @@ export const CreateMatchModal = ({
                         />
                     </Box>
                     <Box>
-                        <ButtonOutline onClick={handleClose}>Cancel</ButtonOutline>
+                        <ButtonOutline data-testid="cancel-btn" onClick={handleClose}>
+                            Cancel
+                        </ButtonOutline>
                         <ButtonFill
+                            data-testid="create-btn"
                             onClick={createMatch}
                             disabled={!selectedProvider}
                             style={{ marginLeft: theme.spacing(1) }}
