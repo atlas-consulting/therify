@@ -6,28 +6,28 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { RankingStatus } from '@therify/types/lib/match';
 
 export type CreateMatchModalProps = {
+    selectedUser: MatchTypes.Patient;
     isOpen: boolean;
     handleClose: () => void;
-    handleCreate: ({ provider, user }: { provider: MatchTypes.Provider; user: MatchTypes.Patient }) => void;
+    handleCreate: (providerId: string) => void;
     providers: MatchTypes.Provider[];
-    selectedUser: MatchTypes.Patient;
     isLoading: boolean;
     errorMsg?: string;
 };
 export const CreateMatchModal = ({
+    selectedUser,
     isOpen,
     handleClose,
     handleCreate,
     providers,
     isLoading,
     errorMsg,
-    selectedUser,
 }: CreateMatchModalProps) => {
     const theme = useTheme();
     const [selectedProvider, setSelectedProvider] = useState<MatchTypes.Provider | null>(null);
     const createMatch = () => {
         if (selectedProvider) {
-            handleCreate({ provider: selectedProvider, user: selectedUser });
+            handleCreate(selectedProvider.id);
         }
     };
     const Error = errorMsg ? (

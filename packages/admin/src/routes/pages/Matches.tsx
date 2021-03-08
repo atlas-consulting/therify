@@ -16,7 +16,6 @@ import {
 import { useTheme, Box, CircularProgress } from '@material-ui/core';
 import { useMatchesApi } from '../../hooks/useMatchesApi';
 import { MatchesList } from '../../components/matches-list/MatchesList';
-import { Patient } from '@therify/types/lib/match';
 import { CreateMatchModal } from '../../components/create-match-modal';
 import { MatchTypes } from '@therify/types';
 
@@ -26,12 +25,14 @@ export const Matches = () => {
     const {
         matches,
         getMatches,
-        createMatch,
         approveMatch,
         denyMatch,
         isDenyingMatch,
+        denyMatchError,
         isLoadingMatches,
-        isCreatingMatch,
+        createRanking,
+        isCreatingRanking,
+        createRankingError,
         isLoadingProviders,
         listProviders,
         listProvidersError,
@@ -41,17 +42,19 @@ export const Matches = () => {
     const [companyFilter, setCompanyFilter] = useState('all');
     const [statusFilter, setStatusFilter] = useState('all');
     const [sortByFilter, setSortByFilter] = useState('newest');
-    const [createMatchTargetUser, setCreateMatchTargetUser] = useState<MatchTypes.Patient | null>(null);
+    const [createMatchTarget, setCreateMatchTarget] = useState<MatchTypes.Match | null>(null);
     const [matchIdToDeny, setMatchIdToDeny] = useState<string | null>(null);
-    const handleOpenCreateMatchModal = (user: Patient) => {
-        setCreateMatchTargetUser(user);
+    const handleOpenCreateMatchModal = (match: MatchTypes.Match) => {
+        setCreateMatchTarget(match);
         listProviders({
-            state: user.preferences.state,
-            network: user.preferences.network,
+            state: match.patient.preferences.state,
+            network: match.patient.preferences.network,
         });
     };
-    const handleCreateMatch = () => {
-        createMatch({ patientId: 'add', providerId: 'me' });
+    const handleCreateRanking = async (providerId: string) => {
+        if (!createMatchTarget) return;
+        await createRanking({ matchId: createMatchTarget.id, patientId: createMatchTarget.patient.id, providerId });
+        setCreateMatchTarget(null);
     };
 
     const selectConfigs: SelectConfig[] = [
@@ -138,15 +141,15 @@ export const Matches = () => {
                     isLoading={isLoadingMatches}
                 />
             </NavDrawerPage>
-            {createMatchTargetUser && (
+            {createMatchTarget && (
                 <CreateMatchModal
-                    selectedUser={createMatchTargetUser}
-                    isOpen={!!createMatchTargetUser}
-                    isLoading={isCreatingMatch || isLoadingProviders}
+                    selectedUser={createMatchTarget.patient}
+                    isOpen={!!createMatchTarget}
+                    isLoading={isCreatingRanking || isLoadingProviders}
                     errorMsg={listProvidersError}
                     providers={providers}
-                    handleCreate={handleCreateMatch}
-                    handleClose={() => setCreateMatchTargetUser(null)}
+                    handleCreate={handleCreateRanking}
+                    handleClose={() => setCreateMatchTarget(null)}
                 ></CreateMatchModal>
             )}
             {matchIdToDeny && (

@@ -14,7 +14,7 @@ export const setMatches = (matches: MatchTypes.Match[]): IMatchesAction<MatchTyp
     payload: matches,
 });
 export const setMatch = (match: MatchTypes.Match): IMatchesAction<MatchTypes.Match> => ({
-    type: MatchesActionType.REMOVE_RANKING_FROM_PATIENT,
+    type: MatchesActionType.SET_MATCH,
     payload: match,
 });
 export const removeRankingFromPatient = (rankingId: string): IMatchesAction<string> => ({

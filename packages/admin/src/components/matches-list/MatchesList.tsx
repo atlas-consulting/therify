@@ -2,12 +2,12 @@ import React from 'react';
 import { Text, MatchesCard, ButtonFill as Button } from '@therify/ui';
 import { useTheme, CircularProgress, Box } from '@material-ui/core';
 import { useMatchesApi } from '../../hooks/useMatchesApi';
-import { Patient } from '@therify/types/lib/match';
+import { MatchTypes } from '@therify/types';
 
 export type MatchesListProps = {
     handleApprove: (matchId: string) => Promise<void>;
     handleDeleteMatch: (id: string) => void;
-    handleCreateMatch: (user: Patient) => void;
+    handleCreateMatch: (match: MatchTypes.Match) => void;
     onCheck: () => void;
     isLoading: boolean;
 };
@@ -37,16 +37,16 @@ export const MatchesList = ({
         matches.length === 0 ? (
             <Text>All caught up. No matches to show!</Text>
         ) : (
-            matches.map(({ patient, matches }) => (
+            matches.map((match) => (
                 <MatchesCard
-                    key={patient.id}
+                    key={match.patient.id}
                     isChecked={false}
                     onCheck={onCheck}
-                    patient={patient}
-                    rankings={matches}
+                    patient={match.patient}
+                    rankings={match.matches}
                     handleApprove={handleApprove}
                     handleDeleteMatch={handleDeleteMatch}
-                    handleCreateMatch={() => handleCreateMatch(patient)}
+                    handleCreateMatch={() => handleCreateMatch(match)}
                 />
             ))
         );

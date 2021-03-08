@@ -1,6 +1,5 @@
 import { MatchTypes } from '@therify/types';
-import { mockModelResultsList } from './mocks/rankingResult';
-import { mockProviders } from './mocks/providers';
+import { mockModelResultsList, mockProviders, mockRanking } from './mocks';
 
 export type getMatchesOptions = {
     token: string;
@@ -8,6 +7,7 @@ export type getMatchesOptions = {
 export type createMatchOptions = {
     patientId: string;
     providerId: string;
+    matchId: string;
 };
 
 const MatchesApiCreator = () => {
@@ -20,13 +20,13 @@ const MatchesApiCreator = () => {
         );
     };
     const createMatch = async ({ patientId, providerId }: createMatchOptions) => {
-        return await new Promise<void>((resolve) =>
+        return await new Promise<MatchTypes.Ranking>((resolve) =>
             setTimeout(() => {
                 console.log(
                     `%cCreating Match for patient '${patientId}' and provider '${providerId}'...`,
                     'color: green',
                 );
-                resolve();
+                resolve(mockRanking);
             }, 2000),
         );
     };

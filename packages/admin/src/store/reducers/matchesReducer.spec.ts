@@ -1,11 +1,13 @@
+import { cleanup } from '@testing-library/react';
 import { mockModelResult } from '../../api/mocks/rankingResult';
-import { MatchesActionType, setMatches, removeRankingFromPatient } from '../actions';
+import { MatchesActionType, setMatches, setMatch, removeRankingFromPatient } from '../actions';
 import matchesReducer, { MatchesStore } from './matchesReducer';
 const mockState: MatchesStore = {
     matches: {},
     deniedRankingIds: new Set([]),
 };
 describe('matches reducer', () => {
+    afterEach(cleanup);
     it('should return default state', () => {
         const type = '' as MatchesActionType;
         expect(matchesReducer(mockState, { type, payload: undefined })).toStrictEqual(mockState);
@@ -17,6 +19,18 @@ describe('matches reducer', () => {
             ...mockState,
             matches: {
                 [mockModelResult.id]: mockModelResult,
+            },
+        });
+    });
+
+    it('should set a single match in state', () => {
+        const newMatch = { ...mockModelResult, id: '999xxx' };
+        const action = setMatch(newMatch);
+        expect(matchesReducer(mockState, action)).toStrictEqual({
+            ...mockState,
+            matches: {
+                ...mockState.matches,
+                [newMatch.id]: newMatch,
             },
         });
     });
