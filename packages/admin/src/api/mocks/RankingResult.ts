@@ -1,5 +1,5 @@
 import { MatchTypes } from '@therify/types';
-import { RankingStatus } from '@therify/types/lib/match';
+import { mockProvider } from './providers';
 
 export const mockModelResult: MatchTypes.Match = {
     id: 'test1234',
@@ -27,7 +27,6 @@ export const mockModelResult: MatchTypes.Match = {
                 race: 'No ',
                 specialty: 'Stress',
             },
-            status: RankingStatus.GOOD,
         },
         {
             id: 'test2',
@@ -40,7 +39,6 @@ export const mockModelResult: MatchTypes.Match = {
                 race: 'No ',
                 specialty: 'Stress',
             },
-            status: RankingStatus.GOOD,
         },
         {
             id: 'test3',
@@ -53,9 +51,13 @@ export const mockModelResult: MatchTypes.Match = {
                 race: 'No ',
                 specialty: 'Stress',
             },
-            status: RankingStatus.GOOD,
         },
     ],
+};
+
+export const mockRanking: MatchTypes.Ranking = {
+    id: 'test789',
+    provider: mockProvider,
 };
 
 export const mockModelResultsList: MatchTypes.Match[] = [

@@ -3,6 +3,7 @@ import { Text, MatchesCard, ButtonFill as Button } from '@therify/ui';
 import { useTheme, CircularProgress, Box } from '@material-ui/core';
 import { useMatchesApi } from '../../hooks/useMatchesApi';
 import { MatchTypes } from '@therify/types';
+import { getRankingStatus } from '../../utils/Matches';
 
 export type MatchesListProps = {
     handleApprove: (matchId: string) => Promise<void>;
@@ -20,6 +21,13 @@ export const MatchesList = ({
 }: MatchesListProps) => {
     const { matches, getMatchesError, isLoadingMatches, getMatches } = useMatchesApi();
     const theme = useTheme();
+    const matchesWithStatuses = matches.map((match) => ({
+        ...match,
+        matches: match.matches.map((ranking) => ({
+            ...ranking,
+            status: getRankingStatus({ user: match.patient, provider: ranking.provider }),
+        })),
+    }));
     const ErrorContent = getMatchesError ? (
         <>
             <Text>Something went wrong: {getMatchesError}</Text>
@@ -37,7 +45,7 @@ export const MatchesList = ({
         matches.length === 0 ? (
             <Text>All caught up. No matches to show!</Text>
         ) : (
-            matches.map((match) => (
+            matchesWithStatuses.map((match) => (
                 <MatchesCard
                     key={match.patient.id}
                     isChecked={false}
