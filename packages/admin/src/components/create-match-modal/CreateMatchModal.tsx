@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MatchTypes } from '@therify/types';
 import { ButtonFill, ButtonOutline, Modal, Text, TextBold, ProviderRanking, PreferencesGrid } from '@therify/ui';
-import { useTheme, Box, CircularProgress, TextField, Grid } from '@material-ui/core';
+import { useTheme, Box, CircularProgress, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { RankingStatus } from '@therify/types/lib/match';
 
@@ -12,7 +12,8 @@ export type CreateMatchModalProps = {
     handleCreate: (providerId: string) => void;
     providers: MatchTypes.Provider[];
     isLoading: boolean;
-    errorMsg?: string;
+    getProvidersError?: string;
+    createError?: string;
 };
 export const CreateMatchModal = ({
     selectedUser,
@@ -21,7 +22,8 @@ export const CreateMatchModal = ({
     handleCreate,
     providers,
     isLoading,
-    errorMsg,
+    getProvidersError,
+    createError,
 }: CreateMatchModalProps) => {
     const theme = useTheme();
     const [selectedProvider, setSelectedProvider] = useState<MatchTypes.Provider | null>(null);
@@ -30,11 +32,27 @@ export const CreateMatchModal = ({
             handleCreate(selectedProvider.id);
         }
     };
-    const Error = errorMsg ? (
+    const CreateButton = ({ children }: { children: React.ReactChild }) => (
+        <ButtonFill
+            data-testid="create-btn"
+            onClick={createMatch}
+            disabled={!selectedProvider}
+            style={{ marginLeft: theme.spacing(1) }}
+        >
+            {children}
+        </ButtonFill>
+    );
+    const GetProvidersError = getProvidersError ? (
         <Box padding={theme.spacing(1)} justifyContent="center" alignItems="center">
-            <Text>There seems to be a problem: {errorMsg}</Text>
+            <Text>There seems to be a problem: {getProvidersError}</Text>
             <Text>please close and try again</Text>
             <ButtonFill onClick={handleClose}>Close</ButtonFill>
+        </Box>
+    ) : null;
+    const CreateError = createError ? (
+        <Box padding={theme.spacing(1)} justifyContent="center" alignItems="center">
+            <Text>There seems to be a problem: {createError}</Text>
+            <CreateButton>Retry</CreateButton>
         </Box>
     ) : null;
     const Loading = isLoading ? (
@@ -44,7 +62,7 @@ export const CreateMatchModal = ({
     ) : null;
     return (
         <Modal isOpen={isOpen} handleClose={handleClose} title="Create Match">
-            {Error ?? Loading ?? (
+            {GetProvidersError ?? CreateError ?? Loading ?? (
                 <Box width="400px">
                     <Text style={{ fontWeight: 300, marginTop: theme.spacing(2) }}>{selectedUser.email}</Text>
                     <Box width="100%" style={{ marginBottom: theme.spacing(2) }}>
@@ -77,14 +95,7 @@ export const CreateMatchModal = ({
                         <ButtonOutline data-testid="cancel-btn" onClick={handleClose}>
                             Cancel
                         </ButtonOutline>
-                        <ButtonFill
-                            data-testid="create-btn"
-                            onClick={createMatch}
-                            disabled={!selectedProvider}
-                            style={{ marginLeft: theme.spacing(1) }}
-                        >
-                            Create
-                        </ButtonFill>
+                        <CreateButton>Create</CreateButton>
                     </Box>
                 </Box>
             )}

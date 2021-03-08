@@ -28,7 +28,6 @@ export const Matches = () => {
         approveMatch,
         denyMatch,
         isDenyingMatch,
-        denyMatchError,
         isLoadingMatches,
         createRanking,
         isCreatingRanking,
@@ -102,7 +101,7 @@ export const Matches = () => {
         if (matches.length === 0) {
             getMatches();
         }
-    }, []);
+    }, [getMatches, matches.length]);
     return (
         <>
             <NavDrawerPage
@@ -146,7 +145,8 @@ export const Matches = () => {
                     selectedUser={createMatchTarget.patient}
                     isOpen={!!createMatchTarget}
                     isLoading={isCreatingRanking || isLoadingProviders}
-                    errorMsg={listProvidersError}
+                    createError={createRankingError}
+                    getProvidersError={listProvidersError}
                     providers={providers}
                     handleCreate={handleCreateRanking}
                     handleClose={() => setCreateMatchTarget(null)}
