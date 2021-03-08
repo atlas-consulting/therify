@@ -28,6 +28,7 @@ export const Matches = () => {
         approveMatch,
         denyMatch,
         isDenyingMatch,
+        denyMatchError,
         isLoadingMatches,
         createRanking,
         isCreatingRanking,
@@ -171,7 +172,11 @@ export const Matches = () => {
                         </Box>
                     ) : (
                         <>
-                            <Text>Are you sure you want to deny match {matchIdToDeny}?</Text>
+                            {denyMatchError ? (
+                                <Text color="error">There was a problem: {denyMatchError}</Text>
+                            ) : (
+                                <Text>Are you sure you want to deny match {matchIdToDeny}?</Text>
+                            )}
                             <ButtonOutline onClick={() => setMatchIdToDeny(null)}>cancel</ButtonOutline>
                             <ButtonFill
                                 onClick={() => {
@@ -179,7 +184,7 @@ export const Matches = () => {
                                 }}
                                 style={{ marginLeft: theme.spacing(1) }}
                             >
-                                Deny
+                                {denyMatchError ? 'Try again' : 'Deny'}
                             </ButtonFill>
                         </>
                     )}
