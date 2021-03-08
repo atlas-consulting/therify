@@ -2,11 +2,13 @@ import React from 'react';
 import { Text, MatchesCard, ButtonFill as Button } from '@therify/ui';
 import { useTheme, CircularProgress, Box } from '@material-ui/core';
 import { useMatchesApi } from '../../hooks/useMatchesApi';
+import { MatchTypes } from '@therify/types';
+import { getRankingStatus } from '../../utils/Matches';
 
 export type MatchesListProps = {
     handleApprove: (matchId: string) => Promise<void>;
     handleDeleteMatch: (id: string) => void;
-    handleCreateMatch: () => void;
+    handleCreateMatch: (match: MatchTypes.Match) => void;
     onCheck: () => void;
     isLoading: boolean;
 };
@@ -19,6 +21,13 @@ export const MatchesList = ({
 }: MatchesListProps) => {
     const { matches, getMatchesError, isLoadingMatches, getMatches } = useMatchesApi();
     const theme = useTheme();
+    const matchesWithStatuses = matches.map((match) => ({
+        ...match,
+        matches: match.matches.map((ranking) => ({
+            ...ranking,
+            status: getRankingStatus({ user: match.patient, provider: ranking.provider }),
+        })),
+    }));
     const ErrorContent = getMatchesError ? (
         <>
             <Text>Something went wrong: {getMatchesError}</Text>
@@ -36,16 +45,16 @@ export const MatchesList = ({
         matches.length === 0 ? (
             <Text>All caught up. No matches to show!</Text>
         ) : (
-            matches.map(({ patient, matches }) => (
+            matchesWithStatuses.map((match) => (
                 <MatchesCard
-                    key={patient.id}
+                    key={match.patient.id}
                     isChecked={false}
                     onCheck={onCheck}
-                    patient={patient}
-                    rankings={matches}
+                    patient={match.patient}
+                    rankings={match.matches}
                     handleApprove={handleApprove}
                     handleDeleteMatch={handleDeleteMatch}
-                    handleCreateMatch={handleCreateMatch}
+                    handleCreateMatch={() => handleCreateMatch(match)}
                 />
             ))
         );

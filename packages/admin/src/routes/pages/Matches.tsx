@@ -16,6 +16,8 @@ import {
 import { useTheme, Box, CircularProgress } from '@material-ui/core';
 import { useMatchesApi } from '../../hooks/useMatchesApi';
 import { MatchesList } from '../../components/matches-list/MatchesList';
+import { CreateMatchModal } from '../../components/create-match-modal';
+import { MatchTypes } from '@therify/types';
 
 const Nav = () => <h2>hi</h2>;
 export const Matches = () => {
@@ -23,23 +25,36 @@ export const Matches = () => {
     const {
         matches,
         getMatches,
-        createMatch,
         approveMatch,
         denyMatch,
         isDenyingMatch,
+        denyMatchError,
         isLoadingMatches,
+        createRanking,
+        isCreatingRanking,
+        createRankingError,
+        isLoadingProviders,
+        listProviders,
+        listProvidersError,
+        providers,
     } = useMatchesApi();
     // const [selectedMatches, setSelectedMatches] = useState({});
     const [companyFilter, setCompanyFilter] = useState('all');
     const [statusFilter, setStatusFilter] = useState('all');
     const [sortByFilter, setSortByFilter] = useState('newest');
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [createMatchTarget, setCreateMatchTarget] = useState<MatchTypes.Match | null>(null);
     const [matchIdToDeny, setMatchIdToDeny] = useState<string | null>(null);
-    const handleCreateMatch = () => {
-        if (isModalOpen) {
-            createMatch({ patientId: 'add', providerId: 'me' });
-        }
-        setIsModalOpen(!isModalOpen);
+    const handleOpenCreateMatchModal = (match: MatchTypes.Match) => {
+        setCreateMatchTarget(match);
+        listProviders({
+            state: match.patient.preferences.state,
+            network: match.patient.preferences.network,
+        });
+    };
+    const handleCreateRanking = async (providerId: string) => {
+        if (!createMatchTarget) return;
+        await createRanking({ matchId: createMatchTarget.id, patientId: createMatchTarget.patient.id, providerId });
+        setCreateMatchTarget(null);
     };
 
     const selectConfigs: SelectConfig[] = [
@@ -87,7 +102,7 @@ export const Matches = () => {
         if (matches.length === 0) {
             getMatches();
         }
-    }, []);
+    }, [getMatches, matches.length]);
     return (
         <>
             <NavDrawerPage
@@ -122,10 +137,22 @@ export const Matches = () => {
                     onCheck={() => {}}
                     handleApprove={approveMatch}
                     handleDeleteMatch={(id) => setMatchIdToDeny(id)}
-                    handleCreateMatch={handleCreateMatch}
+                    handleCreateMatch={handleOpenCreateMatchModal}
                     isLoading={isLoadingMatches}
                 />
             </NavDrawerPage>
+            {createMatchTarget && (
+                <CreateMatchModal
+                    selectedUser={createMatchTarget.patient}
+                    isOpen={!!createMatchTarget}
+                    isLoading={isCreatingRanking || isLoadingProviders}
+                    createError={createRankingError}
+                    getProvidersError={listProvidersError}
+                    providers={providers}
+                    handleCreate={handleCreateRanking}
+                    handleClose={() => setCreateMatchTarget(null)}
+                ></CreateMatchModal>
+            )}
             {matchIdToDeny && (
                 <Modal
                     isOpen={!!matchIdToDeny}
@@ -145,7 +172,11 @@ export const Matches = () => {
                         </Box>
                     ) : (
                         <>
-                            <Text>Are you sure you want to deny match {matchIdToDeny}?</Text>
+                            {denyMatchError ? (
+                                <Text color="error">There was a problem: {denyMatchError}</Text>
+                            ) : (
+                                <Text>Are you sure you want to deny match {matchIdToDeny}?</Text>
+                            )}
                             <ButtonOutline onClick={() => setMatchIdToDeny(null)}>cancel</ButtonOutline>
                             <ButtonFill
                                 onClick={() => {
@@ -153,7 +184,7 @@ export const Matches = () => {
                                 }}
                                 style={{ marginLeft: theme.spacing(1) }}
                             >
-                                Deny
+                                {denyMatchError ? 'Try again' : 'Deny'}
                             </ButtonFill>
                         </>
                     )}

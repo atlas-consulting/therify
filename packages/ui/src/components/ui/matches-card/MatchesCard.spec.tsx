@@ -18,7 +18,13 @@ const mockPatient = {
 describe('MatchesCard', () => {
     it('should render patient data', () => {
         const { getByText } = render(
-            <MatchesCard isChecked={false} onCheck={() => {}} patient={mockPatient} rankings={[]} />,
+            <MatchesCard
+                handleApprove={async () => {}}
+                isChecked={false}
+                onCheck={() => {}}
+                patient={mockPatient}
+                rankings={[]}
+            />,
         );
         expect(getByText(mockPatient.email)).toBeInTheDocument();
         expect(getByText(mockPatient.company)).toBeInTheDocument();
@@ -32,7 +38,13 @@ describe('MatchesCard', () => {
     it('should call `onCheck` when checkbox clicked', () => {
         const handleCheck = jest.fn();
         const { getByTestId } = render(
-            <MatchesCard isChecked={false} onCheck={handleCheck} patient={mockPatient} rankings={[]} />,
+            <MatchesCard
+                isChecked={false}
+                onCheck={handleCheck}
+                patient={mockPatient}
+                rankings={[]}
+                handleApprove={async () => {}}
+            />,
         );
         const checkbox = getByTestId('patient-card-checkbox');
         fireEvent.click(checkbox);

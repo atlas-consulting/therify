@@ -19,9 +19,19 @@ export type Patient = {
     preferences: Features;
 };
 
+export type Provider = {
+    name: string;
+    id: string;
+    state: string;
+    acceptedNetworks: string[];
+    gender: string;
+    race: string;
+    specialty: string;
+};
+
 export type Ranking = {
     id: string;
-    provider: { name: string } & Features;
+    provider: Provider;
     status: RankingStatus;
 };
 

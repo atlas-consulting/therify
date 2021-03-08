@@ -7,10 +7,10 @@ import { ApprovalButton } from '../approval-button';
 export type ProviderRankingProps = {
     id: string;
     status: RankingStatus;
-    rank: number;
-    providerName: string;
+    rank?: number;
+    displayText: string;
     statusText?: string;
-    onApprove: (rankingId: string) => Promise<unknown>;
+    onApprove?: (rankingId: string) => Promise<unknown>;
     onCancel?: () => void;
     onDelete?: (rankingId: string) => void;
 };
@@ -28,7 +28,7 @@ export const ProviderRanking = ({
     id,
     status,
     rank,
-    providerName,
+    displayText,
     statusText,
     onApprove,
     onCancel,
@@ -55,20 +55,22 @@ export const ProviderRanking = ({
                 }}
             >
                 <div style={flexCenter}>
-                    <TextSmall style={{ width: theme.spacing(3), margin: 0 }}>{rank}.</TextSmall>
-                    <TextBold style={{ margin: 0 }}>{providerName}</TextBold>
+                    {rank && <TextSmall style={{ width: theme.spacing(3), margin: 0 }}>{rank}.</TextSmall>}
+                    <TextBold style={{ margin: 0 }}>{displayText}</TextBold>
                 </div>
                 {statusText && <Text style={{ margin: 0, color: textColor }}>{statusText}</Text>}
             </Box>
-            <Box>
-                <ApprovalButton
-                    isHidden={status === RankingStatus.INCOMPATIBLE}
-                    rankingId={id}
-                    onCancel={onCancel}
-                    onApprove={onApprove}
-                    buttonText="Approve"
-                />
-            </Box>
+            {onApprove && (
+                <Box>
+                    <ApprovalButton
+                        isHidden={status === RankingStatus.INCOMPATIBLE}
+                        rankingId={id}
+                        onCancel={onCancel}
+                        onApprove={onApprove}
+                        buttonText="Approve"
+                    />
+                </Box>
+            )}
         </RankingWrapper>
     );
 };
