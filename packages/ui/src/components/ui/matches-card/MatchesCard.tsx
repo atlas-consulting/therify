@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Paper, Theme, useTheme, withStyles } from '@material-ui/core';
-import { Checkbox, TextSmall, Text } from '../..';
+import { Checkbox, TextSmall, Text } from '../../core';
 import { Header3 } from '../../core';
 import { ProviderRanking } from '../provider-ranking';
 import { Patient, Ranking, RankingStatus } from '@therify/types/lib/match';
