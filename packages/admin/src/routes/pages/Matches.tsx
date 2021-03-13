@@ -13,13 +13,11 @@ import {
     ButtonOutline,
     ButtonFill,
 } from '@therify/ui';
+import { MatchTypes } from '@therify/types';
 import { useTheme, Box, CircularProgress } from '@material-ui/core';
 import { useMatchesApi } from '../../hooks/useMatchesApi';
-import { MatchesList } from '../../components/matches-list/MatchesList';
-import { CreateMatchModal } from '../../components/create-match-modal';
-import { MatchTypes } from '@therify/types';
+import { MatchesList, CreateMatchModal, Navigation } from '../../components';
 
-const Nav = () => <h2>hi</h2>;
 export const Matches = () => {
     const theme = useTheme();
     const {
@@ -105,14 +103,7 @@ export const Matches = () => {
     }, [getMatches, matches.length]);
     return (
         <>
-            <NavDrawerPage
-                drawer={Nav}
-                style={{
-                    flexFlow: 'column',
-                    display: 'flex',
-                    height: '100vh',
-                }}
-            >
+            <NavDrawerPage drawer={Navigation} style={{ flexFlow: 'column', display: 'flex', height: '100vh' }}>
                 <Box style={{ padding: theme.spacing(3, 6, 0, 6) }}>
                     <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Header1>Matches</Header1>

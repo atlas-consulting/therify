@@ -1,4 +1,4 @@
-import { getUserState, getUserToken } from './userSelector';
+import { getUserFirstName, getUserLastName, getUserName, getUserState, getUserToken } from './userSelector';
 const mockUser = {
     firstName: 'Test',
     lastName: 'Jackson',
@@ -14,9 +14,21 @@ describe('userSelector', () => {
         });
     });
 
-    describe('getUserToken', () => {
-        it('should return matches as array', () => {
+    describe('user details', () => {
+        it('should getUserToken', () => {
             expect(getUserToken({ user: { ...mockUser } })).toBe(mockUser.token);
+        });
+
+        it('should getUserFirstName', () => {
+            expect(getUserFirstName({ user: { ...mockUser } })).toBe(mockUser.firstName);
+        });
+
+        it('should getUserLastName', () => {
+            expect(getUserLastName({ user: { ...mockUser } })).toBe(mockUser.lastName);
+        });
+
+        it('should getUserName', () => {
+            expect(getUserName({ user: { ...mockUser } })).toBe(`${mockUser.firstName} ${mockUser.lastName}`);
         });
     });
 });

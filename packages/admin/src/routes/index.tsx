@@ -15,7 +15,7 @@ const ProtectedRoute = ({ component: Component, redirectPath: string, ...rest }:
 export const Router = () => (
     <BrowserRouter>
         <Switch>
-            <ProtectedRoute path="/" redirectPath="/login" component={Matches} />
+            <Redirect exact from="/" to="/matches" />
             <ProtectedRoute path="/matches" redirectPath="/login" component={Matches} />
             <Route path="/login" component={Login} />
             <Route path="*" component={() => <h1>404</h1>} />
