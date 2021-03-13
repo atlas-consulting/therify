@@ -1,6 +1,6 @@
 # Therify Lambdas
 
-This package describes the serverless components of the Therify application
+This package describes the serverless components of the Therify application.
 
 ## Relevant Materials
 
