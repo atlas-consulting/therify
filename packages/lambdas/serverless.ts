@@ -2,10 +2,7 @@ import type { Serverless } from 'serverless/aws';
 
 const serverlessConfiguration: Serverless = {
     service: {
-        name: 'lambdas',
-        // app and org for use with dashboard.serverless.com
-        // app: your-app-name,
-        // org: your-org-name,
+        name: 'therify-lambdas',
     },
     frameworkVersion: '2',
     custom: {
@@ -22,7 +19,7 @@ const serverlessConfiguration: Serverless = {
     provider: {
         name: 'aws',
         stage: "${opt:stage,'dev'}",
-        region: "${opt:region,'us-east-2}",
+        region: "${opt:region,'us-east-1'}",
         runtime: 'nodejs12.x',
         apiGateway: {
             minimumCompressionSize: 1024,
