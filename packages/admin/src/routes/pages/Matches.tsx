@@ -103,7 +103,7 @@ export const Matches = () => {
     }, [getMatches, matches.length]);
     return (
         <>
-            <NavDrawerPage drawer={Navigation}>
+            <NavDrawerPage drawer={Navigation} style={{ flexFlow: 'column', display: 'flex', height: '100vh' }}>
                 <Box style={{ padding: theme.spacing(3, 6, 0, 6) }}>
                     <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Header1>Matches</Header1>
