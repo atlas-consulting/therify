@@ -28,11 +28,7 @@ export const Navigation = ({ isExpanded }: NavigationProps) => {
                 }}
             >
                 {/* TODO: Switch styles with delay isntead of scaling up and down */}
-                <img
-                    width={isExpanded ? '100%' : '70%'}
-                    src="https://static1.squarespace.com/static/5d507f5c0bbd8c0001b145ef/t/60061142f838875dc565c8fa/1615142898857/?format=1500w"
-                    alt="Therify logo"
-                />
+                <img width="50%" src="/therify-icon-192.png" alt="Therify logo" />
             </Box>
             {isExpanded && (
                 <Header2 style={{ textAlign: 'center', padding: theme.spacing(3) }}>Hello, {name || 'user'}</Header2>
