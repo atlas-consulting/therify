@@ -18,6 +18,19 @@ export const extractBoundary = (event: APIGatewayProxyEvent): Maybe<string> => {
 
 /**
  *
+ * @param contentSegment
+ * @returns
+ */
+export const extractContentDispositionName = (contentSegment: string): Maybe<string> => {
+    const CONTENT_DISPOSITION_REGEX = new RegExp(/"(.+)"$/m);
+    const result = CONTENT_DISPOSITION_REGEX.exec(contentSegment);
+    if (!result) throw new Error();
+    const [, capture] = result;
+    return Maybe.fromNullable(capture);
+};
+
+/**
+ *
  */
 export const JotFormUserSubmissionAdapter: IntakeAdapter = {
     async parseSubmission(event) {
