@@ -36,4 +36,10 @@ export interface IntakeResultError {
     rawMessage: string;
 }
 
+export interface IntakeSubmission {
+    formID: string;
+    submissionID: string;
+    rawRequest: Record<string, unknown> | string;
+}
+
 export type IntakeResult = IntakeResultSuccess | IntakeResultError;
