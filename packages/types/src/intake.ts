@@ -3,10 +3,10 @@
  * @description Global types related to user and provider intake
  */
 
-const INTAKE_SUBJECT_USER = 'INTAKE_SUBJECT_USER';
-const INTAKE_SUBJECT_PROVIDER = 'INTAKE_SUBJECT_PROVIDER';
+const INTAKE_SUBJECT_USER = 'USER';
+const INTAKE_SUBJECT_PROVIDER = 'PROVIDER';
 const INTAKE_SUBJECTS = [INTAKE_SUBJECT_USER, INTAKE_SUBJECT_PROVIDER] as const;
-type IntakeSubject = typeof INTAKE_SUBJECTS[number];
+export type IntakeSubject = typeof INTAKE_SUBJECTS[number];
 
 /**
  * Submission intake can result in one of two states, "success" or "error".
