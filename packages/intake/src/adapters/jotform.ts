@@ -24,7 +24,7 @@ export const extractBoundary = (event: APIGatewayProxyEvent): Maybe<string> => {
 export const extractContentDispositionName = (contentSegment: string): Maybe<string> => {
     const CONTENT_DISPOSITION_REGEX = new RegExp(/"(.+)"$/m);
     const result = CONTENT_DISPOSITION_REGEX.exec(contentSegment);
-    if (!result) throw new Error();
+    if (!result) return Maybe.nothing();
     const [, capture] = result;
     return Maybe.fromNullable(capture);
 };
