@@ -91,6 +91,7 @@ export const extractFormSubmission = (event: APIGatewayProxyEvent & { body: stri
  */
 export const JotFormUserSubmissionAdapter: IntakeAdapter = {
     async parseSubmission(event) {
-        return {};
+        if (event.body === null) return Maybe.nothing();
+        return extractFormSubmission(event as APIGatewayProxyEvent & { body: string });
     },
 };
