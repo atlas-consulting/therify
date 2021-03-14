@@ -22,6 +22,7 @@
         "ttypescript": "^1.5.12"
     },
     "dependencies": {
-        "true-myth": "^4.1.1"
+        "true-myth": "^4.1.1",
+        "yup": "^0.32.9"
     }
 }
