@@ -24,7 +24,7 @@ describe('JotForm Intake Adapter', () => {
                 expect(boundary.unwrapOr(undefined)).toBeDefined(); // Extracting value from Maybe
             });
         });
-        describe('Extracting content-disposition name', () => {
+        describe('extracting content-disposition name', () => {
             test('extracting disposition from a form-segment', () => {
                 const sampleSegment = `            
       Content-Disposition: form-data; name="username"
