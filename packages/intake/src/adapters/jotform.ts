@@ -1,20 +1,21 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { Maybe } from 'true-myth';
-import * as Yup from 'yup';
+import * as z from 'zod';
 import { IntakeAdapter } from '../adapter';
 
-const jotformSubmissionSchema = Yup.object({
-    formID: Yup.string().defined(),
-    submissionID: Yup.string().defined(),
-    webhookURL: Yup.string().defined(),
-    ip: Yup.string().defined(),
-    formTitle: Yup.string().defined(),
-    username: Yup.string().defined(),
-    rawRequest: Yup.object().defined(),
-    type: Yup.string().defined(),
+const jotformSubmissionSchema = z.object({
+    formID: z.string(),
+    submissionID: z.string(),
+    webhookURL: z.string(),
+    ip: z.string(),
+    formTitle: z.string(),
+    username: z.string(),
+    rawRequest: z.union([z.record(z.unknown()), z.string()]),
+    type: z.string(),
+    pretty: z.string(),
 });
 
-type JotFormSubmission = Yup.Asserts<typeof jotformSubmissionSchema>;
+type JotFormSubmission = z.infer<typeof jotformSubmissionSchema>;
 
 /**
  * Used to extract multi-part form boundaries from JotForm submissions.
@@ -77,9 +78,10 @@ export const extractFormSubmission = (event: APIGatewayProxyEvent & { body: stri
             // attempt to parse collected segments into jotformSubmission
             .flatMap((data) => {
                 try {
-                    const submission = jotformSubmissionSchema.validateSync(data);
+                    const submission = jotformSubmissionSchema.parse(data);
                     return Maybe.just(submission);
                 } catch (error) {
+                    console.log(error);
                     return new Maybe.Nothing();
                 }
             })
