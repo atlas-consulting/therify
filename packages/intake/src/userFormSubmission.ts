@@ -16,22 +16,30 @@ export async function userFormSubmission(
     event: APIGatewayProxyEvent,
     adapter: IntakeAdapter,
 ): Promise<Intake.IntakeResult> {
-    const result = await adapter.parseSubmission(event);
-    const submission = result.unsafelyUnwrap();
-    const persistResult = await storage.persistSubmission('USER', submission);
-    switch (persistResult.type) {
-        case 'SUCCESS':
-            return {
-                subject: 'USER',
-                bucketId: persistResult.bucketId,
-                key: persistResult.key,
-                status: 'INTAKE_SUCCESS',
-            };
-        case 'FAILURE':
-            return {
-                subject: 'USER',
-                rawMessage: JSON.stringify(persistResult.rawMessage),
-                status: 'INTAKE_ERROR',
-            };
+    try {
+        const result = await adapter.parseSubmission(event);
+        const submission = result.unsafelyUnwrap();
+        const persistResult = await storage.persistSubmission('USER', submission);
+        switch (persistResult.type) {
+            case 'SUCCESS':
+                return {
+                    subject: 'USER',
+                    bucketId: persistResult.bucketId,
+                    key: persistResult.key,
+                    status: 'INTAKE_SUCCESS',
+                };
+            case 'FAILURE':
+                return {
+                    subject: 'USER',
+                    rawMessage: JSON.stringify(persistResult.rawMessage),
+                    status: 'INTAKE_ERROR',
+                };
+        }
+    } catch (intakeError) {
+        return {
+            subject: 'USER',
+            rawMessage: JSON.stringify(event),
+            status: 'INTAKE_ERROR',
+        };
     }
 }
