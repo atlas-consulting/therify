@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { createMock } from 'ts-auto-mock';
 import { extractBoundary, extractContentDispositionName, extractFormSubmission } from '../../src/adapters/jotform';
-import userFormSubmission from '../../__mocks__/data/userFormSubmission.json';
+import userFormSubmission from '../../data/userFormSubmission.json';
 
 describe('JotForm Intake Adapter', () => {
     describe('Parsing submissions', () => {
