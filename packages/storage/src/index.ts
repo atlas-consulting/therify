@@ -35,7 +35,7 @@ export async function persistSubmission(
             .putObject({
                 Bucket: bucketId,
                 Key: key,
-                Body: submission.rawRequest,
+                Body: JSON.stringify(submission.rawRequest),
             })
             .promise();
         return {
