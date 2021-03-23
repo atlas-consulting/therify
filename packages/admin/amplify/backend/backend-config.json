@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "therifyadminuifec90852": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}
