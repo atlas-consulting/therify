@@ -24,7 +24,7 @@ export const mockModelResult: MatchTypes.Match = {
                 state: 'TN',
                 acceptedNetworks: ['Cigna'],
                 gender: 'male',
-                race: 'No ',
+                race: 'No',
                 specialty: 'Stress',
             },
         },
