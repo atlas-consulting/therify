@@ -11,7 +11,7 @@ export const mockModelResult: MatchTypes.Match = {
             state: 'TN',
             network: 'Cigna',
             gender: 'male',
-            race: 'No ',
+            race: 'No',
             specialty: 'Stress',
         },
     },

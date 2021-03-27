@@ -32,21 +32,7 @@ jobs:
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.ADMIN_UI_AWS_SECRET_ACCESS_KEY }}
                   AWS_REGION: us-east-1
 
-            - name: build types
-              working-directory: ./packages/types
-              run: |
-                  npm install
-                  npm run build
-
-            - name: build and test ui package
-              working-directory: ./packages/ui
-              run: |
-                  npm install
-                  npm run build
-                  npm run test
-
             - name: install, build and test
-              working-directory: ./packages/admin
               run: |
                   npm install
                   # build and test
