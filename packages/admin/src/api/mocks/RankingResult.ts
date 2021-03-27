@@ -1,5 +1,4 @@
 import { MatchTypes } from '@therify/types';
-import { RankingStatus } from '@therify/types/lib/match';
 import { mockProvider } from './providers';
 
 export const mockModelResult: MatchTypes.Match = {
@@ -19,7 +18,6 @@ export const mockModelResult: MatchTypes.Match = {
     matches: [
         {
             id: 'test1',
-            status: RankingStatus.GOOD,
             provider: {
                 id: 'xx1',
                 name: 'Dr. Test Jackson',
@@ -32,7 +30,6 @@ export const mockModelResult: MatchTypes.Match = {
         },
         {
             id: 'test2',
-            status: RankingStatus.WARNING,
             provider: {
                 id: 'xx2',
                 name: 'Dr. Test Jameson',
@@ -44,7 +41,6 @@ export const mockModelResult: MatchTypes.Match = {
             },
         },
         {
-            status: RankingStatus.INCOMPATIBLE,
             id: 'test3',
             provider: {
                 id: 'xx3',
@@ -60,7 +56,6 @@ export const mockModelResult: MatchTypes.Match = {
 };
 
 export const mockRanking: MatchTypes.Ranking = {
-    status: RankingStatus.INCOMPATIBLE,
     id: 'test789',
     provider: mockProvider,
 };
