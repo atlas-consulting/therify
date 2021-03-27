@@ -2,8 +2,7 @@ name: 'Amplify Deploy'
 on:
     push:
         branches: [main]
-        paths:
-      - "packages/admin/**"
+        paths: 'packages/admin/**'
 
 jobs:
     test:
