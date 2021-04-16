@@ -1,7 +1,22 @@
+type UserSession = {
+    [x: string]: string;
+};
+enum UserPermissions {}
+
 const authHandler = () => {
     let _isAuthenticated = true;
 
     const isAuthenticated = () => _isAuthenticated;
+    const hasUserPermission = ({
+        user,
+        targetPermission,
+    }: {
+        user: UserSession;
+        targetPermission: UserPermissions;
+    }) => {
+        // check user session for user permission
+        return true;
+    };
     const login = (cb?: () => void) => {
         _isAuthenticated = true;
         if (cb) cb();
@@ -12,6 +27,7 @@ const authHandler = () => {
     };
     return {
         isAuthenticated,
+        hasUserPermission,
         login,
         logout,
     };
