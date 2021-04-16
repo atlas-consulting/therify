@@ -14,7 +14,7 @@ export type SearchBarProps = {
 };
 export const SearchBar = ({ label, value, onChange, onClear, placeholder, style }: SearchBarProps) => {
     const theme = useTheme();
-    const handleChange = (ev: any) => onChange(ev.target?.value ?? '');
+    const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => onChange(ev.target.value);
     const [isActive, setIsActive] = useState(false);
     const isVisible = !!value || isActive;
     return (
