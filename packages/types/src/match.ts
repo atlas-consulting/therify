@@ -1,7 +1,7 @@
 // TODO: Type this out correctly
 export type Match = {
     id: string;
-    patient: Patient;
+    patient: User;
     matches: Ranking[];
 };
 
@@ -12,26 +12,39 @@ export type Features = {
     race: string;
     specialties: string;
 };
-export type Patient = {
-    email: string;
+
+export type User = {
     id: string;
-    company: string;
-    preferences: Features;
+    emailAddress: string;
+    stateOfResidence: string;
+    gender: string;
+    genderPreference: string;
+    race: string[];
+    racePreference: string;
+    issues: string[];
+    insuranceProvider: string;
+    languagePreference: string;
+    createdAt: string;
+    updatedAt: string;
 };
 
 export type Provider = {
     id: string;
     emailAddress: string;
-    nameOfPractice: string;
     firstName: string;
     lastName: string;
     licensedStates: string[];
     acceptedInsurance: string[];
+    yearsOfExperience: number;
     gender: string;
     race: string[];
     specialties: string[];
     createdAt: string;
     updatedAt: string;
+    rate: number;
+    license?: string;
+    websiteUrl?: string;
+    nameOfPractice?: string;
 };
 
 export type Ranking = {
