@@ -4,20 +4,7 @@ import { Mocks } from '@therify/types';
 import { MatchesCard as MatchesCardUi } from './MatchesCard';
 import { RankingStatus } from '@therify/types/lib/match';
 
-const mockPatient = {
-    email: 'test@storybook.com',
-    id: '123',
-    company: 'Therify',
-    preferences: {
-        state: 'TN',
-        network: 'Cigna',
-        gender: 'male',
-        race: 'No ',
-        specialties: 'Stress',
-    },
-};
-
-const mockRanking = {
+const mockRankingWithStatus = {
     ...Mocks.mockRanking,
     status: RankingStatus.GOOD,
 };
@@ -28,11 +15,11 @@ export const MatchesCard: Story = () => {
         <MatchesCardUi
             isChecked={isChecked}
             onCheck={() => setIsChecked(!isChecked)}
-            patient={mockPatient}
+            patient={Mocks.mockUser}
             rankings={[
-                { ...mockRanking, id: '1' },
-                { ...mockRanking, id: '2' },
-                { ...mockRanking, id: '3' },
+                { ...mockRankingWithStatus, id: '1' },
+                { ...mockRankingWithStatus, id: '2' },
+                { ...mockRankingWithStatus, id: '3' },
             ]}
             handleApprove={async () => {}}
             handleCreateMatch={() => {}}
@@ -45,11 +32,11 @@ export const NoMatchCreation: Story = () => {
         <MatchesCardUi
             isChecked={isChecked}
             onCheck={() => setIsChecked(!isChecked)}
-            patient={mockPatient}
+            patient={Mocks.mockUser}
             rankings={[
-                { ...mockRanking, id: '1' },
-                { ...mockRanking, id: '2' },
-                { ...mockRanking, id: '3' },
+                { ...mockRankingWithStatus, id: '1' },
+                { ...mockRankingWithStatus, id: '2' },
+                { ...mockRankingWithStatus, id: '3' },
             ]}
             handleApprove={async () => {}}
         />
