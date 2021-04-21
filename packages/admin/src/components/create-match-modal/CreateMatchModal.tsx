@@ -84,7 +84,7 @@ export const CreateMatchModal = ({
                             data-testid="provider-select"
                             id="combo-box-demo"
                             options={providers}
-                            getOptionLabel={(provider) => provider.name}
+                            getOptionLabel={(provider) => `${provider.firstName} ${provider.lastName}`}
                             renderInput={(params) => (
                                 <TextField {...params} label="Select a provider" variant="outlined" />
                             )}

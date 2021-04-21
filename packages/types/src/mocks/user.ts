@@ -1,6 +1,6 @@
-import { MatchTypes } from '@therify/types';
+import { Patient } from '../match';
 
-export const mockUser: MatchTypes.Patient = {
+export const mockUser: Patient = {
     email: 'patient@therifydev.com',
     id: '123',
     company: 'Therify',

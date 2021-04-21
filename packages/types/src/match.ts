@@ -37,7 +37,6 @@ export type Provider = {
 export type Ranking = {
     id: string;
     provider: Provider;
-    status: RankingStatus;
 };
 
 export enum RankingStatus {

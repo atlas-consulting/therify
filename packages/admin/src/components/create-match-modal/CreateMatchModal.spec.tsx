@@ -1,6 +1,6 @@
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { mockUser, mockProvider } from '../../api/mocks';
+import { Mocks } from '@therify/types';
 import { CreateMatchModal } from './CreateMatchModal';
 
 describe('CreateMatchModal', () => {
@@ -8,7 +8,7 @@ describe('CreateMatchModal', () => {
     it('should render patient data', () => {
         const { getByText } = render(
             <CreateMatchModal
-                selectedUser={mockUser}
+                selectedUser={Mocks.mockUser}
                 isOpen={true}
                 isLoading={false}
                 providers={[]}
@@ -16,8 +16,8 @@ describe('CreateMatchModal', () => {
                 handleClose={() => null}
             />,
         );
-        expect(getByText(mockUser.email)).toBeInTheDocument();
-        const preferences = Object.values(mockUser.preferences);
+        expect(getByText(Mocks.mockUser.email)).toBeInTheDocument();
+        const preferences = Object.values(Mocks.mockUser.preferences);
         preferences.forEach((p) => expect(getByText(p)).toBeInTheDocument());
     });
     // TODO: FIX THESE TESTS
