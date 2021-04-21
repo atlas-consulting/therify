@@ -1,6 +1,6 @@
 import { MatchTypes } from '@therify/types';
 import { RankingStatus } from '@therify/types/lib/match';
-type MatchQualityOptions = { user: MatchTypes.Patient; provider: MatchTypes.Provider };
+type MatchQualityOptions = { user: MatchTypes.User; provider: MatchTypes.Provider };
 const isIncompatible = ({ user, provider }: MatchQualityOptions) => false;
 const hasIssues = ({ user, provider }: MatchQualityOptions) => false;
 

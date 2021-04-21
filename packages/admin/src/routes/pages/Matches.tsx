@@ -45,8 +45,8 @@ export const Matches = () => {
     const handleOpenCreateMatchModal = (match: MatchTypes.Match) => {
         setCreateMatchTarget(match);
         listProviders({
-            state: match.patient.preferences.state,
-            network: match.patient.preferences.network,
+            state: match.patient.stateOfResidence,
+            network: match.patient.insuranceProvider,
         });
     };
     const handleCreateRanking = async (providerId: string) => {
@@ -96,11 +96,11 @@ export const Matches = () => {
             onChange: (val: string) => setSortByFilter(val),
         },
     ];
-    useEffect(() => {
-        if (matches.length === 0) {
-            getMatches();
-        }
-    }, [getMatches, matches.length]);
+    // useEffect(() => {
+    //     if (matches.length === 0) {
+    //         getMatches();
+    //     }
+    // }, [getMatches, matches.length]);
     return (
         <>
             <NavDrawerPage drawer={Navigation} style={{ flexFlow: 'column', display: 'flex', height: '100vh' }}>
@@ -118,7 +118,13 @@ export const Matches = () => {
                         </Box>
                     </Box>
 
-                    <Box display="flex" justifyContent="space-between" alignItems="center" marginTop={3}>
+                    <Box
+                        onClick={getMatches}
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        marginTop={3}
+                    >
                         <MatchCounter good={[]} warnings={[]} incompatibilities={[]} />
                         <SelectGroup configs={selectConfigs} />
                     </Box>

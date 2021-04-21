@@ -6,7 +6,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { RankingStatus } from '@therify/types/lib/match';
 
 export type CreateMatchModalProps = {
-    selectedUser: MatchTypes.Patient;
+    selectedUser: MatchTypes.User;
     isOpen: boolean;
     handleClose: () => void;
     handleCreate: (providerId: string) => void;
@@ -27,6 +27,14 @@ export const CreateMatchModal = ({
 }: CreateMatchModalProps) => {
     const theme = useTheme();
     const [selectedProvider, setSelectedProvider] = useState<MatchTypes.Provider | null>(null);
+    const {
+        emailAddress,
+        stateOfResidence,
+        genderPreference,
+        racePreference,
+        issues,
+        insuranceProvider,
+    } = selectedUser;
     const createMatch = () => {
         if (selectedProvider) {
             handleCreate(selectedProvider.id);
@@ -64,9 +72,15 @@ export const CreateMatchModal = ({
         <Modal isOpen={isOpen} handleClose={handleClose} title="Create Match">
             {GetProvidersError ?? CreateError ?? Loading ?? (
                 <Box width="400px">
-                    <Text style={{ fontWeight: 300, marginTop: theme.spacing(2) }}>{selectedUser.email}</Text>
+                    <Text style={{ fontWeight: 300, marginTop: theme.spacing(2) }}>{emailAddress}</Text>
                     <Box width="100%" style={{ marginBottom: theme.spacing(2) }}>
-                        <PreferencesGrid preferences={selectedUser.preferences} />
+                        <PreferencesGrid
+                            stateOfResidence={stateOfResidence}
+                            genderPreference={genderPreference}
+                            racePreference={racePreference}
+                            issues={issues}
+                            insuranceProvider={insuranceProvider}
+                        />
                     </Box>
                     <TextBold style={{ marginBottom: theme.spacing(1) }}>Provider</TextBold>
                     <Box width="100%" style={{ marginBottom: theme.spacing(2) }}>
