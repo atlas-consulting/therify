@@ -1,9 +1,9 @@
 import { Typography, TypographyProps } from '@material-ui/core';
 import React from 'react';
-import { TherafyFontSizes } from '../theme/Therafy/Typography';
+import { TherifyFontSizes } from '../theme/Therify/Typography';
 
 export const Headline = (props: TypographyProps) => (
-    <Typography variant="h1" gutterBottom {...props} style={{ fontSize: TherafyFontSizes.Xxl }}>
+    <Typography variant="h1" gutterBottom {...props} style={{ fontSize: TherifyFontSizes.Xxl }}>
         {props.children}
     </Typography>
 );

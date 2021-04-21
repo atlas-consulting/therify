@@ -1,1 +1,1 @@
-export * from './Therafy';
+export * from './Therify';

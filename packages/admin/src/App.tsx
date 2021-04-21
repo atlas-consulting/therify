@@ -1,5 +1,5 @@
 import React from 'react';
-import { therafyTheme } from '@therify/ui';
+import { therifyTheme } from '@therify/ui';
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 import { Provider as StoreProvider } from 'react-redux';
 import Amplify, { Hub, Logger } from 'aws-amplify';
@@ -48,7 +48,7 @@ function App() {
 
     Hub.listen('auth', listener);
     return (
-        <ThemeProvider theme={therafyTheme}>
+        <ThemeProvider theme={therifyTheme}>
             <StoreProvider store={store}>
                 <CssBaseline />
                 <Router />

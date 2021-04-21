@@ -1,6 +1,6 @@
 import React from "react";
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
-import {therafyTheme} from '../src/components/core/theme'
+import {therifyTheme} from '../src/components/core/theme'
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -8,7 +8,7 @@ export const parameters = {
 
 export const decorators = [
   (Story) => (
-    <ThemeProvider theme={therafyTheme}>
+    <ThemeProvider theme={therifyTheme}>
       <CssBaseline />
       <Story/>
     </ThemeProvider>

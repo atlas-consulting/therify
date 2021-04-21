@@ -1,6 +1,6 @@
 import { TypographyOptions } from '@material-ui/core/styles/createTypography';
 
-export enum TherafyFontSizes {
+export enum TherifyFontSizes {
     Xxl = '4Rem',
     Xl = '2.5rem',
     Lg = '2rem',
@@ -10,30 +10,30 @@ export enum TherafyFontSizes {
 }
 
 // Poppins is Sofia Pro alternate
-export const therafyTypography: TypographyOptions = {
+export const therifyTypography: TypographyOptions = {
     fontFamily: ['Poppins', 'sans-serif'].join(','),
     fontSize: 16,
     h1: {
-        fontSize: TherafyFontSizes.Xl,
+        fontSize: TherifyFontSizes.Xl,
         fontWeight: 700,
-        marginBotttom: TherafyFontSizes.Xl
+        marginBotttom: TherifyFontSizes.Xl,
     },
     h2: {
-        fontSize: TherafyFontSizes.Lg,
+        fontSize: TherifyFontSizes.Lg,
         fontWeight: 700,
-        marginBotttom: TherafyFontSizes.Xl
+        marginBotttom: TherifyFontSizes.Xl,
     },
     h3: {
-        fontSize: TherafyFontSizes.Md,
+        fontSize: TherifyFontSizes.Md,
         fontWeight: 700,
-        marginBotttom: TherafyFontSizes.Lg
+        marginBotttom: TherifyFontSizes.Lg,
     },
     body1: {
-        fontSize: TherafyFontSizes.Base,
+        fontSize: TherifyFontSizes.Base,
         fontWeight: 400,
     },
     body2: {
-        fontSize: TherafyFontSizes.Sm,
+        fontSize: TherifyFontSizes.Sm,
         fontWeight: 300,
     },
 };

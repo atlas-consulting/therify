@@ -1,7 +1,7 @@
 import { Overrides } from '@material-ui/core/styles/overrides';
-import { TherafyBrandColors } from './Pallete';
+import { TherifyBrandColors } from './Pallete';
 
-export const therafyglobals: Overrides = {
+export const therifyglobals: Overrides = {
     MuiCssBaseline: {
         '@global': {
             html: {
@@ -9,7 +9,7 @@ export const therafyglobals: Overrides = {
                 boxSizing: 'border-box',
             },
             body: {
-                color: TherafyBrandColors.Black,
+                color: TherifyBrandColors.Black,
             },
         },
     },
