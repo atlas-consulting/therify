@@ -12,7 +12,7 @@ export const PreferencesGrid: Story = () => (
                 network: 'Cigna',
                 gender: 'male',
                 race: 'No ',
-                specialty: 'Stress',
+                specialties: 'Stress',
             } as MatchTypes.Features
         }
     />

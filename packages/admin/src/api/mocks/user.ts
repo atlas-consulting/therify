@@ -9,6 +9,6 @@ export const mockUser: MatchTypes.Patient = {
         network: 'Cigna',
         gender: 'male',
         race: 'other',
-        specialty: 'stress',
+        specialties: 'stress',
     },
 };

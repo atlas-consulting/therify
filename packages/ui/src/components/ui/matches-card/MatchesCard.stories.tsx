@@ -12,7 +12,7 @@ const mockPatient = {
         network: 'Cigna',
         gender: 'male',
         race: 'No ',
-        specialty: 'Stress',
+        specialties: 'Stress',
     },
 };
 
@@ -22,10 +22,10 @@ const mockRanking = {
         id: '1',
         name: 'Dr. Test Jackson',
         state: 'TN',
-        acceptedNetworks: ['Cigna'],
+        acceptedInsurance: ['Cigna'],
         gender: 'male',
         race: 'No ',
-        specialty: 'Stress',
+        specialties: 'Stress',
     },
     status: RankingStatus.GOOD,
 };

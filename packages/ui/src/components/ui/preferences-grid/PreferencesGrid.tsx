@@ -24,8 +24,8 @@ export const PreferencesGrid = ({ preferences }: PreferencesGridProps) => {
             </Grid>
             <Grid item xs={12} sm={4}>
                 <TextSmall style={{ flexGrow: 3 }}>
-                    <b>Specialty: </b>
-                    {preferences.specialty}
+                    <b>specialties: </b>
+                    {preferences.specialties}
                 </TextSmall>
             </Grid>
             <Grid item xs={12} sm={4}>
