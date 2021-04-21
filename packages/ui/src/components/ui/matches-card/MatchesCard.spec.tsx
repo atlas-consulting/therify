@@ -11,7 +11,7 @@ const mockPatient = {
         network: 'Cigna',
         gender: 'male',
         race: 'No preference',
-        specialty: 'Stress',
+        specialties: 'Stress',
     },
 };
 
@@ -32,7 +32,7 @@ describe('MatchesCard', () => {
         expect(getByText(mockPatient.preferences.network)).toBeInTheDocument();
         expect(getByText(mockPatient.preferences.gender)).toBeInTheDocument();
         expect(getByText(mockPatient.preferences.race)).toBeInTheDocument();
-        expect(getByText(mockPatient.preferences.specialty)).toBeInTheDocument();
+        expect(getByText(mockPatient.preferences.specialties)).toBeInTheDocument();
     });
 
     it('should call `onCheck` when checkbox clicked', () => {

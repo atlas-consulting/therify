@@ -10,7 +10,7 @@ export type Features = {
     network: string;
     gender: string;
     race: string;
-    specialty: string;
+    specialties: string;
 };
 export type Patient = {
     email: string;
@@ -20,19 +20,23 @@ export type Patient = {
 };
 
 export type Provider = {
-    name: string;
     id: string;
-    state: string;
-    acceptedNetworks: string[];
+    emailAddress: string;
+    nameOfPractice: string;
+    firstName: string;
+    lastName: string;
+    licensedStates: string[];
+    acceptedInsurance: string[];
     gender: string;
-    race: string;
-    specialty: string;
+    race: string[];
+    specialties: string[];
+    createdAt: string;
+    updatedAt: string;
 };
 
 export type Ranking = {
     id: string;
     provider: Provider;
-    status: RankingStatus;
 };
 
 export enum RankingStatus {

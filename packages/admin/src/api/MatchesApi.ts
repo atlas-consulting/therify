@@ -1,5 +1,4 @@
-import { MatchTypes } from '@therify/types';
-import { mockModelResultsList, mockProviders, mockRanking } from './mocks';
+import { MatchTypes, Mocks } from '@therify/types';
 
 export type getMatchesOptions = {
     token: string;
@@ -15,7 +14,7 @@ const MatchesApiCreator = () => {
         return await new Promise<MatchTypes.Match[]>((resolve) =>
             setTimeout(() => {
                 console.log(`%cGetting Matches`, 'color: green');
-                resolve(mockModelResultsList);
+                resolve(Mocks.mockModelResultsList);
             }, 2000),
         );
     };
@@ -26,7 +25,7 @@ const MatchesApiCreator = () => {
                     `%cCreating Match for patient '${patientId}' and provider '${providerId}'...`,
                     'color: green',
                 );
-                resolve(mockRanking);
+                resolve(Mocks.mockRanking);
             }, 2000),
         );
     };
@@ -50,7 +49,7 @@ const MatchesApiCreator = () => {
         return await new Promise<MatchTypes.Provider[]>((resolve) =>
             setTimeout(() => {
                 console.log(`%Fetching providers with traits: ${queryString}`, 'color: green');
-                resolve(mockProviders);
+                resolve(Mocks.mockProviders);
             }, 2000),
         );
     };

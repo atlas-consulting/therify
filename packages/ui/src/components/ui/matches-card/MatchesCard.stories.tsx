@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
+import { Mocks } from '@therify/types';
 import { MatchesCard as MatchesCardUi } from './MatchesCard';
 import { RankingStatus } from '@therify/types/lib/match';
 
@@ -12,21 +13,12 @@ const mockPatient = {
         network: 'Cigna',
         gender: 'male',
         race: 'No ',
-        specialty: 'Stress',
+        specialties: 'Stress',
     },
 };
 
 const mockRanking = {
-    id: 'test',
-    provider: {
-        id: '1',
-        name: 'Dr. Test Jackson',
-        state: 'TN',
-        acceptedNetworks: ['Cigna'],
-        gender: 'male',
-        race: 'No ',
-        specialty: 'Stress',
-    },
+    ...Mocks.mockRanking,
     status: RankingStatus.GOOD,
 };
 

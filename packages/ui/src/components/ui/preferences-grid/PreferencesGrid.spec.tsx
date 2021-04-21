@@ -7,7 +7,7 @@ const mockPreferences = {
     network: 'Cigna',
     gender: 'male',
     race: 'No preference',
-    specialty: 'Stress',
+    specialties: 'Stress',
 };
 
 describe('PreferencesGrid', () => {
@@ -17,6 +17,6 @@ describe('PreferencesGrid', () => {
         expect(getByText(mockPreferences.network)).toBeInTheDocument();
         expect(getByText(mockPreferences.gender)).toBeInTheDocument();
         expect(getByText(mockPreferences.race)).toBeInTheDocument();
-        expect(getByText(mockPreferences.specialty)).toBeInTheDocument();
+        expect(getByText(mockPreferences.specialties)).toBeInTheDocument();
     });
 });
