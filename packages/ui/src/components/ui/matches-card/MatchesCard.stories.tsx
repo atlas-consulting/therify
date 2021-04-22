@@ -15,7 +15,7 @@ export const MatchesCard: Story = () => {
         <MatchesCardUi
             isChecked={isChecked}
             onCheck={() => setIsChecked(!isChecked)}
-            patient={Mocks.mockUser}
+            user={Mocks.mockUser}
             rankings={[
                 { ...mockRankingWithStatus, id: '1' },
                 { ...mockRankingWithStatus, id: '2' },
@@ -32,7 +32,7 @@ export const NoMatchCreation: Story = () => {
         <MatchesCardUi
             isChecked={isChecked}
             onCheck={() => setIsChecked(!isChecked)}
-            patient={Mocks.mockUser}
+            user={Mocks.mockUser}
             rankings={[
                 { ...mockRankingWithStatus, id: '1' },
                 { ...mockRankingWithStatus, id: '2' },

@@ -25,7 +25,7 @@ export const MatchesList = ({
         ...match,
         matches: match.matches.map((ranking) => ({
             ...ranking,
-            status: getRankingStatus({ user: match.patient, provider: ranking.provider }),
+            status: getRankingStatus({ user: match.user, provider: ranking.provider }),
         })),
     }));
     const ErrorContent = getMatchesError ? (
@@ -47,10 +47,10 @@ export const MatchesList = ({
         ) : (
             matchesWithStatuses.map((match) => (
                 <MatchesCard
-                    key={match.patient.id}
+                    key={match.user.id}
                     isChecked={false}
                     onCheck={onCheck}
-                    patient={match.patient}
+                    user={match.user}
                     rankings={match.matches}
                     handleApprove={handleApprove}
                     handleDeleteMatch={handleDeleteMatch}

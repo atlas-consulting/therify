@@ -1,16 +1,6 @@
-// TODO: Type this out correctly
 export type Match = {
-    id: string;
-    patient: User;
+    user: User;
     matches: Ranking[];
-};
-
-export type Features = {
-    state: string;
-    network: string;
-    gender: string;
-    race: string;
-    specialties: string;
 };
 
 export type User = {
@@ -46,9 +36,20 @@ export type Provider = {
     websiteUrl?: string;
     nameOfPractice?: string;
 };
+export interface MatchPreferenceQualifier {
+    preference: string | string[];
+    isMet: boolean;
+}
 
-export type Ranking = {
+export type ProviderMatchRecord = {
     id: string;
+    score: number;
+    providerEmailAddress: string;
+    userEmailAddress: string;
+    criteria: Record<string, MatchPreferenceQualifier>;
+};
+
+export type Ranking = ProviderMatchRecord & {
     provider: Provider;
 };
 

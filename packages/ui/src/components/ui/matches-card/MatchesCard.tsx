@@ -9,17 +9,17 @@ import { PreferencesGrid } from '../preferences-grid';
 export type MatchesCardProps = {
     isChecked: boolean;
     onCheck: () => void;
-    patient: MatchTypes.User;
+    user: MatchTypes.User;
     rankings: (MatchTypes.Ranking & { status: MatchTypes.RankingStatus })[];
     handleApprove: (matchId: string) => Promise<void>;
-    handleCancelApprove?: ({ patient, ranking }: { patient: MatchTypes.User; ranking: MatchTypes.Ranking }) => void;
+    handleCancelApprove?: ({ user, ranking }: { user: MatchTypes.User; ranking: MatchTypes.Ranking }) => void;
     handleDeleteMatch?: (id: string) => void;
     handleCreateMatch?: () => void;
 };
 export const MatchesCard = ({
     isChecked,
     onCheck,
-    patient,
+    user,
     rankings,
     handleApprove,
     handleCancelApprove,
@@ -35,7 +35,7 @@ export const MatchesCard = ({
         racePreference,
         issues,
         insuranceProvider,
-    } = patient;
+    } = user;
     // TODO: Company should come from user
     const company = '';
     const TextButton = makeTextButton(theme);
@@ -49,7 +49,7 @@ export const MatchesCard = ({
                 marginBottom: theme.spacing(2),
             }}
         >
-            <Checkbox data-testid="patient-card-checkbox" checked={isChecked} onClick={onCheck} />
+            <Checkbox data-testid="user-card-checkbox" checked={isChecked} onClick={onCheck} />
             <Box flexGrow="1" style={{ paddingLeft: theme.spacing(3) }}>
                 <TextSmall>{company}</TextSmall>
                 <Header3>{emailAddress}</Header3>
@@ -75,7 +75,7 @@ export const MatchesCard = ({
                             displayText={`${ranking.provider.firstName} ${ranking.provider.lastName}`}
                             rank={i + 1}
                             onApprove={() => handleApprove(ranking.id)}
-                            onCancel={handleCancelApprove ? () => handleCancelApprove({ ranking, patient }) : undefined}
+                            onCancel={handleCancelApprove ? () => handleCancelApprove({ ranking, user }) : undefined}
                             onDelete={handleDeleteMatch}
                         />
                     ))

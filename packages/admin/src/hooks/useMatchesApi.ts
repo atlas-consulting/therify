@@ -2,7 +2,7 @@ import { MatchTypes } from '@therify/types';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createMatchOptions, MatchesApi } from '../api/MatchesApi';
-import { removeRankingFromPatient, setMatch, setMatches } from '../store/actions';
+import { removeRankingFromUser, setMatch, setMatches } from '../store/actions';
 import { getMatches as getMatchesArray, getMatchesState, getUserToken } from '../store/selectors';
 
 export const useMatchesApi = () => ({
@@ -69,7 +69,7 @@ const useDenyMatch = () => {
         setDenyMatchError(undefined);
         try {
             await MatchesApi.denyMatch(matchId);
-            dispatch(removeRankingFromPatient(matchId));
+            dispatch(removeRankingFromUser(matchId));
         } catch (error) {
             setDenyMatchError(error.message);
         }
@@ -88,12 +88,12 @@ const useCreateRanking = () => {
     const dispatch = useDispatch();
     const matches = useSelector(getMatchesState);
 
-    const createRanking = async ({ providerId, patientId, matchId }: createMatchOptions) => {
+    const createRanking = async ({ userId, providerId }: createMatchOptions) => {
         setIsCreatingRanking(true);
         setCreateRankingError(undefined);
         try {
-            const newRanking = await MatchesApi.createMatch({ providerId, patientId, matchId });
-            const match = matches[matchId];
+            const newRanking = await MatchesApi.createMatch({ userId, providerId });
+            const match = matches[userId];
             if (match) {
                 dispatch(
                     setMatch({
@@ -102,7 +102,7 @@ const useCreateRanking = () => {
                     }),
                 );
             } else {
-                throw new Error(`[createRanking]: Can not find match with id ${matchId}`);
+                throw new Error(`[createRanking]: Can not find match with user id ${userId}`);
             }
         } catch (error) {
             setCreateRankingError(error.message);

@@ -7,7 +7,7 @@ export interface IMatchesAction<PayloadType> {
 export enum MatchesActionType {
     SET_MATCHES = 'SET_MATCHES',
     SET_MATCH = 'SET_MATCH',
-    REMOVE_RANKING_FROM_PATIENT = 'REMOVE_RANKING_FROM_PATIENT',
+    REMOVE_RANKING_FROM_USER = 'REMOVE_RANKING_FROM_USER',
 }
 export const setMatches = (matches: MatchTypes.Match[]): IMatchesAction<MatchTypes.Match[]> => ({
     type: MatchesActionType.SET_MATCHES,
@@ -17,7 +17,7 @@ export const setMatch = (match: MatchTypes.Match): IMatchesAction<MatchTypes.Mat
     type: MatchesActionType.SET_MATCH,
     payload: match,
 });
-export const removeRankingFromPatient = (rankingId: string): IMatchesAction<string> => ({
-    type: MatchesActionType.REMOVE_RANKING_FROM_PATIENT,
+export const removeRankingFromUser = (rankingId: string): IMatchesAction<string> => ({
+    type: MatchesActionType.REMOVE_RANKING_FROM_USER,
     payload: rankingId,
 });

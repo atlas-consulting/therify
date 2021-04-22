@@ -2,34 +2,41 @@ import { Match, Ranking } from '../match';
 import { mockUser } from './user';
 import { mockProvider, mockProvider2, mockProvider3 } from './providers';
 
+export const mockRanking: Ranking = {
+    id: 'test789',
+    score: 25,
+    providerEmailAddress: mockProvider.emailAddress,
+    userEmailAddress: mockUser.emailAddress,
+    criteria: {},
+    provider: mockProvider,
+};
+
 export const mockModelResult: Match = {
-    id: 'test1234',
-    patient: mockUser,
+    user: mockUser,
     matches: [
         {
+            ...mockRanking,
             id: 'test1',
-            provider: mockProvider,
         },
         {
+            ...mockRanking,
             id: 'test2',
+            providerEmailAddress: mockProvider2.emailAddress,
             provider: mockProvider2,
         },
         {
+            ...mockRanking,
             id: 'test3',
+            providerEmailAddress: mockProvider3.emailAddress,
             provider: mockProvider3,
         },
     ],
 };
 
-export const mockRanking: Ranking = {
-    id: 'test789',
-    provider: mockProvider,
-};
-
 export const mockModelResultsList: Match[] = [
-    { ...mockModelResult, patient: { ...mockModelResult.patient, id: 'test1' }, id: 'test1' },
-    { ...mockModelResult, patient: { ...mockModelResult.patient, id: 'test2' }, id: 'test2' },
-    { ...mockModelResult, patient: { ...mockModelResult.patient, id: 'test3' }, id: 'test3' },
-    { ...mockModelResult, patient: { ...mockModelResult.patient, id: 'test4' }, id: 'test4' },
-    { ...mockModelResult, patient: { ...mockModelResult.patient, id: 'test5' }, id: 'test5' },
+    { ...mockModelResult, user: { ...mockModelResult.user, id: 'test1' } },
+    { ...mockModelResult, user: { ...mockModelResult.user, id: 'test2' } },
+    { ...mockModelResult, user: { ...mockModelResult.user, id: 'test3' } },
+    { ...mockModelResult, user: { ...mockModelResult.user, id: 'test4' } },
+    { ...mockModelResult, user: { ...mockModelResult.user, id: 'test5' } },
 ];

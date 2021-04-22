@@ -45,13 +45,16 @@ export const Matches = () => {
     const handleOpenCreateMatchModal = (match: MatchTypes.Match) => {
         setCreateMatchTarget(match);
         listProviders({
-            state: match.patient.stateOfResidence,
-            network: match.patient.insuranceProvider,
+            state: match.user.stateOfResidence,
+            network: match.user.insuranceProvider,
         });
     };
     const handleCreateRanking = async (providerId: string) => {
         if (!createMatchTarget) return;
-        await createRanking({ matchId: createMatchTarget.id, patientId: createMatchTarget.patient.id, providerId });
+        await createRanking({
+            userId: createMatchTarget.user.id,
+            providerId,
+        });
         setCreateMatchTarget(null);
     };
 
@@ -140,7 +143,7 @@ export const Matches = () => {
             </NavDrawerPage>
             {createMatchTarget && (
                 <CreateMatchModal
-                    selectedUser={createMatchTarget.patient}
+                    selectedUser={createMatchTarget.user}
                     isOpen={!!createMatchTarget}
                     isLoading={isCreatingRanking || isLoadingProviders}
                     createError={createRankingError}
