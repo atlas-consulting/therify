@@ -18,9 +18,10 @@ type MatchesApiResponse = {
     };
     errors: any[];
 };
-// TODO: move to env
-const API_BASE_URL = 'https://e20m2ce7nk.execute-api.us-east-1.amazonaws.com/dev/api/v1';
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL ?? '';
 const MatchesApiCreator = (baseUrl: string) => {
+    if (baseUrl === '') throw new Error("Can't create api without a base url!");
     const makeRequest = async (url: string, method?: Method): Promise<AxiosPromise<MatchesApiResponse>> => {
         return axios({
             url,
