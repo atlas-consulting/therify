@@ -1,4 +1,4 @@
-import { Provider, User } from '../match';
+import { MatchPreferenceQualifier, Provider, User } from '../match';
 
 export enum ResponseType {
     Match = 'Match',
@@ -25,11 +25,6 @@ export interface IUser {
     emailAddress?: string;
     details: User;
 }
-
-interface PreferenceCheck {
-    preference: string | string[];
-    isMet: boolean;
-}
 export interface IMatch {
     PK: string;
     SK: string;
@@ -38,7 +33,7 @@ export interface IMatch {
     providerEmailAddress: string;
     userEmailAddress: string;
     type: ResponseType.Match;
-    criteria: Record<string, PreferenceCheck>;
+    criteria: Record<string, MatchPreferenceQualifier>;
     score: number;
 }
 
@@ -50,4 +45,4 @@ interface RecordData {
 
 type Match = IProvider | IUser | IMatch;
 
-export type Response = RecordData & Match;
+export type GetMatchesResponse = RecordData & Match;

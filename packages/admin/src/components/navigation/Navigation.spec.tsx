@@ -10,7 +10,7 @@ jest.mock('react-router-dom', () => ({
         pathname: 'localhost:3000/matches',
     }),
 }));
-describe.only('Navigation', () => {
+describe('Navigation', () => {
     afterEach(cleanup);
     it('should show link display text when expanded', () => {
         const { getByText } = renderWithStore(

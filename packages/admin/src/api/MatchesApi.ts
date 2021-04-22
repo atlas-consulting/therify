@@ -1,30 +1,46 @@
-import { MatchTypes, Mocks } from '@therify/types';
+import { MatchTypes, Mocks, MatchApiTypes } from '@therify/types';
+import axios, { AxiosPromise, Method } from 'axios';
+import { adaptApiMatches } from './utils';
 
 export type getMatchesOptions = {
     token: string;
 };
 export type createMatchOptions = {
-    patientId: string;
+    userId: string;
     providerId: string;
-    matchId: string;
 };
 
-const MatchesApiCreator = () => {
-    const getMatches = async (options: getMatchesOptions) => {
-        return await new Promise<MatchTypes.Match[]>((resolve) =>
-            setTimeout(() => {
-                console.log(`%cGetting Matches`, 'color: green');
-                resolve(Mocks.mockModelResultsList);
-            }, 2000),
-        );
+type MatchesApiResponse = {
+    data: {
+        count: number;
+        scannedCount: number;
+        Items: MatchApiTypes.GetMatchesResponse[];
     };
-    const createMatch = async ({ patientId, providerId }: createMatchOptions) => {
+    errors: any[];
+};
+// TODO: move to env
+const API_BASE_URL = 'https://e20m2ce7nk.execute-api.us-east-1.amazonaws.com/dev/api/v1';
+const MatchesApiCreator = (baseUrl: string) => {
+    const makeRequest = async (url: string, method?: Method): Promise<AxiosPromise<MatchesApiResponse>> => {
+        return axios({
+            url,
+            method: method ?? 'GET',
+            headers: {
+                // APIKEY,
+            },
+        });
+    };
+
+    const getMatches = async (options: getMatchesOptions): Promise<MatchTypes.Match[]> => {
+        const { data: axiosData } = await makeRequest(`${baseUrl}/matches`);
+        console.log({ items: axiosData.data.Items });
+        return adaptApiMatches(axiosData?.data?.Items ?? []);
+    };
+
+    const createMatch = async ({ userId, providerId }: createMatchOptions) => {
         return await new Promise<MatchTypes.Ranking>((resolve) =>
             setTimeout(() => {
-                console.log(
-                    `%cCreating Match for patient '${patientId}' and provider '${providerId}'...`,
-                    'color: green',
-                );
+                console.log(`%cCreating Match for user '${userId}' and provider '${providerId}'...`, 'color: green');
                 resolve(Mocks.mockRanking);
             }, 2000),
         );
@@ -56,4 +72,4 @@ const MatchesApiCreator = () => {
     return { getMatches, createMatch, approveMatch, denyMatch, listProviders };
 };
 
-export const MatchesApi = MatchesApiCreator();
+export const MatchesApi = MatchesApiCreator(API_BASE_URL);
