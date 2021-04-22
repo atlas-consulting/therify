@@ -1,7 +1,7 @@
 import { fireEvent, render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { MatchesCard } from './MatchesCard';
-import { MatchTypes, Mocks } from '@therify/types';
+import { Mocks } from '@therify/types';
 import { RankingStatus } from '@therify/types/lib/match';
 
 describe('MatchesCard', () => {

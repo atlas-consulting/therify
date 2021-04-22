@@ -3,7 +3,7 @@ import { Delete } from '@material-ui/icons';
 import { RankingStatus } from '@therify/types/lib/match';
 import React from 'react';
 import { Text, TextSmall, TextBold } from '../../core';
-import { ApprovalButton } from '../approval-button';
+
 export type ProviderRankingProps = {
     id: string;
     status: RankingStatus;

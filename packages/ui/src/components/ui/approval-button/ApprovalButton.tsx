@@ -65,6 +65,7 @@ const RequestHandlerUi = ({ handleApprove }: { handleApprove: () => Promise<void
             await handleApprove();
         };
         approveFn();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
         <Box display="flex" alignContent="center">
