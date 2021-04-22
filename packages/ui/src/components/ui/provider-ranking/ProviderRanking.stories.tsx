@@ -7,7 +7,6 @@ export const PatientCard: Story = () => {
     return (
         <ProviderRankingUi
             id="test"
-            onApprove={async () => alert('Approved')}
             onDelete={async () => alert('Deleted!')}
             rank={1}
             displayText="Dr. Test Jenkins"
@@ -23,7 +22,6 @@ export const Warning: Story = () => {
             displayText="Dr. Test Jenkins"
             statusText="Gender: Male"
             status={RankingStatus.WARNING}
-            onApprove={async () => alert('Approved')}
             onDelete={async () => alert('Deleted!')}
         />
     );
@@ -36,24 +34,11 @@ export const Incompatible: Story = () => {
             displayText="Dr. Test Jenkins"
             statusText="Out of Network"
             status={RankingStatus.INCOMPATIBLE}
-            onApprove={async () => alert('Approved')}
             onDelete={async () => alert('Deleted!')}
         />
     );
 };
 export const NoDelete: Story = () => {
-    return (
-        <ProviderRankingUi
-            id="test"
-            rank={1}
-            displayText="Dr. Test Jenkins"
-            status={RankingStatus.GOOD}
-            onApprove={async () => {}}
-        />
-    );
-};
-
-export const NoApprove: Story = () => {
     return <ProviderRankingUi id="test" rank={1} displayText="Dr. Test Jenkins" status={RankingStatus.GOOD} />;
 };
 

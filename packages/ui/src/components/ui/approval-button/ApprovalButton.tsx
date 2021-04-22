@@ -4,8 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { SuccessButton, TextSmall, Text } from '../../core';
 
 export type ApprovalButtonProps = {
-    rankingId: string;
-    onApprove: (rankingId: string) => Promise<unknown>;
+    onApprove: () => Promise<unknown>;
     onCancel?: () => void;
     timeoutInMs?: number;
     buttonText?: string;
@@ -54,7 +53,7 @@ const Loader = ({
                 value={progress}
                 style={{ height: '16px', width: '16px' }}
             />
-            <TextSmall style={{ margin: 0, marginLeft: theme.spacing(1) }}>Undo</TextSmall>
+            <TextSmall style={{ margin: 0, marginLeft: theme.spacing(1), cursor: 'pointer' }}>Undo</TextSmall>
         </Box>
     );
 };
@@ -96,7 +95,6 @@ const ErrorState = ({ onClose }: { onClose: () => void }) => {
     );
 };
 export const ApprovalButton = ({
-    rankingId,
     onApprove,
     onCancel,
     timeoutInMs,
@@ -117,7 +115,7 @@ export const ApprovalButton = ({
         setIsCountingDown(true);
         setIsError(false);
         try {
-            await onApprove(rankingId);
+            await onApprove();
             setIsCompleted(true);
         } catch (e) {
             setIsError(true);

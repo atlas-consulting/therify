@@ -78,7 +78,7 @@ export const CreateMatchModal = ({
                             stateOfResidence={stateOfResidence}
                             genderPreference={genderPreference}
                             racePreference={racePreference}
-                            issues={issues}
+                            issues={(issues ?? []).join(', ')}
                             insuranceProvider={insuranceProvider}
                         />
                     </Box>

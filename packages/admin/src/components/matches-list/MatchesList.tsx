@@ -6,7 +6,7 @@ import { MatchTypes } from '@therify/types';
 import { getRankingStatus } from '../../utils/Matches';
 
 export type MatchesListProps = {
-    handleApprove: (matchId: string) => Promise<void>;
+    handleApprove: (userId: string) => Promise<void>;
     handleDeleteMatch: (id: string) => void;
     handleCreateMatch: (match: MatchTypes.Match) => void;
     onCheck: () => void;
@@ -52,7 +52,7 @@ export const MatchesList = ({
                     onCheck={onCheck}
                     user={match.user}
                     rankings={match.matches}
-                    handleApprove={handleApprove}
+                    handleApprove={() => handleApprove(match.user.id)}
                     handleDeleteMatch={handleDeleteMatch}
                     handleCreateMatch={() => handleCreateMatch(match)}
                 />

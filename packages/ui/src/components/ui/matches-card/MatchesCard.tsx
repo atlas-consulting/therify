@@ -5,14 +5,16 @@ import { Header3 } from '../../core';
 import { ProviderRanking } from '../provider-ranking';
 import { MatchTypes } from '@therify/types';
 import { PreferencesGrid } from '../preferences-grid';
+import { ApprovalButton } from '../approval-button';
+import { RankingStatus } from '@therify/types/lib/match';
 
 export type MatchesCardProps = {
     isChecked: boolean;
     onCheck: () => void;
     user: MatchTypes.User;
     rankings: (MatchTypes.Ranking & { status: MatchTypes.RankingStatus })[];
-    handleApprove: (matchId: string) => Promise<void>;
-    handleCancelApprove?: ({ user, ranking }: { user: MatchTypes.User; ranking: MatchTypes.Ranking }) => void;
+    handleApprove: () => Promise<void>;
+    handleCancelApprove?: () => void;
     handleDeleteMatch?: (id: string) => void;
     handleCreateMatch?: () => void;
 };
@@ -58,29 +60,45 @@ export const MatchesCard = ({
                     stateOfResidence={stateOfResidence}
                     genderPreference={genderPreference}
                     racePreference={racePreference}
-                    issues={issues}
+                    issues={(issues ?? []).join(', ')}
                     insuranceProvider={insuranceProvider}
                 />
             </Box>
-            <Box flexGrow="2" style={{ paddingLeft: theme.spacing(3) }}>
-                <TextSmall style={{ marginLeft: theme.spacing(5) }}>Matches</TextSmall>
-                {rankings.length === 0 ? (
-                    <Text style={{ opacity: 0.7 }}>No rankings to show.</Text>
-                ) : (
-                    rankings.map((ranking, i) => (
-                        <ProviderRanking
-                            key={ranking.id}
-                            id={ranking.id}
-                            status={ranking.status}
-                            displayText={`${ranking.provider.firstName} ${ranking.provider.lastName}`}
-                            rank={i + 1}
-                            onApprove={() => handleApprove(ranking.id)}
-                            onCancel={handleCancelApprove ? () => handleCancelApprove({ ranking, user }) : undefined}
-                            onDelete={handleDeleteMatch}
-                        />
-                    ))
-                )}
-                {handleCreateMatch && <TextButton onClick={handleCreateMatch}>+ Add Provider</TextButton>}
+            <Box flexGrow="2">
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="flex-end"
+                    style={{ paddingBottom: theme.spacing(1) }}
+                >
+                    <TextSmall>Matches</TextSmall>
+                    <ApprovalButton
+                        isHidden={
+                            rankings.length === 0 || rankings.every((r) => r.status === RankingStatus.INCOMPATIBLE)
+                        }
+                        onCancel={handleCancelApprove}
+                        onApprove={handleApprove}
+                        buttonText="Approve"
+                    />
+                </Box>
+                {/* TODO: Disable Box while approving*/}
+                <Box>
+                    {rankings.length === 0 ? (
+                        <Text style={{ opacity: 0.7 }}>No rankings to show.</Text>
+                    ) : (
+                        rankings.map((ranking, i) => (
+                            <ProviderRanking
+                                key={ranking.id}
+                                id={ranking.id}
+                                status={ranking.status}
+                                displayText={`${ranking.provider.firstName} ${ranking.provider.lastName}`}
+                                rank={i + 1}
+                                onDelete={handleDeleteMatch}
+                            />
+                        ))
+                    )}
+                    {handleCreateMatch && <TextButton onClick={handleCreateMatch}>+ Add Provider</TextButton>}
+                </Box>
             </Box>
         </Paper>
     );

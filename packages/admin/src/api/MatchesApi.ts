@@ -46,10 +46,10 @@ const MatchesApiCreator = (baseUrl: string) => {
             }, 2000),
         );
     };
-    const approveMatch = async (matchId: string) => {
+    const approveMatchesForUser = async (userId: string) => {
         return await new Promise<void>((resolve) =>
             setTimeout(() => {
-                console.log(`%cApproving Match: ${matchId}`, 'color: green');
+                console.log(`%cApproving Match: ${userId}`, 'color: green');
                 resolve();
             }, 2000),
         );
@@ -70,7 +70,7 @@ const MatchesApiCreator = (baseUrl: string) => {
             }, 2000),
         );
     };
-    return { getMatches, createMatch, approveMatch, denyMatch, listProviders };
+    return { getMatches, createMatch, approveMatchesForUser, denyMatch, listProviders };
 };
 
 export const MatchesApi = MatchesApiCreator(API_BASE_URL);

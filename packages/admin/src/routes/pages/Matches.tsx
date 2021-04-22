@@ -21,9 +21,8 @@ import { MatchesList, CreateMatchModal, Navigation } from '../../components';
 export const Matches = () => {
     const theme = useTheme();
     const {
-        matches,
         getMatches,
-        approveMatch,
+        approveMatchesForUser,
         denyMatch,
         isDenyingMatch,
         denyMatchError,
@@ -99,11 +98,10 @@ export const Matches = () => {
             onChange: (val: string) => setSortByFilter(val),
         },
     ];
-    // useEffect(() => {
-    //     if (matches.length === 0) {
-    //         getMatches();
-    //     }
-    // }, [getMatches, matches.length]);
+    useEffect(() => {
+        getMatches();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     return (
         <>
             <NavDrawerPage drawer={Navigation} style={{ flexFlow: 'column', display: 'flex', height: '100vh' }}>
@@ -135,7 +133,7 @@ export const Matches = () => {
                 </Box>
                 <MatchesList
                     onCheck={() => {}}
-                    handleApprove={approveMatch}
+                    handleApprove={approveMatchesForUser}
                     handleDeleteMatch={(id) => setMatchIdToDeny(id)}
                     handleCreateMatch={handleOpenCreateMatchModal}
                     isLoading={isLoadingMatches}

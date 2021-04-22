@@ -42,18 +42,18 @@ const useApproveMatch = () => {
     const [isApprovingMatch, setIsApprovingMatch] = useState(false);
     const [approveMatchError, setApproveMatchError] = useState<string | undefined>(undefined);
 
-    const approveMatch = async (matchId: string) => {
+    const approveMatchesForUser = async (userId: string) => {
         setIsApprovingMatch(true);
         setApproveMatchError(undefined);
         try {
-            await MatchesApi.approveMatch(matchId);
+            await MatchesApi.approveMatchesForUser(userId);
         } catch (error) {
             setApproveMatchError(error.message);
         }
         setIsApprovingMatch(false);
     };
     return {
-        approveMatch,
+        approveMatchesForUser,
         isApprovingMatch,
         approveMatchError,
     };

@@ -14,9 +14,7 @@ describe('ApprovalButton', () => {
     });
     it('calls onApprove when countdown successful', async () => {
         const onApprove = jest.fn();
-        const { getByTestId } = render(
-            <ApprovalButton rankingId="test" timeoutInMs={10} onApprove={async () => onApprove()} />,
-        );
+        const { getByTestId } = render(<ApprovalButton timeoutInMs={10} onApprove={async () => onApprove()} />);
         userEvent.click(getByTestId('approve-button'));
         expect(setInterval).toHaveBeenCalledTimes(1);
     });

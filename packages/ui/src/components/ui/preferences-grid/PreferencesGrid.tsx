@@ -6,7 +6,7 @@ export type PreferencesGridProps = {
     stateOfResidence: string;
     genderPreference: string;
     racePreference: string;
-    issues: string[];
+    issues: string;
     insuranceProvider: string;
 };
 
@@ -34,7 +34,7 @@ export const PreferencesGrid = ({
             <Grid item xs={12} sm={4}>
                 <TextSmall style={{ flexGrow: 3 }}>
                     <b>specialties: </b>
-                    {issues.join(', ')}
+                    {issues}
                 </TextSmall>
             </Grid>
             <Grid item xs={12} sm={4}>

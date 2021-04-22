@@ -23,6 +23,7 @@ export const MatchesCard: Story = () => {
             ]}
             handleApprove={async () => {}}
             handleCreateMatch={() => {}}
+            handleDeleteMatch={() => {}}
         />
     );
 };
@@ -39,6 +40,39 @@ export const NoMatchCreation: Story = () => {
                 { ...mockRankingWithStatus, id: '3' },
             ]}
             handleApprove={async () => {}}
+            handleDeleteMatch={() => {}}
+        />
+    );
+};
+
+export const NoApprovableMatches: Story = () => {
+    const [isChecked, setIsChecked] = useState(false);
+    return (
+        <MatchesCardUi
+            isChecked={isChecked}
+            onCheck={() => setIsChecked(!isChecked)}
+            user={Mocks.mockUser}
+            rankings={[
+                { ...mockRankingWithStatus, status: RankingStatus.INCOMPATIBLE, id: '1' },
+                { ...mockRankingWithStatus, status: RankingStatus.INCOMPATIBLE, id: '2' },
+                { ...mockRankingWithStatus, status: RankingStatus.INCOMPATIBLE, id: '3' },
+            ]}
+            handleApprove={async () => {}}
+            handleDeleteMatch={() => {}}
+        />
+    );
+};
+
+export const NoMatchesToShow: Story = () => {
+    const [isChecked, setIsChecked] = useState(false);
+    return (
+        <MatchesCardUi
+            isChecked={isChecked}
+            onCheck={() => setIsChecked(!isChecked)}
+            user={Mocks.mockUser}
+            rankings={[]}
+            handleApprove={async () => {}}
+            handleDeleteMatch={() => {}}
         />
     );
 };
