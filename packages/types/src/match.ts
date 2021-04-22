@@ -29,6 +29,7 @@ export type Provider = {
     gender: string;
     race: string[];
     specialties: string[];
+    theraputicPractices: string[];
     createdAt: string;
     updatedAt: string;
     rate: number;
