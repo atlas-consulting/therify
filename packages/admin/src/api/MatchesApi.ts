@@ -1,5 +1,5 @@
 import { MatchTypes, Mocks, MatchApiTypes } from '@therify/types';
-import axios, { AxiosPromise, Method } from 'axios';
+import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
 import { adaptApiMatches } from './utils';
 
 export type getMatchesOptions = {
@@ -18,23 +18,31 @@ type MatchesApiResponse = {
     };
     errors: any[];
 };
+const makeFakeRequest = ({ url, config }: any) =>
+    new Promise<any>((resolve) => {
+        setTimeout(() => {
+            console.log('makeFakeRequest:', { url, config });
+            resolve(undefined);
+        }, 2000);
+    });
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL ?? '';
 const MatchesApiCreator = (baseUrl: string) => {
     if (baseUrl === '') throw new Error("Can't create api without a base url!");
-    const makeRequest = async (url: string, method?: Method): Promise<AxiosPromise<MatchesApiResponse>> => {
+    const makeRequest = async (
+        url: string,
+        config?: AxiosRequestConfig & { shouldFakeRequest?: boolean },
+    ): Promise<AxiosPromise<MatchesApiResponse>> => {
+        if (config?.shouldFakeRequest) return makeFakeRequest({ url, config });
         return axios({
+            ...(config ?? {}),
             url,
-            method: method ?? 'GET',
-            headers: {
-                // APIKEY,
-            },
+            method: config?.method ?? 'GET',
         });
     };
 
     const getMatches = async (options: getMatchesOptions): Promise<MatchTypes.Match[]> => {
         const { data: axiosData } = await makeRequest(`${baseUrl}/matches`);
-        console.log({ items: axiosData.data.Items });
         return adaptApiMatches(axiosData?.data?.Items ?? []);
     };
 
@@ -46,13 +54,13 @@ const MatchesApiCreator = (baseUrl: string) => {
             }, 2000),
         );
     };
-    const approveMatchesForUser = async (userId: string) => {
-        return await new Promise<void>((resolve) =>
-            setTimeout(() => {
-                console.log(`%cApproving Match: ${userId}`, 'color: green');
-                resolve();
-            }, 2000),
-        );
+    const approveMatches = async (matchIds: string[]) => {
+        const { data: axiosData } = await makeRequest(`${baseUrl}/matches/approve`, {
+            method: 'POST',
+            data: { matchIds },
+            shouldFakeRequest: true,
+        });
+        return axiosData?.data ?? [];
     };
     const denyMatch = async (matchId: string, reason?: string) => {
         return await new Promise<void>((resolve) =>
@@ -70,7 +78,7 @@ const MatchesApiCreator = (baseUrl: string) => {
             }, 2000),
         );
     };
-    return { getMatches, createMatch, approveMatchesForUser, denyMatch, listProviders };
+    return { getMatches, createMatch, approveMatches, denyMatch, listProviders };
 };
 
 export const MatchesApi = MatchesApiCreator(API_BASE_URL);

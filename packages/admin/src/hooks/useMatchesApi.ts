@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createMatchOptions, MatchesApi } from '../api/MatchesApi';
 import { removeRankingFromUser, setMatch, setMatches } from '../store/actions';
-import { getMatches as getMatchesArray, getMatchesState, getUserToken } from '../store/selectors';
+import { getApprovedMatches, getDeniedRankingIds, getMatchesState, getUserToken } from '../store/selectors';
+import { removeDeniedRankingsFromMatch } from '../utils/Matches';
 import { useAlerts } from './useAlerts';
 
 type MatchesApiConfig = { withAlerts?: boolean; withEvents?: boolean };
@@ -20,7 +21,7 @@ export const useGetMatches = (config?: MatchesApiConfig) => {
     const [isLoadingMatches, setIsLoadingMatches] = useState(false);
     const [getMatchesError, setGetMatchesError] = useState<string | undefined>(undefined);
     const dispatch = useDispatch();
-    const matches = useSelector(getMatchesArray);
+    const matches = useSelector(getApprovedMatches);
     const token = useSelector(getUserToken);
     const getMatches = async () => {
         setIsLoadingMatches(true);
@@ -46,12 +47,24 @@ export const useApproveMatch = (config?: MatchesApiConfig) => {
     const { createErrorAlert } = useAlerts();
     const [isApprovingMatch, setIsApprovingMatch] = useState(false);
     const [approveMatchError, setApproveMatchError] = useState<string | undefined>(undefined);
+    const matchesState = useSelector(getMatchesState);
+    const deniedRankingIds = useSelector(getDeniedRankingIds);
 
     const approveMatchesForUser = async (userId: string) => {
         setIsApprovingMatch(true);
         setApproveMatchError(undefined);
+        const userMatch = matchesState[userId];
+        if (!userMatch) {
+            createErrorAlert('Cannot find user');
+            return;
+        }
+        const userMatchIds = removeDeniedRankingsFromMatch(userMatch, deniedRankingIds).matches.map((m) => m.id);
+        if (!userMatchIds.length) {
+            createErrorAlert('No matches found for user');
+            return;
+        }
         try {
-            await MatchesApi.approveMatchesForUser(userId);
+            await MatchesApi.approveMatches(userMatchIds);
         } catch (error) {
             setApproveMatchError(error.message);
             if (config?.withAlerts) createErrorAlert(error.message);
