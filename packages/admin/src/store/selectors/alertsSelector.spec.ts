@@ -1,15 +1,6 @@
-import { IAlert } from '../../models';
-import { AlertsStore } from '../reducers/alertsReducer';
-// import { getDeniedRankingIds, getMatches, getMatchesState } from './matchesSelector';/
 import { getAlerts, getUnreadAlerts } from './alertsSelector';
+import { mockAlert, mockStore } from '../mocks';
 
-const mockAlert: IAlert = { id: 0, isViewed: false };
-const mockStore: { alertsStore: AlertsStore } = {
-    alertsStore: {
-        alerts: [],
-        idCounter: 1,
-    },
-};
 describe('alertsSelector', () => {
     describe('getAlerts', () => {
         it('should return alerts array', () => {

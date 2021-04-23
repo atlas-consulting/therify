@@ -2,6 +2,7 @@ import { MatchTypes } from '@therify/types';
 import { IMatchesAction, MatchesActionType } from '../actions';
 export type MatchesStore = {
     matches: Record<string, MatchTypes.Match>;
+    // If typeof deniedRankingIds ever changes, be sure to update in helpers and mocks
     deniedRankingIds: Set<string>;
 };
 const initialState: MatchesStore = {

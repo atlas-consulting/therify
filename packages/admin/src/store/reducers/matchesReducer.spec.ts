@@ -1,12 +1,13 @@
 import { cleanup } from '@testing-library/react';
-import { Mocks } from '@therify/types';
 import { MatchesActionType, setMatches, setMatch, removeRankingFromUser } from '../actions';
-import matchesReducer, { MatchesStore } from './matchesReducer';
-const mockState: MatchesStore = {
+import { mockStore, mockMatch as mockModelResult } from '../mocks';
+import matchesReducer from './matchesReducer';
+const { matchesStore } = mockStore;
+const mockState = {
+    ...matchesStore,
     matches: {},
     deniedRankingIds: new Set([]),
 };
-const { mockModelResult } = Mocks;
 describe('matches reducer', () => {
     afterEach(cleanup);
     it('should return default state', () => {

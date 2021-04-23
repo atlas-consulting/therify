@@ -1,11 +1,5 @@
+import { mockUser } from '../mocks';
 import { getUserFirstName, getUserLastName, getUserName, getUserState, getUserToken } from './userSelector';
-const mockUser = {
-    firstName: 'Test',
-    lastName: 'Jackson',
-    email: 'test@j.com',
-    id: 'test1234',
-    token: 'xxxxxxxxxxxx',
-};
 
 describe('userSelector', () => {
     describe('getUserState', () => {
