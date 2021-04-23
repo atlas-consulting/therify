@@ -8,6 +8,7 @@ import awsExports from './aws-exports';
 import store from './store';
 import './App.css';
 import { Router } from './routes';
+import { AppNotification } from './components/app-notification';
 
 const withEnvironmentVars = (awsExports: Record<string, any>) => ({
     ...awsExports,
@@ -52,6 +53,7 @@ function App() {
             <StoreProvider store={store}>
                 <CssBaseline />
                 <Router />
+                <AppNotification />
             </StoreProvider>
         </ThemeProvider>
     );

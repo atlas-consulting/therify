@@ -15,7 +15,7 @@ import {
 } from '@therify/ui';
 import { MatchTypes } from '@therify/types';
 import { useTheme, Box, CircularProgress } from '@material-ui/core';
-import { useMatchesApi } from '../../hooks/useMatchesApi';
+import { useMatchesApi, useCreateRanking } from '../../hooks/useMatchesApi';
 import { MatchesList, CreateMatchModal, Navigation } from '../../components';
 
 export const Matches = () => {
@@ -27,14 +27,13 @@ export const Matches = () => {
         isDenyingMatch,
         denyMatchError,
         isLoadingMatches,
-        createRanking,
-        isCreatingRanking,
-        createRankingError,
         isLoadingProviders,
         listProviders,
         listProvidersError,
         providers,
     } = useMatchesApi();
+    const { isCreatingRanking, createRanking, createRankingError } = useCreateRanking({ withAlerts: true });
+
     // const [selectedMatches, setSelectedMatches] = useState({});
     const [companyFilter, setCompanyFilter] = useState('all');
     const [statusFilter, setStatusFilter] = useState('all');

@@ -1,3 +1,4 @@
+export * from './alert';
 export * from './select-group';
 export * from './match-counter';
 export * from './matches-card';

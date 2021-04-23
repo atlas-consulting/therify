@@ -4,16 +4,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createMatchOptions, MatchesApi } from '../api/MatchesApi';
 import { removeRankingFromUser, setMatch, setMatches } from '../store/actions';
 import { getMatches as getMatchesArray, getMatchesState, getUserToken } from '../store/selectors';
+import { useAlerts } from './useAlerts';
 
-export const useMatchesApi = () => ({
-    ...useGetMatches(),
-    ...useApproveMatch(),
-    ...useDenyMatch(),
-    ...useCreateRanking(),
-    ...useListProviders(),
+type MatchesApiConfig = { withAlerts?: boolean; withEvents?: boolean };
+export const useMatchesApi = (config?: MatchesApiConfig) => ({
+    ...useGetMatches(config),
+    ...useApproveMatch(config),
+    ...useDenyMatch(config),
+    ...useCreateRanking(config),
+    ...useListProviders(config),
 });
 
-const useGetMatches = () => {
+export const useGetMatches = (config?: MatchesApiConfig) => {
+    const { createErrorAlert } = useAlerts();
     const [isLoadingMatches, setIsLoadingMatches] = useState(false);
     const [getMatchesError, setGetMatchesError] = useState<string | undefined>(undefined);
     const dispatch = useDispatch();
@@ -27,6 +30,7 @@ const useGetMatches = () => {
             dispatch(setMatches(results));
         } catch (error) {
             setGetMatchesError(error.message);
+            if (config?.withAlerts) createErrorAlert(error.message);
         }
         setIsLoadingMatches(false);
     };
@@ -38,7 +42,8 @@ const useGetMatches = () => {
     };
 };
 
-const useApproveMatch = () => {
+export const useApproveMatch = (config?: MatchesApiConfig) => {
+    const { createErrorAlert } = useAlerts();
     const [isApprovingMatch, setIsApprovingMatch] = useState(false);
     const [approveMatchError, setApproveMatchError] = useState<string | undefined>(undefined);
 
@@ -49,6 +54,7 @@ const useApproveMatch = () => {
             await MatchesApi.approveMatchesForUser(userId);
         } catch (error) {
             setApproveMatchError(error.message);
+            if (config?.withAlerts) createErrorAlert(error.message);
         }
         setIsApprovingMatch(false);
     };
@@ -59,7 +65,8 @@ const useApproveMatch = () => {
     };
 };
 
-const useDenyMatch = () => {
+export const useDenyMatch = (config?: MatchesApiConfig) => {
+    const { createErrorAlert } = useAlerts();
     const dispatch = useDispatch();
     const [isDenyingMatch, setIsDenyingMatch] = useState(false);
     const [denyMatchError, setDenyMatchError] = useState<string | undefined>(undefined);
@@ -72,6 +79,7 @@ const useDenyMatch = () => {
             dispatch(removeRankingFromUser(matchId));
         } catch (error) {
             setDenyMatchError(error.message);
+            if (config?.withAlerts) createErrorAlert(error.message);
         }
         setIsDenyingMatch(false);
     };
@@ -82,7 +90,8 @@ const useDenyMatch = () => {
     };
 };
 
-const useCreateRanking = () => {
+export const useCreateRanking = (config?: MatchesApiConfig) => {
+    const { createErrorAlert, createSuccessAlert } = useAlerts();
     const [isCreatingRanking, setIsCreatingRanking] = useState(false);
     const [createRankingError, setCreateRankingError] = useState<string | undefined>(undefined);
     const dispatch = useDispatch();
@@ -101,11 +110,13 @@ const useCreateRanking = () => {
                         matches: [...match.matches, newRanking],
                     }),
                 );
+                if (config?.withAlerts) createSuccessAlert('Successfully created match!');
             } else {
                 throw new Error(`[createRanking]: Can not find match with user id ${userId}`);
             }
         } catch (error) {
             setCreateRankingError(error.message);
+            if (config?.withAlerts) createErrorAlert(error.message);
         }
         setIsCreatingRanking(false);
     };
@@ -116,7 +127,8 @@ const useCreateRanking = () => {
     };
 };
 
-const useListProviders = () => {
+export const useListProviders = (config?: MatchesApiConfig) => {
+    const { createErrorAlert } = useAlerts();
     const [providers, setProviders] = useState<MatchTypes.Provider[]>([]);
     const [isLoadingProviders, setIsLoadingProviders] = useState(false);
     const [listProvidersError, setListProvidersError] = useState<string | undefined>(undefined);
@@ -132,6 +144,7 @@ const useListProviders = () => {
             setProviders(results);
         } catch (error) {
             setListProvidersError(error.message);
+            if (config?.withAlerts) createErrorAlert(error.message);
         }
         setIsLoadingProviders(false);
     };
