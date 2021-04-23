@@ -1,5 +1,5 @@
 import { MatchTypes, Mocks, MatchApiTypes } from '@therify/types';
-import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
+import axios, { AxiosPromise, AxiosRequestConfig, Method } from 'axios';
 import { adaptApiMatches } from './utils';
 
 export type getMatchesOptions = {
@@ -22,7 +22,7 @@ const makeFakeRequest = ({ url, config }: any) =>
     new Promise<any>((resolve) => {
         setTimeout(() => {
             console.log('makeFakeRequest:', { url, config });
-            resolve(undefined);
+            resolve({ data: `fake request to ${url}` });
         }, 2000);
     });
 
@@ -47,12 +47,13 @@ const MatchesApiCreator = (baseUrl: string) => {
     };
 
     const createMatch = async ({ userId, providerId }: createMatchOptions) => {
-        return await new Promise<MatchTypes.Ranking>((resolve) =>
-            setTimeout(() => {
-                console.log(`%cCreating Match for user '${userId}' and provider '${providerId}'...`, 'color: green');
-                resolve(Mocks.mockRanking);
-            }, 2000),
-        );
+        const { data: axiosData } = await makeRequest(`${baseUrl}/matches/approve`, {
+            method: 'POST',
+            data: { userId, providerId },
+            shouldFakeRequest: true,
+        });
+        // return axiosData?.data ?? [];
+        return Mocks.mockRanking;
     };
     const approveMatches = async (matchIds: string[]) => {
         const { data: axiosData } = await makeRequest(`${baseUrl}/matches/approve`, {
@@ -63,22 +64,22 @@ const MatchesApiCreator = (baseUrl: string) => {
         return axiosData?.data ?? [];
     };
     const denyMatch = async (matchId: string, reason?: string) => {
-        return await new Promise<void>((resolve) =>
-            setTimeout(() => {
-                console.log(`%cDenying Match: ${matchId}`, 'color: red');
-                resolve();
-            }, 2000),
-        );
+        const { data: axiosData } = await makeRequest(`${baseUrl}/matches`, {
+            method: 'DELETE',
+            data: {
+                matchIds: [matchId],
+                reason,
+            },
+            shouldFakeRequest: true,
+        });
+        console.log({ denyMatchResponse: axiosData });
+        return axiosData.data;
     };
-    const listProviders = async (queryString?: string) => {
-        return await new Promise<MatchTypes.Provider[]>((resolve) =>
-            setTimeout(() => {
-                console.log(`%Fetching providers with traits: ${queryString}`, 'color: green');
-                resolve(Mocks.mockProviders);
-            }, 2000),
-        );
+    const getProviders = async (queryString?: string) => {
+        const { data: axiosData } = await makeRequest(`${baseUrl}/providers`);
+        return Mocks.mockProviders;
     };
-    return { getMatches, createMatch, approveMatches, denyMatch, listProviders };
+    return { getMatches, createMatch, approveMatches, denyMatch, getProviders };
 };
 
 export const MatchesApi = MatchesApiCreator(API_BASE_URL);

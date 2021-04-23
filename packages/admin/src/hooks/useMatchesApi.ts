@@ -13,7 +13,7 @@ export const useMatchesApi = (config?: MatchesApiConfig) => ({
     ...useApproveMatch(config),
     ...useDenyMatch(config),
     ...useCreateRanking(config),
-    ...useListProviders(config),
+    ...useGetProviders(config),
 });
 
 export const useGetMatches = (config?: MatchesApiConfig) => {
@@ -140,7 +140,7 @@ export const useCreateRanking = (config?: MatchesApiConfig) => {
     };
 };
 
-export const useListProviders = (config?: MatchesApiConfig) => {
+export const useGetProviders = (config?: MatchesApiConfig) => {
     const { createErrorAlert } = useAlerts();
     const [providers, setProviders] = useState<MatchTypes.Provider[]>([]);
     const [isLoadingProviders, setIsLoadingProviders] = useState(false);
@@ -153,7 +153,7 @@ export const useListProviders = (config?: MatchesApiConfig) => {
         setListProvidersError(undefined);
         setIsLoadingProviders(true);
         try {
-            const results = await MatchesApi.listProviders(query);
+            const results = await MatchesApi.getProviders(query);
             setProviders(results);
         } catch (error) {
             setListProvidersError(error.message);
