@@ -13,3 +13,18 @@ export const getRankingStatus = (comparison: MatchQualityOptions) => {
     }
     return RankingStatus.GOOD;
 };
+
+export const removeDeniedRankings = (
+    matches: MatchTypes.Match[],
+    deniedRankingIds: Set<string>,
+): MatchTypes.Match[] => {
+    return matches.map((match) => removeDeniedRankingsFromMatch(match, deniedRankingIds));
+};
+
+export const removeDeniedRankingsFromMatch = (
+    match: MatchTypes.Match,
+    deniedRankingIds: Set<string>,
+): MatchTypes.Match => ({
+    ...match,
+    matches: match.matches.filter((ranking) => !deniedRankingIds.has(ranking.id)),
+});
