@@ -7,14 +7,15 @@ export const AppNotification = () => {
     const onDismiss = (id: number) => setTimeout(() => markAlertAsViewed(id), 400);
     return (
         <>
-            {unreadAlerts.map((currentAlert) => (
+            {unreadAlerts.map((alert) => (
                 <AlertUi
-                    message={currentAlert.message}
-                    type={currentAlert.type}
-                    autoHideDurationInMs={currentAlert.autoHideDurationInMs}
+                    key={alert.id}
+                    message={alert.message}
+                    type={alert.type}
+                    autoHideDurationInMs={alert.autoHideDurationInMs}
                     positionX="center"
                     positionY="bottom"
-                    onDismiss={() => onDismiss(currentAlert.id)}
+                    onDismiss={() => onDismiss(alert.id)}
                 />
             ))}
         </>

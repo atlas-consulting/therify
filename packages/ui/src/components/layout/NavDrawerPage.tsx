@@ -27,7 +27,7 @@ export const NavDrawerPage = ({ drawer: Drawer, children, style }: NavDrawerPage
     }, [isExpanded]);
 
     return (
-        <Grid container>
+        <Grid container style={{ flexWrap: 'nowrap' }}>
             <Box
                 height="100vh"
                 overflow="auto"
