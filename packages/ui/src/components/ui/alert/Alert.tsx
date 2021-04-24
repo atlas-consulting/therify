@@ -28,7 +28,6 @@ export const Alert = ({
     const [isOpen, setIsOpen] = useState(true);
     const handleClose = (event: React.SyntheticEvent | React.MouseEvent, reason?: string) => {
         if (reason === 'clickaway') {
-            console.log('clickaway');
             return;
         }
         setIsOpen(false);
