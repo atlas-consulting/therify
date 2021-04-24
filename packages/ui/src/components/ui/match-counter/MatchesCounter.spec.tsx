@@ -2,39 +2,34 @@ import React from 'react';
 import { cleanup, render } from '@testing-library/react';
 import { MatchCounter } from './MatchCounter';
 import '@testing-library/jest-dom/extend-expect';
-import { MatchTypes } from '@therify/types';
-
-const mockMatch = {} as MatchTypes.Match;
 
 describe('MatchCounter', () => {
     afterEach(cleanup);
     it('renders successfully', () => {
-        const { container } = render(<MatchCounter good={[]} incompatibilities={[]} warnings={[]} />);
+        const { container } = render(<MatchCounter good={0} incompatibilities={0} warnings={0} />);
         expect(container.childElementCount).toBe(1);
     });
 
-    it('detects incompatibile matches', () => {
-        const { getByTestId } = render(<MatchCounter good={[]} incompatibilities={[mockMatch]} warnings={[]} />);
+    it('should render incompatibilities count', () => {
+        const { getByTestId } = render(<MatchCounter good={0} incompatibilities={1} warnings={0} />);
         const incompatibilies = getByTestId('match-counter-incompatibilies');
         expect(incompatibilies).toHaveTextContent('1 incompatibility');
     });
 
-    it('detects good matches', () => {
-        const { getByTestId } = render(<MatchCounter good={[mockMatch]} incompatibilities={[]} warnings={[]} />);
+    it('should render good count', () => {
+        const { getByTestId } = render(<MatchCounter good={1} incompatibilities={0} warnings={0} />);
         const goodRankings = getByTestId('match-counter-rankings');
         expect(goodRankings).toHaveTextContent('1 ranking');
     });
-    // TODO: move to @admin-ui utils
-    // it('detects problematic matches', () => {
-    //     const { getByTestId } = render(<MatchCounter matches={[mockIssuesMatch]} />);
-    //     const warnings = getByTestId('match-counter-warnings');
-    //     expect(warnings).toHaveTextContent('1 warning');
-    // });
+
+    it('should render warnings count', () => {
+        const { getByTestId } = render(<MatchCounter good={0} incompatibilities={0} warnings={1} />);
+        const goodRankings = getByTestId('match-counter-warnings');
+        expect(goodRankings).toHaveTextContent('1 warning');
+    });
 
     it('should use singular nouns when one match type found', () => {
-        const { getByTestId } = render(
-            <MatchCounter good={[mockMatch]} incompatibilities={[mockMatch]} warnings={[mockMatch]} />,
-        );
+        const { getByTestId } = render(<MatchCounter good={1} incompatibilities={1} warnings={1} />);
         const incompatibilies = getByTestId('match-counter-incompatibilies');
         const rankings = getByTestId('match-counter-rankings');
         const warnings = getByTestId('match-counter-warnings');
@@ -44,7 +39,7 @@ describe('MatchCounter', () => {
     });
 
     it('should use plural nouns when appropriate', () => {
-        const { getByTestId } = render(<MatchCounter good={[]} incompatibilities={[]} warnings={[]} />);
+        const { getByTestId } = render(<MatchCounter good={0} incompatibilities={0} warnings={0} />);
         const incompatibilies = getByTestId('match-counter-incompatibilies');
         const rankings = getByTestId('match-counter-rankings');
         const warnings = getByTestId('match-counter-warnings');
