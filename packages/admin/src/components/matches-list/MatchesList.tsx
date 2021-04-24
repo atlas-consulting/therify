@@ -1,49 +1,68 @@
 import React from 'react';
 import { Text, MatchesCard, ButtonFill as Button } from '@therify/ui';
-import { useTheme, CircularProgress, Box } from '@material-ui/core';
-import { useMatchesApi } from '../../hooks/useMatchesApi';
+import { useTheme, CircularProgress, Box, withStyles } from '@material-ui/core';
+import { Refresh } from '@material-ui/icons';
 import { MatchTypes } from '@therify/types';
-import { getRankingStatus } from '../../utils/Matches';
+import { getProviderToUserCompatability } from '../../utils/Matches';
 
 export type MatchesListProps = {
     handleApprove: (userId: string) => Promise<void>;
     handleDeleteMatch: (id: string) => void;
     handleCreateMatch: (match: MatchTypes.Match) => void;
+    handleRetry?: () => void;
     onCheck: () => void;
-    isLoading: boolean;
+    matches: MatchTypes.Match[];
+    isLoading?: boolean;
+    errorMessage?: string;
 };
 export const MatchesList = ({
     handleApprove,
     handleDeleteMatch,
     handleCreateMatch,
+    handleRetry,
     onCheck,
     isLoading,
+    matches,
+    errorMessage,
 }: MatchesListProps) => {
-    const { matches, getMatchesError, isLoadingMatches, getMatches } = useMatchesApi();
     const theme = useTheme();
     const matchesWithStatuses = matches.map((match) => ({
         ...match,
-        matches: match.matches.map((ranking) => ({
-            ...ranking,
-            status: getRankingStatus({ user: match.user, provider: ranking.provider }),
-        })),
+        matches: match.matches.map((ranking) => {
+            const { status, reasons } = getProviderToUserCompatability({
+                user: match.user,
+                provider: ranking.provider,
+            });
+            return {
+                ...ranking,
+                status,
+                statusReason: reasons ? reasons.join(', ') : undefined,
+            };
+        }),
     }));
-    const ErrorContent = getMatchesError ? (
+    const ErrorContent = errorMessage ? (
         <>
-            <Text>Something went wrong: {getMatchesError}</Text>
-            <Button onClick={getMatches}>Try again</Button>
+            <Text>Something went wrong: {errorMessage}</Text>
+            <Button onClick={handleRetry}>Try again</Button>
         </>
     ) : undefined;
-    const LoadingContent =
-        isLoadingMatches || isLoading ? (
-            <Box display="flex" padding={theme.spacing(1)} justifyContent="center" alignItems="center">
-                <CircularProgress color="primary" />
-            </Box>
-        ) : undefined;
+    const LoadingContent = isLoading ? (
+        <Box display="flex" padding={theme.spacing(1)} justifyContent="center" alignItems="center">
+            <CircularProgress color="primary" />
+        </Box>
+    ) : undefined;
 
     const MatchesContent =
         matches.length === 0 ? (
-            <Text>All caught up. No matches to show!</Text>
+            <Box display="flex" alignItems="center">
+                <Text>All caught up. No matches to show!</Text>
+                <RefreshWrapper
+                    onClick={handleRetry}
+                    style={{ marginLeft: theme.spacing(0.5), padding: theme.spacing(0.5) }}
+                >
+                    <Refresh fontSize="small" />
+                </RefreshWrapper>
+            </Box>
         ) : (
             matchesWithStatuses.map((match) => (
                 <MatchesCard
@@ -64,3 +83,15 @@ export const MatchesList = ({
         </Box>
     );
 };
+
+const RefreshWrapper = withStyles({
+    root: {
+        display: 'inline-block',
+        opacity: 0.5,
+        cursor: 'pointer',
+        transition: '300ms',
+        '&:hover': {
+            opacity: 1,
+        },
+    },
+})(Box);

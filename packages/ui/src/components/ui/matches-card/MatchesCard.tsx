@@ -12,7 +12,7 @@ export type MatchesCardProps = {
     isChecked: boolean;
     onCheck: () => void;
     user: MatchTypes.User;
-    rankings: (MatchTypes.Ranking & { status: MatchTypes.RankingStatus })[];
+    rankings: (MatchTypes.Ranking & { status: MatchTypes.RankingStatus; statusReason?: string })[];
     handleApprove: () => Promise<void>;
     handleCancelApprove?: () => void;
     handleDeleteMatch?: (id: string) => void;
@@ -91,6 +91,7 @@ export const MatchesCard = ({
                                 key={ranking.id}
                                 id={ranking.id}
                                 status={ranking.status}
+                                statusText={ranking.statusReason}
                                 displayText={`${ranking.provider.firstName} ${ranking.provider.lastName}`}
                                 rank={i + 1}
                                 onDelete={handleDeleteMatch}
