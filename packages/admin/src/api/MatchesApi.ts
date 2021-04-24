@@ -51,7 +51,6 @@ const MatchesApiCreator = (baseUrl: string) => {
         const { data: axiosData } = await makeRequest(`${baseUrl}/matches/approve`, {
             method: 'POST',
             data: { matchIds },
-            shouldFakeRequest: true,
         });
         return axiosData?.data ?? [];
     };
@@ -62,7 +61,6 @@ const MatchesApiCreator = (baseUrl: string) => {
                 matchIds: [matchId],
                 reason,
             },
-            shouldFakeRequest: true,
         });
         console.log({ denyMatchResponse: axiosData });
         return axiosData.data;
