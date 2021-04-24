@@ -1,5 +1,5 @@
-import { MatchTypes, Mocks, MatchApiTypes } from '@therify/types';
-import axios, { AxiosPromise, AxiosRequestConfig, Method } from 'axios';
+import { MatchTypes, Mocks } from '@therify/types';
+import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
 import { adaptApiMatches } from './utils';
 
 export type getMatchesOptions = {
