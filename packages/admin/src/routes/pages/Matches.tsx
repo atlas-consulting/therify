@@ -36,8 +36,6 @@ export const Matches = () => {
 
     // const [selectedMatches, setSelectedMatches] = useState({});
     const [companyFilter, setCompanyFilter] = useState('all');
-    const [statusFilter, setStatusFilter] = useState('all');
-    const [sortByFilter, setSortByFilter] = useState('newest');
     const [createMatchTarget, setCreateMatchTarget] = useState<MatchTypes.Match | null>(null);
     const [matchIdToDeny, setMatchIdToDeny] = useState<string | null>(null);
     const matchTypeCounts = countMatchQualities(matches);

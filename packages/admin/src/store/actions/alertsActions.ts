@@ -1,4 +1,4 @@
-import { Alert, ICreateAlertProps } from '../../models';
+import { ICreateAlertProps } from '../../models';
 
 export interface IAlertsAction<PayloadType> {
     type: AlertsActionType;

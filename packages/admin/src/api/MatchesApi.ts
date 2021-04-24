@@ -44,7 +44,7 @@ const MatchesApiCreator = (baseUrl: string) => {
             data: { userId, providerId },
             shouldFakeRequest: true,
         });
-        // return axiosData?.data ?? [];
+        console.log(axiosData?.data);
         return Mocks.mockRanking;
     };
     const approveMatches = async (matchIds: string[]) => {
