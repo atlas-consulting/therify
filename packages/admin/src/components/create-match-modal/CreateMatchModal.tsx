@@ -4,7 +4,7 @@ import { ButtonFill, ButtonOutline, Modal, Text, TextBold, ProviderRanking, Pref
 import { useTheme, Box, CircularProgress, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useEffect } from 'react';
-import { getProviderToUserCompatability, MatchCompatibilityStatus } from '../../utils/Matches';
+import { getProviderToUserCompatability, MatchCompatibilityStatus } from '../../utils/MatchQuality';
 
 export type CreateMatchModalProps = {
     selectedUser: MatchTypes.User;

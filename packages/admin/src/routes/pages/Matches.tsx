@@ -123,7 +123,7 @@ export const Matches = () => {
                         alignItems="center"
                         marginTop={3}
                     >
-                        <MatchCounter good={[]} warnings={[]} incompatibilities={[]} />
+                        <MatchCounter good={0} warnings={0} incompatibilities={0} />
                         <SelectGroup configs={selectConfigs} />
                     </Box>
                     <Divider margin={`${theme.spacing(2)}px 0 0`} />

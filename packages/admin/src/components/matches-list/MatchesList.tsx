@@ -3,7 +3,7 @@ import { Text, MatchesCard, ButtonFill as Button } from '@therify/ui';
 import { useTheme, CircularProgress, Box, withStyles } from '@material-ui/core';
 import { Refresh } from '@material-ui/icons';
 import { MatchTypes } from '@therify/types';
-import { getProviderToUserCompatability } from '../../utils/Matches';
+import { getProviderToUserCompatability } from '../../utils/MatchQuality';
 
 export type MatchesListProps = {
     handleApprove: (userId: string) => Promise<void>;
