@@ -11,6 +11,7 @@ export const getIncompatibleReasons = ({ user, provider }: MatchQualityOptions) 
     }
     return incompatibleReasons.length ? incompatibleReasons : undefined;
 };
+
 const noPreference = (preference: string) => preference === "Don't Care";
 
 export const getPreferenceIssues = ({ user, provider }: MatchQualityOptions) => {
@@ -55,5 +56,26 @@ export const getProviderToUserCompatability = (combination: MatchQualityOptions)
     return {
         status,
         reasons: incompatibleReasons ?? preferenceIssues,
+    };
+};
+
+export const countMatchQualities = (matches: MatchTypes.Match[]) => {
+    let good = 0;
+    let warnings = 0;
+    let incompatibilities = 0;
+    for (const match of matches) {
+        const statuses = match.matches.map((ranking) => {
+            const { status } = getProviderToUserCompatability({ user: match.user, provider: ranking.provider });
+            return status;
+        });
+        if (statuses.includes(RankingStatus.INCOMPATIBLE)) incompatibilities += 1;
+        else if (statuses.includes(RankingStatus.WARNING)) warnings += 1;
+        else good += 1;
+    }
+    return {
+        total: matches.length,
+        good,
+        warnings,
+        incompatibilities,
     };
 };

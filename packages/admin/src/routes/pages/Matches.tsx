@@ -17,6 +17,7 @@ import { MatchTypes } from '@therify/types';
 import { useTheme, Box, CircularProgress } from '@material-ui/core';
 import { useMatchesApi, useCreateRanking, useGetMatches } from '../../hooks/useMatchesApi';
 import { MatchesList, CreateMatchModal, Navigation } from '../../components';
+import { countMatchQualities } from '../../utils/MatchQuality';
 
 export const Matches = () => {
     const theme = useTheme();
@@ -39,6 +40,7 @@ export const Matches = () => {
     const [sortByFilter, setSortByFilter] = useState('newest');
     const [createMatchTarget, setCreateMatchTarget] = useState<MatchTypes.Match | null>(null);
     const [matchIdToDeny, setMatchIdToDeny] = useState<string | null>(null);
+    const matchTypeCounts = countMatchQualities(matches);
     const handleOpenCreateMatchModal = (match: MatchTypes.Match) => {
         setCreateMatchTarget(match);
         getProviders({
@@ -67,33 +69,6 @@ export const Matches = () => {
             selectedValue: companyFilter,
             onChange: (val: string) => setCompanyFilter(val),
         },
-        {
-            options: [
-                { value: 'all', text: 'all' },
-                { value: 'no-warnings', text: 'No Warnings' },
-                { value: 'warning', text: 'Warnings' },
-                { value: 'incompatible', text: 'Incompatible' },
-            ],
-            id: 'status-select',
-            name: 'Status',
-            label: 'Status',
-            selectedValue: statusFilter,
-            onChange: (val: string) => setStatusFilter(val),
-        },
-        {
-            options: [
-                { value: 'newest', text: 'Newest' },
-                { value: 'alphabetical', text: 'Alphabetical' },
-                { value: 'no-warnings-first', text: 'No Warnings First' },
-                { value: 'warnings-first', text: 'Warnings First' },
-                { value: 'incompatible-first', text: 'Incompatibles First' },
-            ],
-            id: 'sort-select',
-            name: 'Sort by',
-            label: 'Sort by',
-            selectedValue: sortByFilter,
-            onChange: (val: string) => setSortByFilter(val),
-        },
     ];
     useEffect(() => {
         getMatches();
@@ -116,14 +91,12 @@ export const Matches = () => {
                         </Box>
                     </Box>
 
-                    <Box
-                        onClick={getMatches}
-                        display="flex"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        marginTop={3}
-                    >
-                        <MatchCounter good={0} warnings={0} incompatibilities={0} />
+                    <Box display="flex" justifyContent="space-between" alignItems="center" marginTop={3}>
+                        <MatchCounter
+                            good={matchTypeCounts.good}
+                            warnings={matchTypeCounts.warnings}
+                            incompatibilities={matchTypeCounts.incompatibilities}
+                        />
                         <SelectGroup configs={selectConfigs} />
                     </Box>
                     <Divider margin={`${theme.spacing(2)}px 0 0`} />
