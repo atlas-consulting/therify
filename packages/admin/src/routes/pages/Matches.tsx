@@ -15,24 +15,16 @@ import {
 } from '@therify/ui';
 import { MatchTypes } from '@therify/types';
 import { useTheme, Box, CircularProgress } from '@material-ui/core';
-import { useMatchesApi, useCreateRanking, useGetMatches } from '../../hooks/useMatchesApi';
+import { useMatchesApi, useCreateRanking, useGetMatches, useDenyMatch } from '../../hooks/useMatchesApi';
 import { MatchesList, CreateMatchModal, Navigation } from '../../components';
 import { countMatchQualities } from '../../utils/MatchQuality';
 
 export const Matches = () => {
     const theme = useTheme();
-    const {
-        approveMatchesForUser,
-        denyMatch,
-        isDenyingMatch,
-        denyMatchError,
-        isLoadingProviders,
-        getProviders,
-        getProvidersError,
-        providers,
-    } = useMatchesApi();
+    const { approveMatchesForUser, isLoadingProviders, getProviders, getProvidersError, providers } = useMatchesApi();
     const { isCreatingRanking, createRanking, createRankingError } = useCreateRanking({ withAlerts: true });
     const { matches, getMatches, getMatchesError, isLoadingMatches } = useGetMatches({ withAlerts: true });
+    const { denyMatch, isDenyingMatch, denyMatchError } = useDenyMatch({ withAlerts: true });
 
     // const [selectedMatches, setSelectedMatches] = useState({});
     const [companyFilter, setCompanyFilter] = useState('all');
@@ -42,7 +34,7 @@ export const Matches = () => {
     const handleOpenCreateMatchModal = (match: MatchTypes.Match) => {
         setCreateMatchTarget(match);
         getProviders({
-            state: match.user.stateOfResidence,
+            licensedState: match.user.stateOfResidence,
         });
     };
     const handleCreateRanking = async (providerId: string) => {
