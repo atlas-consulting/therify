@@ -23,10 +23,10 @@ jobs:
 
             - name: configure amplify
               uses: ambientlight/amplify-cli-action@0.2.1
-              #   continue-on-error: true
+
               with:
                   amplify_command: configure
-                  amplify_env: prod
+                  amplify_env: dev
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.ADMIN_UI_AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.ADMIN_UI_AWS_SECRET_ACCESS_KEY }}
@@ -43,7 +43,7 @@ jobs:
               uses: ambientlight/amplify-cli-action@0.2.1
               with:
                   amplify_command: publish
-                  amplify_env: prod
+                  amplify_env: dev
               env:
                   AWS_ACCESS_KEY_ID: ${{ secrets.ADMIN_UI_AWS_ACCESS_KEY_ID }}
                   AWS_SECRET_ACCESS_KEY: ${{ secrets.ADMIN_UI_AWS_SECRET_ACCESS_KEY }}
