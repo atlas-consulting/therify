@@ -3,10 +3,11 @@ import { MatchTypes } from '@therify/types';
 import { ButtonFill, ButtonOutline, Modal, Text, TextBold, ProviderRanking, PreferencesGrid } from '@therify/ui';
 import { useTheme, Box, CircularProgress, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { RankingStatus } from '@therify/types/lib/match';
+import { useEffect } from 'react';
+import { getProviderToUserCompatability, MatchCompatibilityStatus } from '../../utils/MatchQuality';
 
 export type CreateMatchModalProps = {
-    selectedUser: MatchTypes.Patient;
+    selectedUser: MatchTypes.User;
     isOpen: boolean;
     handleClose: () => void;
     handleCreate: (providerId: string) => void;
@@ -27,6 +28,15 @@ export const CreateMatchModal = ({
 }: CreateMatchModalProps) => {
     const theme = useTheme();
     const [selectedProvider, setSelectedProvider] = useState<MatchTypes.Provider | null>(null);
+    const [matchCompatibility, setMatchCompatability] = useState<MatchCompatibilityStatus | null>(null);
+    const {
+        emailAddress,
+        stateOfResidence,
+        genderPreference,
+        racePreference,
+        issues,
+        insuranceProvider,
+    } = selectedUser;
     const createMatch = () => {
         if (selectedProvider) {
             handleCreate(selectedProvider.id);
@@ -42,6 +52,20 @@ export const CreateMatchModal = ({
             {children}
         </ButtonFill>
     );
+
+    useEffect(() => {
+        if (selectedProvider) {
+            setMatchCompatability(
+                getProviderToUserCompatability({
+                    user: selectedUser,
+                    provider: selectedProvider,
+                }),
+            );
+        } else {
+            setMatchCompatability(null);
+        }
+    }, [selectedProvider, selectedUser]);
+
     const GetProvidersError = getProvidersError ? (
         <Box padding={theme.spacing(1)} justifyContent="center" alignItems="center">
             <Text>There seems to be a problem: {getProvidersError}</Text>
@@ -64,19 +88,25 @@ export const CreateMatchModal = ({
         <Modal isOpen={isOpen} handleClose={handleClose} title="Create Match">
             {GetProvidersError ?? CreateError ?? Loading ?? (
                 <Box width="400px">
-                    <Text style={{ fontWeight: 300, marginTop: theme.spacing(2) }}>{selectedUser.email}</Text>
+                    <Text style={{ fontWeight: 300, marginTop: theme.spacing(2) }}>{emailAddress}</Text>
                     <Box width="100%" style={{ marginBottom: theme.spacing(2) }}>
-                        <PreferencesGrid preferences={selectedUser.preferences} />
+                        <PreferencesGrid
+                            stateOfResidence={stateOfResidence}
+                            genderPreference={genderPreference}
+                            racePreference={racePreference}
+                            issues={(issues ?? []).join(', ')}
+                            insuranceProvider={insuranceProvider}
+                        />
                     </Box>
                     <TextBold style={{ marginBottom: theme.spacing(1) }}>Provider</TextBold>
                     <Box width="100%" style={{ marginBottom: theme.spacing(2) }}>
-                        {selectedProvider && (
+                        {selectedProvider && matchCompatibility && (
                             <Box style={{ marginBottom: theme.spacing(2) }}>
                                 <ProviderRanking
                                     data-testid="provider-ranking"
                                     id="selectedProviderStatus"
-                                    displayText="good"
-                                    status={RankingStatus.GOOD}
+                                    displayText={(matchCompatibility.reasons ?? []).join(', ')}
+                                    status={matchCompatibility.status}
                                 />
                             </Box>
                         )}
@@ -84,7 +114,7 @@ export const CreateMatchModal = ({
                             data-testid="provider-select"
                             id="combo-box-demo"
                             options={providers}
-                            getOptionLabel={(provider) => provider.name}
+                            getOptionLabel={(provider) => `${provider.firstName} ${provider.lastName}`}
                             renderInput={(params) => (
                                 <TextField {...params} label="Select a provider" variant="outlined" />
                             )}

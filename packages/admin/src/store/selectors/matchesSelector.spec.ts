@@ -1,33 +1,117 @@
 import { MatchTypes } from '@therify/types';
-import { MatchesStore } from '../reducers/matchesReducer';
-import { getDeniedRankingIds, getMatches, getMatchesState } from './matchesSelector';
+import {
+    getDeniedRankingIds,
+    getAllMatchesForUser,
+    getMatchesState,
+    getApprovedMatchesForUser,
+    getApprovedMatches,
+    getAllMatches,
+} from './matchesSelector';
+import {
+    mockDeniedRankingId,
+    mockDeniedRankingIdsSet,
+    mockMatch,
+    mockMatchWithDeniedRanking,
+    MockStore,
+    mockStore,
+} from '../mocks';
+import { removeDeniedRankings } from '../../utils/Matches';
 
-const mockMatch = ({ id: 'testid', matches: [] } as unknown) as MatchTypes.Match;
-const mockDeniedRankingId = 'test1';
-const mockStore: { matchesStore: MatchesStore } = {
+const mockStoreWithDeniedRanking: MockStore = {
+    ...mockStore,
     matchesStore: {
-        matches: { [mockMatch.id]: mockMatch },
-        deniedRankingIds: new Set<string>([mockDeniedRankingId]),
+        ...mockStore.matchesStore,
+        matches: {
+            ...mockStore.matchesStore.matches,
+            [mockMatchWithDeniedRanking.user.id]: mockMatchWithDeniedRanking,
+        },
     },
 };
-describe('matchesSelector', () => {
+describe.only('matchesSelector', () => {
     describe('getMatchesState', () => {
         it('should return state object', () => {
             expect(getMatchesState(mockStore)).toStrictEqual({
-                [mockMatch.id]: mockMatch,
+                [mockMatch.user.id]: mockMatch,
             });
         });
     });
 
-    describe('getMatches', () => {
+    describe('getAllMatches', () => {
         it('should return matches as array', () => {
-            expect(getMatches(mockStore)).toStrictEqual([mockMatch]);
+            expect(getAllMatches(mockStoreWithDeniedRanking)).toStrictEqual(
+                Object.values(mockStoreWithDeniedRanking.matchesStore.matches),
+            );
+        });
+    });
+
+    describe('getApprovedMatches', () => {
+        it('should return matches as array with only approved rankings', () => {
+            const approvedMatches = getApprovedMatches(mockStoreWithDeniedRanking);
+            const result = removeDeniedRankings(
+                Object.values(mockStoreWithDeniedRanking.matchesStore.matches),
+                mockStoreWithDeniedRanking.matchesStore.deniedRankingIds,
+            );
+            expect(approvedMatches).toStrictEqual(result);
+        });
+    });
+
+    describe('getAllMatchesForUser', () => {
+        const secondMatch = ({
+            ...mockMatch,
+            matches: ['these should be actual ranking objects'],
+            user: { id: 'abc123' },
+        } as unknown) as MatchTypes.Match;
+        const testStore = {
+            matchesStore: {
+                ...mockStore.matchesStore,
+                matches: {
+                    ...mockStore.matchesStore.matches,
+                    [secondMatch.user.id]: secondMatch,
+                },
+            },
+        };
+
+        it('should return matches array for single user', () => {
+            const selector = getAllMatchesForUser(secondMatch.user.id);
+            expect(selector(testStore)).toStrictEqual(secondMatch.matches);
+        });
+
+        it('should return empty array when user not found', () => {
+            const selector = getAllMatchesForUser('This is not a user id');
+            expect(selector(testStore)).toStrictEqual([]);
+        });
+    });
+
+    describe('getApprovedMatchesForUser', () => {
+        const secondMatch = ({
+            ...mockMatch,
+            matches: [{ id: mockDeniedRankingId }],
+            user: { id: 'abc123' },
+        } as unknown) as MatchTypes.Match;
+        const testStore = {
+            matchesStore: {
+                ...mockStore.matchesStore,
+                matches: {
+                    ...mockStore.matchesStore.matches,
+                    [secondMatch.user.id]: secondMatch,
+                },
+            },
+        };
+
+        it('should return matches array for single user without denied rankings', () => {
+            const selector = getApprovedMatchesForUser(secondMatch.user.id);
+            expect(selector(testStore)).toStrictEqual([]);
+        });
+
+        it('should return empty array when user not found', () => {
+            const selector = getApprovedMatchesForUser('This is not a user id');
+            expect(selector(testStore)).toStrictEqual([]);
         });
     });
 
     describe('getDeniedRankingIdsState', () => {
         it('should return state object', () => {
-            expect(getDeniedRankingIds(mockStore)).toStrictEqual(new Set([mockDeniedRankingId]));
+            expect(getDeniedRankingIds(mockStore)).toStrictEqual(mockDeniedRankingIdsSet);
         });
     });
 });

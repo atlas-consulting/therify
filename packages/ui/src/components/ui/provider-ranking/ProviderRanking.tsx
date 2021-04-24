@@ -3,7 +3,7 @@ import { Delete } from '@material-ui/icons';
 import { RankingStatus } from '@therify/types/lib/match';
 import React from 'react';
 import { Text, TextSmall, TextBold } from '../../core';
-import { ApprovalButton } from '../approval-button';
+
 export type ProviderRankingProps = {
     id: string;
     status: RankingStatus;
@@ -24,25 +24,11 @@ const getStatusColor = ({ theme, status }: { status: RankingStatus; theme: Theme
             return { backgroundColor: theme.palette.success.light, textColor: theme.palette.success.main };
     }
 };
-export const ProviderRanking = ({
-    id,
-    status,
-    rank,
-    displayText,
-    statusText,
-    onApprove,
-    onCancel,
-    onDelete,
-}: ProviderRankingProps) => {
+export const ProviderRanking = ({ id, status, rank, displayText, statusText, onDelete }: ProviderRankingProps) => {
     const theme = useTheme();
     const { backgroundColor, textColor } = getStatusColor({ theme, status });
     return (
         <RankingWrapper style={{ marginBottom: theme.spacing(1) }}>
-            {onDelete && (
-                <DeleteWithStyles title="Delete this match" className="delete-match" onClick={() => onDelete(id)}>
-                    <Delete color="error" fontSize="small" style={{ marginRight: theme.spacing(1) }} />
-                </DeleteWithStyles>
-            )}
             <Box
                 style={{
                     ...flexCenter,
@@ -60,16 +46,10 @@ export const ProviderRanking = ({
                 </div>
                 {statusText && <Text style={{ margin: 0, color: textColor }}>{statusText}</Text>}
             </Box>
-            {onApprove && (
-                <Box>
-                    <ApprovalButton
-                        isHidden={status === RankingStatus.INCOMPATIBLE}
-                        rankingId={id}
-                        onCancel={onCancel}
-                        onApprove={onApprove}
-                        buttonText="Approve"
-                    />
-                </Box>
+            {onDelete && (
+                <DeleteWithStyles title="Delete this match" className="delete-match" onClick={() => onDelete(id)}>
+                    <Delete color="error" fontSize="small" style={{ marginRight: theme.spacing(1) }} />
+                </DeleteWithStyles>
             )}
         </RankingWrapper>
     );
@@ -85,6 +65,7 @@ const DeleteWithStyles = withStyles({
         opacity: 0,
         cursor: 'pointer',
         transition: '200ms',
+        maxWidth: 0,
         '&:hover': {
             opacity: '1 !important',
         },
@@ -98,6 +79,7 @@ const RankingWrapper = withStyles({
         justifyContent: 'space-between',
         width: '100%',
         '&:hover .delete-match': {
+            maxWidth: '100px',
             opacity: 0.5,
         },
     },

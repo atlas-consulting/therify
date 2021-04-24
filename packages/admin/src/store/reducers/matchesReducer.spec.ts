@@ -1,8 +1,10 @@
 import { cleanup } from '@testing-library/react';
-import { mockModelResult } from '../../api/mocks/rankingResult';
-import { MatchesActionType, setMatches, setMatch, removeRankingFromPatient } from '../actions';
-import matchesReducer, { MatchesStore } from './matchesReducer';
-const mockState: MatchesStore = {
+import { MatchesActionType, setMatches, setMatch, removeRankingFromUser } from '../actions';
+import { mockStore, mockMatch as mockModelResult } from '../mocks';
+import matchesReducer from './matchesReducer';
+const { matchesStore } = mockStore;
+const mockState = {
+    ...matchesStore,
     matches: {},
     deniedRankingIds: new Set([]),
 };
@@ -18,25 +20,24 @@ describe('matches reducer', () => {
         expect(matchesReducer(mockState, action)).toStrictEqual({
             ...mockState,
             matches: {
-                [mockModelResult.id]: mockModelResult,
+                [mockModelResult.user.id]: mockModelResult,
             },
         });
     });
 
     it('should set a single match in state', () => {
-        const newMatch = { ...mockModelResult, id: '999xxx' };
-        const action = setMatch(newMatch);
+        const action = setMatch(mockModelResult);
         expect(matchesReducer(mockState, action)).toStrictEqual({
             ...mockState,
             matches: {
                 ...mockState.matches,
-                [newMatch.id]: newMatch,
+                [mockModelResult.user.id]: mockModelResult,
             },
         });
     });
 
     it('should set rankingId to state', () => {
-        const action = removeRankingFromPatient('test');
+        const action = removeRankingFromUser('test');
         expect(matchesReducer(mockState, action)).toStrictEqual({
             ...mockState,
             deniedRankingIds: new Set(['test']),

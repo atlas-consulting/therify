@@ -1,38 +1,57 @@
-// TODO: Type this out correctly
 export type Match = {
-    id: string;
-    patient: Patient;
+    user: User;
     matches: Ranking[];
 };
 
-export type Features = {
-    state: string;
-    network: string;
-    gender: string;
-    race: string;
-    specialty: string;
-};
-export type Patient = {
-    email: string;
+export type User = {
     id: string;
-    company: string;
-    preferences: Features;
+    emailAddress: string;
+    stateOfResidence: string;
+    gender: string;
+    genderPreference: string;
+    race: string[];
+    racePreference: string;
+    issues: string[];
+    insuranceProvider: string;
+    languagePreference: string;
+    createdAt: string;
+    updatedAt: string;
 };
 
 export type Provider = {
-    name: string;
     id: string;
-    state: string;
-    acceptedNetworks: string[];
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
+    licensedStates: string[];
+    acceptedInsurance: string[];
+    yearsOfExperience: number;
     gender: string;
-    race: string;
-    specialty: string;
+    race: string[];
+    specialties: string[];
+    theraputicPractices: string[];
+    createdAt: string;
+    updatedAt: string;
+    rate: number;
+    license?: string;
+    websiteUrl?: string;
+    nameOfPractice?: string;
+};
+export interface MatchPreferenceQualifier {
+    preference: string | string[];
+    isMet: boolean;
+}
+
+export type ProviderMatchRecord = {
+    id: string;
+    score: number;
+    providerEmailAddress: string;
+    userEmailAddress: string;
+    criteria: Record<string, MatchPreferenceQualifier>;
 };
 
-export type Ranking = {
-    id: string;
+export type Ranking = ProviderMatchRecord & {
     provider: Provider;
-    status: RankingStatus;
 };
 
 export enum RankingStatus {

@@ -15,43 +15,44 @@ import {
 } from '@therify/ui';
 import { MatchTypes } from '@therify/types';
 import { useTheme, Box, CircularProgress } from '@material-ui/core';
-import { useMatchesApi } from '../../hooks/useMatchesApi';
+import { useMatchesApi, useCreateRanking, useGetMatches } from '../../hooks/useMatchesApi';
 import { MatchesList, CreateMatchModal, Navigation } from '../../components';
+import { countMatchQualities } from '../../utils/MatchQuality';
 
 export const Matches = () => {
     const theme = useTheme();
     const {
-        matches,
-        getMatches,
-        approveMatch,
+        approveMatchesForUser,
         denyMatch,
         isDenyingMatch,
         denyMatchError,
-        isLoadingMatches,
-        createRanking,
-        isCreatingRanking,
-        createRankingError,
         isLoadingProviders,
-        listProviders,
-        listProvidersError,
+        getProviders,
+        getProvidersError,
         providers,
     } = useMatchesApi();
+    const { isCreatingRanking, createRanking, createRankingError } = useCreateRanking({ withAlerts: true });
+    const { matches, getMatches, getMatchesError, isLoadingMatches } = useGetMatches({ withAlerts: true });
+
     // const [selectedMatches, setSelectedMatches] = useState({});
     const [companyFilter, setCompanyFilter] = useState('all');
     const [statusFilter, setStatusFilter] = useState('all');
     const [sortByFilter, setSortByFilter] = useState('newest');
     const [createMatchTarget, setCreateMatchTarget] = useState<MatchTypes.Match | null>(null);
     const [matchIdToDeny, setMatchIdToDeny] = useState<string | null>(null);
+    const matchTypeCounts = countMatchQualities(matches);
     const handleOpenCreateMatchModal = (match: MatchTypes.Match) => {
         setCreateMatchTarget(match);
-        listProviders({
-            state: match.patient.preferences.state,
-            network: match.patient.preferences.network,
+        getProviders({
+            state: match.user.stateOfResidence,
         });
     };
     const handleCreateRanking = async (providerId: string) => {
         if (!createMatchTarget) return;
-        await createRanking({ matchId: createMatchTarget.id, patientId: createMatchTarget.patient.id, providerId });
+        await createRanking({
+            userId: createMatchTarget.user.id,
+            providerId,
+        });
         setCreateMatchTarget(null);
     };
 
@@ -68,39 +69,11 @@ export const Matches = () => {
             selectedValue: companyFilter,
             onChange: (val: string) => setCompanyFilter(val),
         },
-        {
-            options: [
-                { value: 'all', text: 'all' },
-                { value: 'no-warnings', text: 'No Warnings' },
-                { value: 'warning', text: 'Warnings' },
-                { value: 'incompatible', text: 'Incompatible' },
-            ],
-            id: 'status-select',
-            name: 'Status',
-            label: 'Status',
-            selectedValue: statusFilter,
-            onChange: (val: string) => setStatusFilter(val),
-        },
-        {
-            options: [
-                { value: 'newest', text: 'Newest' },
-                { value: 'alphabetical', text: 'Alphabetical' },
-                { value: 'no-warnings-first', text: 'No Warnings First' },
-                { value: 'warnings-first', text: 'Warnings First' },
-                { value: 'incompatible-first', text: 'Incompatibles First' },
-            ],
-            id: 'sort-select',
-            name: 'Sort by',
-            label: 'Sort by',
-            selectedValue: sortByFilter,
-            onChange: (val: string) => setSortByFilter(val),
-        },
     ];
     useEffect(() => {
-        if (matches.length === 0) {
-            getMatches();
-        }
-    }, [getMatches, matches.length]);
+        getMatches();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     return (
         <>
             <NavDrawerPage drawer={Navigation} style={{ flexFlow: 'column', display: 'flex', height: '100vh' }}>
@@ -114,31 +87,38 @@ export const Matches = () => {
                                 onChange={(val: string) => {}}
                                 style={{ marginRight: theme.spacing(1) }}
                             />
-                            <SplitButton options={[]} onClick={(option) => console.log(option?.text)} />
+                            <SplitButton options={[]} onClick={(option: any) => console.log(option?.text)} />
                         </Box>
                     </Box>
 
                     <Box display="flex" justifyContent="space-between" alignItems="center" marginTop={3}>
-                        <MatchCounter good={[]} warnings={[]} incompatibilities={[]} />
+                        <MatchCounter
+                            good={matchTypeCounts.good}
+                            warnings={matchTypeCounts.warnings}
+                            incompatibilities={matchTypeCounts.incompatibilities}
+                        />
                         <SelectGroup configs={selectConfigs} />
                     </Box>
                     <Divider margin={`${theme.spacing(2)}px 0 0`} />
                 </Box>
                 <MatchesList
                     onCheck={() => {}}
-                    handleApprove={approveMatch}
+                    handleApprove={approveMatchesForUser}
                     handleDeleteMatch={(id) => setMatchIdToDeny(id)}
                     handleCreateMatch={handleOpenCreateMatchModal}
                     isLoading={isLoadingMatches}
+                    errorMessage={getMatchesError}
+                    handleRetry={getMatches}
+                    matches={matches}
                 />
             </NavDrawerPage>
             {createMatchTarget && (
                 <CreateMatchModal
-                    selectedUser={createMatchTarget.patient}
+                    selectedUser={createMatchTarget.user}
                     isOpen={!!createMatchTarget}
                     isLoading={isCreatingRanking || isLoadingProviders}
                     createError={createRankingError}
-                    getProvidersError={listProvidersError}
+                    getProvidersError={getProvidersError}
                     providers={providers}
                     handleCreate={handleCreateRanking}
                     handleClose={() => setCreateMatchTarget(null)}

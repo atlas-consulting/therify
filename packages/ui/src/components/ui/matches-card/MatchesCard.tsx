@@ -3,23 +3,25 @@ import { Box, Paper, Theme, useTheme, withStyles } from '@material-ui/core';
 import { Checkbox, TextSmall, Text } from '../../core';
 import { Header3 } from '../../core';
 import { ProviderRanking } from '../provider-ranking';
-import { Patient, Ranking, RankingStatus } from '@therify/types/lib/match';
+import { MatchTypes } from '@therify/types';
 import { PreferencesGrid } from '../preferences-grid';
+import { ApprovalButton } from '../approval-button';
+import { RankingStatus } from '@therify/types/lib/match';
 
 export type MatchesCardProps = {
     isChecked: boolean;
     onCheck: () => void;
-    patient: Patient;
-    rankings: (Ranking & { status: RankingStatus })[];
-    handleApprove: (matchId: string) => Promise<void>;
-    handleCancelApprove?: ({ patient, ranking }: { patient: Patient; ranking: Ranking }) => void;
+    user: MatchTypes.User;
+    rankings: (MatchTypes.Ranking & { status: MatchTypes.RankingStatus; statusReason?: string })[];
+    handleApprove: () => Promise<void>;
+    handleCancelApprove?: () => void;
     handleDeleteMatch?: (id: string) => void;
     handleCreateMatch?: () => void;
 };
 export const MatchesCard = ({
     isChecked,
     onCheck,
-    patient,
+    user,
     rankings,
     handleApprove,
     handleCancelApprove,
@@ -27,7 +29,17 @@ export const MatchesCard = ({
     handleCreateMatch,
 }: MatchesCardProps) => {
     const theme = useTheme();
-    const { email, company, preferences } = patient;
+    const {
+        emailAddress,
+        // company,
+        stateOfResidence,
+        genderPreference,
+        racePreference,
+        issues,
+        insuranceProvider,
+    } = user;
+    // TODO: Company should come from user
+    const company = '';
     const TextButton = makeTextButton(theme);
     return (
         <Paper
@@ -39,32 +51,55 @@ export const MatchesCard = ({
                 marginBottom: theme.spacing(2),
             }}
         >
-            <Checkbox data-testid="patient-card-checkbox" checked={isChecked} onClick={onCheck} />
+            <Checkbox data-testid="user-card-checkbox" checked={isChecked} onClick={onCheck} />
             <Box flexGrow="1" style={{ paddingLeft: theme.spacing(3) }}>
                 <TextSmall>{company}</TextSmall>
-                <Header3>{email}</Header3>
+                <Header3>{emailAddress}</Header3>
                 <TextSmall style={{ paddingTop: theme.spacing(1) }}>Provider Preferences</TextSmall>
-                <PreferencesGrid preferences={preferences} />
+                <PreferencesGrid
+                    stateOfResidence={stateOfResidence}
+                    genderPreference={genderPreference}
+                    racePreference={racePreference}
+                    issues={(issues ?? []).join(', ')}
+                    insuranceProvider={insuranceProvider}
+                />
             </Box>
-            <Box flexGrow="2" style={{ paddingLeft: theme.spacing(3) }}>
-                <TextSmall style={{ marginLeft: theme.spacing(5) }}>Matches</TextSmall>
-                {rankings.length === 0 ? (
-                    <Text style={{ opacity: 0.7 }}>No rankings to show.</Text>
-                ) : (
-                    rankings.map((ranking, i) => (
-                        <ProviderRanking
-                            key={ranking.id}
-                            id={ranking.id}
-                            status={ranking.status}
-                            displayText={ranking.provider.name}
-                            rank={i + 1}
-                            onApprove={() => handleApprove(ranking.id)}
-                            onCancel={handleCancelApprove ? () => handleCancelApprove({ ranking, patient }) : undefined}
-                            onDelete={handleDeleteMatch}
-                        />
-                    ))
-                )}
-                {handleCreateMatch && <TextButton onClick={handleCreateMatch}>+ Add Provider</TextButton>}
+            <Box flexGrow="2">
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="flex-end"
+                    style={{ paddingBottom: theme.spacing(1) }}
+                >
+                    <TextSmall>Matches</TextSmall>
+                    <ApprovalButton
+                        isHidden={
+                            rankings.length === 0 || rankings.every((r) => r.status === RankingStatus.INCOMPATIBLE)
+                        }
+                        onCancel={handleCancelApprove}
+                        onApprove={handleApprove}
+                        buttonText="Approve"
+                    />
+                </Box>
+                {/* TODO: Disable Box while approving*/}
+                <Box>
+                    {rankings.length === 0 ? (
+                        <Text style={{ opacity: 0.7 }}>No rankings to show.</Text>
+                    ) : (
+                        rankings.map((ranking, i) => (
+                            <ProviderRanking
+                                key={ranking.id}
+                                id={ranking.id}
+                                status={ranking.status}
+                                statusText={ranking.statusReason}
+                                displayText={`${ranking.provider.firstName} ${ranking.provider.lastName}`}
+                                rank={i + 1}
+                                onDelete={handleDeleteMatch}
+                            />
+                        ))
+                    )}
+                    {handleCreateMatch && <TextButton onClick={handleCreateMatch}>+ Add Provider</TextButton>}
+                </Box>
             </Box>
         </Paper>
     );

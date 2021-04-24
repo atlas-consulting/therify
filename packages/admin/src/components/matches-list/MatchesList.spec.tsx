@@ -1,7 +1,7 @@
 import { cleanup } from '@testing-library/react';
 import { MatchesList } from './MatchesList';
 import { renderWithStore } from '../../utils/testUtils';
-import { mockModelResult } from '../../api/mocks/rankingResult';
+import { Mocks } from '@therify/types';
 import { MatchTypes } from '@therify/types';
 
 describe('MatchesList', () => {
@@ -28,8 +28,8 @@ describe('MatchesList', () => {
         getMatchesError: mockGetMatchesError,
     }));
     it('needs tests written', () => {
-        expect(0).toBe(0)
-    })
+        expect(0).toBe(0);
+    });
     // it('should render message when no matches provided', () => {
     //     // TODO: Fix this test
     //     const { getByText } = renderWithStore(

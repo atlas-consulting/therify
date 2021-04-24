@@ -5,7 +5,6 @@ import { ApprovalButton as ApprovalButtonUi } from './ApprovalButton';
 export const ApprovalButton: Story = () => {
     return (
         <ApprovalButtonUi
-            rankingId="test"
             onApprove={() =>
                 new Promise((r) =>
                     setTimeout(() => {
@@ -19,7 +18,6 @@ export const ApprovalButton: Story = () => {
 export const ApprovalButtonFailure: Story = () => {
     return (
         <ApprovalButtonUi
-            rankingId="test"
             onApprove={() =>
                 new Promise((r, reject) =>
                     setTimeout(() => {

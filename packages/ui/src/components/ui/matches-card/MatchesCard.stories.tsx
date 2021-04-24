@@ -1,32 +1,11 @@
 import React, { useState } from 'react';
 import { Story, Meta } from '@storybook/react/types-6-0';
+import { Mocks } from '@therify/types';
 import { MatchesCard as MatchesCardUi } from './MatchesCard';
 import { RankingStatus } from '@therify/types/lib/match';
 
-const mockPatient = {
-    email: 'test@storybook.com',
-    id: '123',
-    company: 'Therify',
-    preferences: {
-        state: 'TN',
-        network: 'Cigna',
-        gender: 'male',
-        race: 'No ',
-        specialty: 'Stress',
-    },
-};
-
-const mockRanking = {
-    id: 'test',
-    provider: {
-        id: '1',
-        name: 'Dr. Test Jackson',
-        state: 'TN',
-        acceptedNetworks: ['Cigna'],
-        gender: 'male',
-        race: 'No ',
-        specialty: 'Stress',
-    },
+const mockRankingWithStatus = {
+    ...Mocks.mockRanking,
     status: RankingStatus.GOOD,
 };
 
@@ -36,14 +15,15 @@ export const MatchesCard: Story = () => {
         <MatchesCardUi
             isChecked={isChecked}
             onCheck={() => setIsChecked(!isChecked)}
-            patient={mockPatient}
+            user={Mocks.mockUser}
             rankings={[
-                { ...mockRanking, id: '1' },
-                { ...mockRanking, id: '2' },
-                { ...mockRanking, id: '3' },
+                { ...mockRankingWithStatus, id: '1' },
+                { ...mockRankingWithStatus, id: '2' },
+                { ...mockRankingWithStatus, id: '3' },
             ]}
             handleApprove={async () => {}}
             handleCreateMatch={() => {}}
+            handleDeleteMatch={() => {}}
         />
     );
 };
@@ -53,13 +33,46 @@ export const NoMatchCreation: Story = () => {
         <MatchesCardUi
             isChecked={isChecked}
             onCheck={() => setIsChecked(!isChecked)}
-            patient={mockPatient}
+            user={Mocks.mockUser}
             rankings={[
-                { ...mockRanking, id: '1' },
-                { ...mockRanking, id: '2' },
-                { ...mockRanking, id: '3' },
+                { ...mockRankingWithStatus, id: '1' },
+                { ...mockRankingWithStatus, id: '2' },
+                { ...mockRankingWithStatus, id: '3' },
             ]}
             handleApprove={async () => {}}
+            handleDeleteMatch={() => {}}
+        />
+    );
+};
+
+export const NoApprovableMatches: Story = () => {
+    const [isChecked, setIsChecked] = useState(false);
+    return (
+        <MatchesCardUi
+            isChecked={isChecked}
+            onCheck={() => setIsChecked(!isChecked)}
+            user={Mocks.mockUser}
+            rankings={[
+                { ...mockRankingWithStatus, status: RankingStatus.INCOMPATIBLE, id: '1' },
+                { ...mockRankingWithStatus, status: RankingStatus.INCOMPATIBLE, id: '2' },
+                { ...mockRankingWithStatus, status: RankingStatus.INCOMPATIBLE, id: '3' },
+            ]}
+            handleApprove={async () => {}}
+            handleDeleteMatch={() => {}}
+        />
+    );
+};
+
+export const NoMatchesToShow: Story = () => {
+    const [isChecked, setIsChecked] = useState(false);
+    return (
+        <MatchesCardUi
+            isChecked={isChecked}
+            onCheck={() => setIsChecked(!isChecked)}
+            user={Mocks.mockUser}
+            rankings={[]}
+            handleApprove={async () => {}}
+            handleDeleteMatch={() => {}}
         />
     );
 };

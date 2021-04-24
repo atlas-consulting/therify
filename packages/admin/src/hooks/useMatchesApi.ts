@@ -2,22 +2,26 @@ import { MatchTypes } from '@therify/types';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createMatchOptions, MatchesApi } from '../api/MatchesApi';
-import { removeRankingFromPatient, setMatch, setMatches } from '../store/actions';
-import { getMatches as getMatchesArray, getMatchesState, getUserToken } from '../store/selectors';
+import { removeRankingFromUser, setMatch, setMatches } from '../store/actions';
+import { getApprovedMatches, getDeniedRankingIds, getMatchesState, getUserToken } from '../store/selectors';
+import { removeDeniedRankingsFromMatch } from '../utils/Matches';
+import { useAlerts } from './useAlerts';
 
-export const useMatchesApi = () => ({
-    ...useGetMatches(),
-    ...useApproveMatch(),
-    ...useDenyMatch(),
-    ...useCreateRanking(),
-    ...useListProviders(),
+type MatchesApiConfig = { withAlerts?: boolean; withEvents?: boolean };
+export const useMatchesApi = (config?: MatchesApiConfig) => ({
+    ...useGetMatches(config),
+    ...useApproveMatch(config),
+    ...useDenyMatch(config),
+    ...useCreateRanking(config),
+    ...useGetProviders(config),
 });
 
-const useGetMatches = () => {
+export const useGetMatches = (config?: MatchesApiConfig) => {
+    const { createErrorAlert } = useAlerts();
     const [isLoadingMatches, setIsLoadingMatches] = useState(false);
     const [getMatchesError, setGetMatchesError] = useState<string | undefined>(undefined);
     const dispatch = useDispatch();
-    const matches = useSelector(getMatchesArray);
+    const matches = useSelector(getApprovedMatches);
     const token = useSelector(getUserToken);
     const getMatches = async () => {
         setIsLoadingMatches(true);
@@ -27,6 +31,7 @@ const useGetMatches = () => {
             dispatch(setMatches(results));
         } catch (error) {
             setGetMatchesError(error.message);
+            if (config?.withAlerts) createErrorAlert(error.message);
         }
         setIsLoadingMatches(false);
     };
@@ -38,28 +43,43 @@ const useGetMatches = () => {
     };
 };
 
-const useApproveMatch = () => {
+export const useApproveMatch = (config?: MatchesApiConfig) => {
+    const { createErrorAlert } = useAlerts();
     const [isApprovingMatch, setIsApprovingMatch] = useState(false);
     const [approveMatchError, setApproveMatchError] = useState<string | undefined>(undefined);
+    const matchesState = useSelector(getMatchesState);
+    const deniedRankingIds = useSelector(getDeniedRankingIds);
 
-    const approveMatch = async (matchId: string) => {
+    const approveMatchesForUser = async (userId: string) => {
         setIsApprovingMatch(true);
         setApproveMatchError(undefined);
+        const userMatch = matchesState[userId];
+        if (!userMatch) {
+            createErrorAlert('Cannot find user');
+            return;
+        }
+        const userMatchIds = removeDeniedRankingsFromMatch(userMatch, deniedRankingIds).matches.map((m) => m.id);
+        if (!userMatchIds.length) {
+            createErrorAlert('No matches found for user');
+            return;
+        }
         try {
-            await MatchesApi.approveMatch(matchId);
+            await MatchesApi.approveMatches(userMatchIds);
         } catch (error) {
             setApproveMatchError(error.message);
+            if (config?.withAlerts) createErrorAlert(error.message);
         }
         setIsApprovingMatch(false);
     };
     return {
-        approveMatch,
+        approveMatchesForUser,
         isApprovingMatch,
         approveMatchError,
     };
 };
 
-const useDenyMatch = () => {
+export const useDenyMatch = (config?: MatchesApiConfig) => {
+    const { createErrorAlert } = useAlerts();
     const dispatch = useDispatch();
     const [isDenyingMatch, setIsDenyingMatch] = useState(false);
     const [denyMatchError, setDenyMatchError] = useState<string | undefined>(undefined);
@@ -69,9 +89,10 @@ const useDenyMatch = () => {
         setDenyMatchError(undefined);
         try {
             await MatchesApi.denyMatch(matchId);
-            dispatch(removeRankingFromPatient(matchId));
+            dispatch(removeRankingFromUser(matchId));
         } catch (error) {
             setDenyMatchError(error.message);
+            if (config?.withAlerts) createErrorAlert(error.message);
         }
         setIsDenyingMatch(false);
     };
@@ -82,18 +103,19 @@ const useDenyMatch = () => {
     };
 };
 
-const useCreateRanking = () => {
+export const useCreateRanking = (config?: MatchesApiConfig) => {
+    const { createErrorAlert, createSuccessAlert } = useAlerts();
     const [isCreatingRanking, setIsCreatingRanking] = useState(false);
     const [createRankingError, setCreateRankingError] = useState<string | undefined>(undefined);
     const dispatch = useDispatch();
     const matches = useSelector(getMatchesState);
 
-    const createRanking = async ({ providerId, patientId, matchId }: createMatchOptions) => {
+    const createRanking = async ({ userId, providerId }: createMatchOptions) => {
         setIsCreatingRanking(true);
         setCreateRankingError(undefined);
         try {
-            const newRanking = await MatchesApi.createMatch({ providerId, patientId, matchId });
-            const match = matches[matchId];
+            const newRanking = await MatchesApi.createMatch({ userId, providerId });
+            const match = matches[userId];
             if (match) {
                 dispatch(
                     setMatch({
@@ -101,11 +123,13 @@ const useCreateRanking = () => {
                         matches: [...match.matches, newRanking],
                     }),
                 );
+                if (config?.withAlerts) createSuccessAlert('Successfully created match!');
             } else {
-                throw new Error(`[createRanking]: Can not find match with id ${matchId}`);
+                throw new Error(`[createRanking]: Can not find match with user id ${userId}`);
             }
         } catch (error) {
             setCreateRankingError(error.message);
+            if (config?.withAlerts) createErrorAlert(error.message);
         }
         setIsCreatingRanking(false);
     };
@@ -116,24 +140,26 @@ const useCreateRanking = () => {
     };
 };
 
-const useListProviders = () => {
+export const useGetProviders = (config?: MatchesApiConfig) => {
+    const { createErrorAlert } = useAlerts();
     const [providers, setProviders] = useState<MatchTypes.Provider[]>([]);
     const [isLoadingProviders, setIsLoadingProviders] = useState(false);
-    const [listProvidersError, setListProvidersError] = useState<string | undefined>(undefined);
-    const listProviders = async (queryParams: Record<string, string> | undefined = {}) => {
+    const [getProvidersError, setGetProvidersError] = useState<string | undefined>(undefined);
+    const getProviders = async (queryParams: Record<string, string> | undefined = {}) => {
         const queryString = Object.entries(queryParams)
             .map(([key, value]) => `${key}=${value}`)
             .join('&');
         const query = queryString === '' ? '' : `?${queryString}`;
-        setListProvidersError(undefined);
+        setGetProvidersError(undefined);
         setIsLoadingProviders(true);
         try {
-            const results = await MatchesApi.listProviders(query);
+            const results = await MatchesApi.getProviders(query);
             setProviders(results);
         } catch (error) {
-            setListProvidersError(error.message);
+            setGetProvidersError(error.message);
+            if (config?.withAlerts) createErrorAlert(error.message);
         }
         setIsLoadingProviders(false);
     };
-    return { providers, listProviders, isLoadingProviders, listProvidersError };
+    return { providers, getProviders, isLoadingProviders, getProvidersError };
 };
