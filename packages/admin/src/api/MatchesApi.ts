@@ -10,14 +10,6 @@ export type createMatchOptions = {
     providerId: string;
 };
 
-type MatchesApiResponse = {
-    data: {
-        count: number;
-        scannedCount: number;
-        Items: MatchApiTypes.GetMatchesResponse[];
-    };
-    errors: any[];
-};
 const makeFakeRequest = ({ url, config }: any) =>
     new Promise<any>((resolve) => {
         setTimeout(() => {
@@ -32,7 +24,7 @@ const MatchesApiCreator = (baseUrl: string) => {
     const makeRequest = async (
         url: string,
         config?: AxiosRequestConfig & { shouldFakeRequest?: boolean },
-    ): Promise<AxiosPromise<MatchesApiResponse>> => {
+    ): Promise<AxiosPromise<any>> => {
         if (config?.shouldFakeRequest) return makeFakeRequest({ url, config });
         return axios({
             ...(config ?? {}),
@@ -76,8 +68,8 @@ const MatchesApiCreator = (baseUrl: string) => {
         return axiosData.data;
     };
     const getProviders = async (queryString?: string) => {
-        const { data: axiosData } = await makeRequest(`${baseUrl}/providers`);
-        return Mocks.mockProviders;
+        const { data: axiosData } = await makeRequest(`${baseUrl}/providers${queryString}`);
+        return axiosData.data as MatchTypes.Provider[];
     };
     return { getMatches, createMatch, approveMatches, denyMatch, getProviders };
 };

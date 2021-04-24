@@ -15,24 +15,23 @@ import {
 } from '@therify/ui';
 import { MatchTypes } from '@therify/types';
 import { useTheme, Box, CircularProgress } from '@material-ui/core';
-import { useMatchesApi, useCreateRanking } from '../../hooks/useMatchesApi';
+import { useMatchesApi, useCreateRanking, useGetMatches } from '../../hooks/useMatchesApi';
 import { MatchesList, CreateMatchModal, Navigation } from '../../components';
 
 export const Matches = () => {
     const theme = useTheme();
     const {
-        getMatches,
         approveMatchesForUser,
         denyMatch,
         isDenyingMatch,
         denyMatchError,
-        isLoadingMatches,
         isLoadingProviders,
-        listProviders,
-        listProvidersError,
+        getProviders,
+        getProvidersError,
         providers,
     } = useMatchesApi();
     const { isCreatingRanking, createRanking, createRankingError } = useCreateRanking({ withAlerts: true });
+    const { matches, getMatches, getMatchesError, isLoadingMatches } = useGetMatches({ withAlerts: true });
 
     // const [selectedMatches, setSelectedMatches] = useState({});
     const [companyFilter, setCompanyFilter] = useState('all');
@@ -42,9 +41,8 @@ export const Matches = () => {
     const [matchIdToDeny, setMatchIdToDeny] = useState<string | null>(null);
     const handleOpenCreateMatchModal = (match: MatchTypes.Match) => {
         setCreateMatchTarget(match);
-        listProviders({
+        getProviders({
             state: match.user.stateOfResidence,
-            network: match.user.insuranceProvider,
         });
     };
     const handleCreateRanking = async (providerId: string) => {
@@ -114,7 +112,7 @@ export const Matches = () => {
                                 onChange={(val: string) => {}}
                                 style={{ marginRight: theme.spacing(1) }}
                             />
-                            <SplitButton options={[]} onClick={(option) => console.log(option?.text)} />
+                            <SplitButton options={[]} onClick={(option: any) => console.log(option?.text)} />
                         </Box>
                     </Box>
 
@@ -136,6 +134,9 @@ export const Matches = () => {
                     handleDeleteMatch={(id) => setMatchIdToDeny(id)}
                     handleCreateMatch={handleOpenCreateMatchModal}
                     isLoading={isLoadingMatches}
+                    errorMessage={getMatchesError}
+                    handleRetry={getMatches}
+                    matches={matches}
                 />
             </NavDrawerPage>
             {createMatchTarget && (
@@ -144,7 +145,7 @@ export const Matches = () => {
                     isOpen={!!createMatchTarget}
                     isLoading={isCreatingRanking || isLoadingProviders}
                     createError={createRankingError}
-                    getProvidersError={listProvidersError}
+                    getProvidersError={getProvidersError}
                     providers={providers}
                     handleCreate={handleCreateRanking}
                     handleClose={() => setCreateMatchTarget(null)}

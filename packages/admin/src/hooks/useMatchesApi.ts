@@ -144,22 +144,22 @@ export const useGetProviders = (config?: MatchesApiConfig) => {
     const { createErrorAlert } = useAlerts();
     const [providers, setProviders] = useState<MatchTypes.Provider[]>([]);
     const [isLoadingProviders, setIsLoadingProviders] = useState(false);
-    const [listProvidersError, setListProvidersError] = useState<string | undefined>(undefined);
-    const listProviders = async (queryParams: Record<string, string> | undefined = {}) => {
+    const [getProvidersError, setGetProvidersError] = useState<string | undefined>(undefined);
+    const getProviders = async (queryParams: Record<string, string> | undefined = {}) => {
         const queryString = Object.entries(queryParams)
             .map(([key, value]) => `${key}=${value}`)
             .join('&');
         const query = queryString === '' ? '' : `?${queryString}`;
-        setListProvidersError(undefined);
+        setGetProvidersError(undefined);
         setIsLoadingProviders(true);
         try {
             const results = await MatchesApi.getProviders(query);
             setProviders(results);
         } catch (error) {
-            setListProvidersError(error.message);
+            setGetProvidersError(error.message);
             if (config?.withAlerts) createErrorAlert(error.message);
         }
         setIsLoadingProviders(false);
     };
-    return { providers, listProviders, isLoadingProviders, listProvidersError };
+    return { providers, getProviders, isLoadingProviders, getProvidersError };
 };

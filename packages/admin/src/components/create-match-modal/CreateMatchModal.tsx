@@ -3,7 +3,8 @@ import { MatchTypes } from '@therify/types';
 import { ButtonFill, ButtonOutline, Modal, Text, TextBold, ProviderRanking, PreferencesGrid } from '@therify/ui';
 import { useTheme, Box, CircularProgress, TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { RankingStatus } from '@therify/types/lib/match';
+import { useEffect } from 'react';
+import { getProviderToUserCompatability, MatchCompatibilityStatus } from '../../utils/Matches';
 
 export type CreateMatchModalProps = {
     selectedUser: MatchTypes.User;
@@ -27,6 +28,7 @@ export const CreateMatchModal = ({
 }: CreateMatchModalProps) => {
     const theme = useTheme();
     const [selectedProvider, setSelectedProvider] = useState<MatchTypes.Provider | null>(null);
+    const [matchCompatibility, setMatchCompatability] = useState<MatchCompatibilityStatus | null>(null);
     const {
         emailAddress,
         stateOfResidence,
@@ -50,6 +52,20 @@ export const CreateMatchModal = ({
             {children}
         </ButtonFill>
     );
+
+    useEffect(() => {
+        if (selectedProvider) {
+            setMatchCompatability(
+                getProviderToUserCompatability({
+                    user: selectedUser,
+                    provider: selectedProvider,
+                }),
+            );
+        } else {
+            setMatchCompatability(null);
+        }
+    }, [selectedProvider, selectedUser]);
+
     const GetProvidersError = getProvidersError ? (
         <Box padding={theme.spacing(1)} justifyContent="center" alignItems="center">
             <Text>There seems to be a problem: {getProvidersError}</Text>
@@ -84,13 +100,13 @@ export const CreateMatchModal = ({
                     </Box>
                     <TextBold style={{ marginBottom: theme.spacing(1) }}>Provider</TextBold>
                     <Box width="100%" style={{ marginBottom: theme.spacing(2) }}>
-                        {selectedProvider && (
+                        {selectedProvider && matchCompatibility && (
                             <Box style={{ marginBottom: theme.spacing(2) }}>
                                 <ProviderRanking
                                     data-testid="provider-ranking"
                                     id="selectedProviderStatus"
-                                    displayText="good"
-                                    status={RankingStatus.GOOD}
+                                    displayText={(matchCompatibility.reasons ?? []).join(', ')}
+                                    status={matchCompatibility.status}
                                 />
                             </Box>
                         )}
