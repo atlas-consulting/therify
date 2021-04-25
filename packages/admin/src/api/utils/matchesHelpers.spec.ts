@@ -1,67 +1,17 @@
 import { MatchApiTypes } from '@therify/types';
+import { ResponseType } from '@therify/types/lib/api/matchApi';
 import { adaptApiMatches } from './matchesHelpers';
 const mockApiResults: MatchApiTypes.GetMatchesResponse[] = [
     {
-        modified: '2021-04-21T04:30:37.077Z',
-        ttl: 37,
-        SK: 'PROVIDER#f49fa136-797a-4f4f-a2f6-48c3fb41108d',
-        details: {
-            lastName: 'Sadler',
-            licensedStates: ['California'],
-            race: ['Black or African American'],
-            gender: 'Male',
-            // therapeuticPractices: [],
-            nameOfPractice: 'Therify',
-            firstName: 'Warren',
-            license: 'Therify',
-            createdAt: '',
-            emailAddress: 'warren@therify.co',
-            specialties: ['ADHD'],
-            websiteUrl: 'http://www.therify.co',
-            yearsOfExperience: 0,
-            rate: 200,
-            acceptedInsurance: ['Other'],
-            id: 'f49fa136-797a-4f4f-a2f6-48c3fb41108d',
-            updatedAt: '',
-        },
-        PK: 'MATCH#1443c25d-c5f4-4c37-8a47-36082c40c2b6',
-        entity: 'Match',
-        created: '2021-04-21T04:30:37.077Z',
-        type: MatchApiTypes.ResponseType.Provider,
-    },
-    {
-        modified: '2021-04-21T04:30:37.079Z',
-        ttl: 37,
-        SK: 'USER#54dfdcfd-4e9e-4fa1-bc66-ce5e5817a502',
-        details: {
-            languagePreference: 'English',
-            createdAt: '2021-04-21T04:28:06.689Z',
-            emailAddress: 'warrendsadler@gmail.com',
-            insuranceProvider: 'Aetna',
-            race: ['Black or African American', 'White'],
-            gender: 'Male',
-            genderPreference: 'Male',
-            racePreference: 'Black or African American',
-            stateOfResidence: 'California',
-            id: '54dfdcfd-4e9e-4fa1-bc66-ce5e5817a502',
-            issues: ['Gender or Sexual Identity', 'Life Transitions'],
-            updatedAt: '2021-04-21T04:28:06.689Z',
-        },
-        PK: 'MATCH#1443c25d-c5f4-4c37-8a47-36082c40c2b6',
-        entity: 'Match',
-        created: '2021-04-21T04:30:37.079Z',
-        type: MatchApiTypes.ResponseType.User,
-    },
-    {
         userEmailAddress: 'warrendsadler@gmail.com',
-        modified: '2021-04-21T04:38:57.063Z',
+        modified: '2021-04-24T19:47:40.115Z',
         providerEmailAddress: 'warren@therify.co',
         score: 45,
-        ttl: 57,
-        SK: 'MATCH#3949ec8a-375f-4fbd-8ef7-f1fb3019df08',
-        PK: 'MATCH#3949ec8a-375f-4fbd-8ef7-f1fb3019df08',
+        ttl: 39,
+        SK: 'MATCH#dc97ec41-f0b6-4524-bd84-93bf727a4954',
+        PK: 'MATCH#dc97ec41-f0b6-4524-bd84-93bf727a4954',
         entity: 'Match',
-        created: '2021-04-21T04:38:57.063Z',
+        created: '2021-04-24T19:47:40.115Z',
         criteria: {
             insurance: {
                 preference: 'Aetna',
@@ -80,18 +30,69 @@ const mockApiResults: MatchApiTypes.GetMatchesResponse[] = [
                 isMet: true,
             },
             issues: {
-                preference: ['Gender or Sexual Identity', 'Life Transitions'],
+                preference: ['Life Transitions', 'Pregnancy, Prenatal, or Postpartum Issues'],
                 isMet: false,
             },
         },
-        type: MatchApiTypes.ResponseType.Match,
+        type: ResponseType.Match,
+    },
+    {
+        modified: '2021-04-24T19:47:40.118Z',
+        ttl: 39,
+        SK: 'PROVIDER#773748a1-6367-4d3b-8393-a5019ae41bf7',
+        details: {
+            lastName: 'Sadler',
+            licensedStates: ['California'],
+            race: ['Black or African American'],
+            gender: 'Male',
+            therapeuticPractices: [],
+            nameOfPractice: 'Therify',
+            firstName: 'Warren',
+            license: 'Therify',
+            createdAt: {},
+            emailAddress: 'warren@therify.co',
+            specialties: ['ADHD'],
+            websiteUrl: 'http://www.therify.co',
+            yearsOfExperience: 0,
+            rate: 200,
+            acceptedInsurance: ['Other'],
+            id: '773748a1-6367-4d3b-8393-a5019ae41bf7',
+            updatedAt: '',
+        },
+        PK: 'MATCH#dc97ec41-f0b6-4524-bd84-93bf727a4954',
+        entity: 'Match',
+        created: '2021-04-24T19:47:40.118Z',
+        type: ResponseType.Provider,
+    },
+    {
+        modified: '2021-04-24T19:47:40.120Z',
+        ttl: 39,
+        SK: 'USER#2727a488-b5d8-4d1e-9b49-393d0a7d42d4',
+        details: {
+            languagePreference: 'English',
+            createdAt: '2021-04-24T19:47:37.095Z',
+            emailAddress: 'warrendsadler@gmail.com',
+            insuranceProvider: 'Aetna',
+            race: ['Native Hawaiian or Other Pacific Islander', 'White'],
+            gender: 'Female',
+            genderPreference: 'Male',
+            racePreference: 'Black or African American',
+            stateOfResidence: 'California',
+            id: '2727a488-b5d8-4d1e-9b49-393d0a7d42d4',
+            issues: ['Life Transitions', 'Pregnancy, Prenatal, or Postpartum Issues'],
+            updatedAt: '2021-04-24T19:47:37.095Z',
+        },
+        PK: 'MATCH#dc97ec41-f0b6-4524-bd84-93bf727a4954',
+        entity: 'Match',
+        created: '2021-04-24T19:47:40.120Z',
+        type: ResponseType.User,
     },
 ];
 describe('matchHelpers', () => {
     it('should transform json payload into Match array', () => {
-        const mockProvider = mockApiResults[0] as MatchApiTypes.IProvider;
-        const mockUser = mockApiResults[1] as MatchApiTypes.IUser;
-        const mockMatch = mockApiResults[2] as MatchApiTypes.IMatch;
+        const mockProvider = mockApiResults[1] as MatchApiTypes.IProvider;
+        const mockUser = mockApiResults[2] as MatchApiTypes.IUser;
+        const mockMatch = mockApiResults[0] as MatchApiTypes.IMatch;
         expect(adaptApiMatches(mockApiResults)).toStrictEqual([
             {
                 user: mockUser.details,

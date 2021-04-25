@@ -1,53 +1,56 @@
 import { MatchTypes, MatchApiTypes } from '@therify/types';
 
-type MatchesMap = {
-    users: Record<string, MatchApiTypes.IUser>;
-    providers: Record<string, MatchTypes.Provider>;
-    matchesByUserEmail: Record<string, Record<string, MatchApiTypes.IMatch>>;
-};
-export const adaptApiMatches = (rawMatches: MatchApiTypes.GetMatchesResponse[]): MatchTypes.Match[] => {
-    const { users, providers, matchesByUserEmail } = createMatchesMap(rawMatches);
-    return Object.values(users).map<MatchTypes.Match>((user) => {
-        const {
-            details: { emailAddress },
-        } = user;
-        const userMatches = matchesByUserEmail[emailAddress];
-        const matches: MatchTypes.Ranking[] = Object.values(userMatches ?? {}).map((match) => ({
-            id: match.PK,
-            score: match.score,
-            providerEmailAddress: match.providerEmailAddress,
-            userEmailAddress: match.userEmailAddress,
-            criteria: match.criteria,
-            provider: providers[match.providerEmailAddress],
-        }));
-        return {
-            user: user.details,
-            matches,
-        };
-    });
+type MatchRecord = {
+    user?: MatchApiTypes.IUser;
+    provider?: MatchApiTypes.IProvider;
+    match?: MatchApiTypes.IMatch;
 };
 
-function createMatchesMap(matches: MatchApiTypes.GetMatchesResponse[]): MatchesMap {
-    return matches.reduce<MatchesMap>(
-        (map, match) => {
-            if (match.type === MatchApiTypes.ResponseType.Match) {
-                if (map.matchesByUserEmail[match.userEmailAddress] === undefined) {
-                    map.matchesByUserEmail[match.userEmailAddress] = {};
-                }
-                map.matchesByUserEmail[match.userEmailAddress][match.PK] = match as MatchApiTypes.IMatch;
-            } else if (match.type === MatchApiTypes.ResponseType.Provider) {
-                map.providers[match.details.emailAddress] = match.details;
-            } else if (match.type === MatchApiTypes.ResponseType.User) {
-                map.users[match.PK] = match as MatchApiTypes.IUser;
-            } else {
-                console.warn(`There was an unrecognized match`);
-            }
-            return map;
-        },
-        {
-            users: {},
-            providers: {},
-            matchesByUserEmail: {},
-        },
-    );
-}
+export const adaptApiMatches = (rawMatches: MatchApiTypes.GetMatchesResponse[]): MatchTypes.Match[] => {
+    const matchRecords = groupMatchRecords(rawMatches);
+    return groupMatchRecordsByUser(matchRecords);
+};
+
+const groupMatchRecords = (matches: MatchApiTypes.GetMatchesResponse[]): MatchRecord[] => {
+    const recordsMap = matches.reduce<Record<string, MatchRecord>>((map, item) => {
+        if (map[item.PK] === undefined) {
+            map[item.PK] = {};
+        }
+        if (item.type === MatchApiTypes.ResponseType.Match) {
+            map[item.PK].match = item;
+        } else if (item.type === MatchApiTypes.ResponseType.Provider) {
+            map[item.PK].provider = item;
+        } else if (item.type === MatchApiTypes.ResponseType.User) {
+            map[item.PK].user = item;
+        }
+        return map;
+    }, {});
+    return Object.values(recordsMap);
+};
+
+const groupMatchRecordsByUser = (matchRecords: MatchRecord[]): MatchTypes.Match[] => {
+    const matches = matchRecords.reduce<Record<string, MatchTypes.Match>>((map, record) => {
+        const hasAllMatchParts = !!record.user && !!record.provider && !!record.match;
+        if (!hasAllMatchParts) return map;
+        const userEntry = map[record.user!.details.id];
+        if (userEntry) {
+            userEntry.matches.push(createMatch(record.match!, record.provider!));
+        } else {
+            map[record.user!.details.id] = {
+                user: record.user!.details,
+                matches: [createMatch(record.match!, record.provider!)],
+            };
+        }
+        return map;
+    }, {});
+    return Object.values(matches);
+};
+
+const createMatch = (match: MatchApiTypes.IMatch, provider: MatchApiTypes.IProvider): MatchTypes.Ranking => ({
+    id: match.PK,
+    score: match.score,
+    providerEmailAddress: match.providerEmailAddress,
+    userEmailAddress: match.userEmailAddress,
+    criteria: match.criteria,
+    provider: provider.details,
+});
