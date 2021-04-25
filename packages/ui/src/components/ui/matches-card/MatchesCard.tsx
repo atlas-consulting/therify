@@ -64,7 +64,7 @@ export const MatchesCard = ({
                     insuranceProvider={insuranceProvider}
                 />
             </Box>
-            <Box flexGrow="2">
+            <Box style={{ width: '45%' }}>
                 <Box
                     display="flex"
                     justifyContent="space-between"
