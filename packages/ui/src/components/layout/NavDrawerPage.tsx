@@ -47,6 +47,7 @@ export const NavDrawerPage = ({ drawer: Drawer, children, style }: NavDrawerPage
                 flexGrow={1}
                 height="100vh"
                 overflow="auto"
+                maxWidth={`calc(100vw - ${width})`}
                 style={{
                     background: theme.palette.background.default,
                     overflowX: 'hidden',
